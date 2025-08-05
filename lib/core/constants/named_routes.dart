@@ -7,6 +7,7 @@ class NamedRoutes {
   static const login = '/login';
   static const forgotPassword = '/forgotPassword';
   static const createPassword = '/createPassword';
+  static const otp = '/otp';
 
   //game
 

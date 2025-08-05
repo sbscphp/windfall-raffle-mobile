@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/authentication/forgot_password.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
@@ -142,7 +145,9 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: 24.h,),
                       Clickable(
-                        onPressed: (){},
+                        onPressed: (){
+                          pushNavigation(context: context, widget: const ForgotPassword(), routeName: NamedRoutes.forgotPassword);
+                        },
                         child: Text(
                          'Forgot password ?',
                           style: Theme.of(context)

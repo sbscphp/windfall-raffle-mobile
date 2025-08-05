@@ -31,6 +31,8 @@ class ColorPath {
   static const meadowGreen = Color(0xff12B76A);
   static const paleGrey = Color(0xff667085);
   static const troutGrey = Color(0xff4C4D61);
+  static const yourPink = Color(0xffFFBABA);
+  static const shipGrey = Color(0xff48464E);
 
 
 

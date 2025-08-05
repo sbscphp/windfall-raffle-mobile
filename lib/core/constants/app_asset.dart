@@ -9,6 +9,8 @@ class AppAsset {
   static const String biometrics = 'assets/icons/biometrics.svg';
   static const String calendar = 'assets/icons/calendar.svg';
   static const String checkMark = 'assets/icons/check_mark.svg';
+  static const String emailVerification = 'assets/icons/email_verification.svg';
+  static const String createPassword = 'assets/icons/create_new_password.svg';
 
 
 

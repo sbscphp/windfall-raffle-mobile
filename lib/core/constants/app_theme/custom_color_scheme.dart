@@ -17,6 +17,9 @@ extension CustomColorScheme on ColorScheme {
   Color get textSecondary => brightness == Brightness.light ? ColorPath.grayGrey : Colors.white;
   Color get textTertiary => brightness == Brightness.light ? ColorPath.scorpionGrey : Colors.white;
   Color get text4 => brightness == Brightness.light ? ColorPath.troutGrey : Colors.white;
+  Color get text5 => brightness == Brightness.light ? ColorPath.silverGrey : Colors.white;
+  Color get text6 => brightness == Brightness.light ? ColorPath.shipGrey : Colors.white;
+  Color get text7 => brightness == Brightness.light ? ColorPath.paleGrey : Colors.white;
 
 
 
@@ -34,6 +37,13 @@ extension CustomColorScheme on ColorScheme {
 
   //password requirement widget
   Color get pwdInactive => brightness == Brightness.light ? ColorPath.paleGrey : Colors.white;
+
+  //pin code field
+  Color get pinCodeInactiveFillColor => brightness == Brightness.light ? ColorPath.athensGrey4 : Colors.white;
+  Color get pinCodeInactiveBorderColor => brightness == Brightness.light ? ColorPath.athensGrey9 : Colors.white;
+  Color get pinCodeActiveBorderColor => brightness == Brightness.light ? ColorPath.yourPink : Colors.white;
+  Color get pinCodeActiveFillColor => brightness == Brightness.light ? ColorPath.roseWhite : Colors.white;
+
 
 
 }
