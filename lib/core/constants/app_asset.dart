@@ -11,6 +11,11 @@ class AppAsset {
   static const String checkMark = 'assets/icons/check_mark.svg';
   static const String emailVerification = 'assets/icons/email_verification.svg';
   static const String createPassword = 'assets/icons/create_new_password.svg';
+  static const String home = 'assets/icons/bottom_nav/home.svg';
+  static const String raffles = 'assets/icons/bottom_nav/raffles.svg';
+  static const String myGames = 'assets/icons/bottom_nav/my_games.svg';
+  static const String profile = 'assets/icons/bottom_nav/profile.svg';
+
 
 
 

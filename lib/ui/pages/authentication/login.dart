@@ -6,6 +6,7 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/forgot_password.dart';
+import 'package:windfall/ui/pages/bottom_nav.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
@@ -164,7 +165,7 @@ class _LoginState extends State<Login> {
                           useDottedBorder: true,
                           buttonText:'Log in',
                           onPressed: (){
-
+                            pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
                           }
                       ),
                       SizedBox(height: 16.h,),

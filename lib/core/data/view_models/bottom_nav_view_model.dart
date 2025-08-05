@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BottomNavViewModel extends ChangeNotifier{
 
   //current index of the bottom nav-bar
-  int _currentIndex = 4;
+  int _currentIndex = 0;
   int get currentIndex => _currentIndex;
   void setCurrentIndex(int value, {bool refreshUi = true}){
     _currentIndex = value;
@@ -28,7 +28,7 @@ class BottomNavViewModel extends ChangeNotifier{
 
 
   //updates the current index of the bottom nav
-  updateIndex(int index){
+  void updateIndex(int index){
     _currentIndex = index;
     notifyListeners();
   }

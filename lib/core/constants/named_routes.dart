@@ -9,6 +9,9 @@ class NamedRoutes {
   static const createPassword = '/createPassword';
   static const otp = '/otp';
 
+  //bottom-nav
+  static const bottomNav = '/bottomNav';
+
   //game
 
 
