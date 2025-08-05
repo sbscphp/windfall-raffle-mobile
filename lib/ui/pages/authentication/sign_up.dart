@@ -10,7 +10,6 @@ import 'package:windfall/core/data/view_models/authentication_vms/password_vm.da
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/core/utilities/validator.dart';
 import 'package:windfall/ui/widgets/authentication/password_requirement.dart';
-import 'package:windfall/ui/widgets/bottom_sheets/action_completed.dart';
 import 'package:windfall/ui/widgets/bottom_sheets/email_verification.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 

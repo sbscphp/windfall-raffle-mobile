@@ -33,8 +33,6 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     final vm = ref.watch(passwordViewModel);
     return Scaffold(
       appBar: customAppBar(
