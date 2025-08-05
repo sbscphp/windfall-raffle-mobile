@@ -1,0 +1,102 @@
+
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
+class ColorPath {
+
+  //brand colors
+  static const redOrange = Color(0xffFF2F31);
+
+
+  //other colors
+  static const athensGrey = Color(0xffF7F7F9);
+  static const athensGrey2 = Color(0xffE7E6EC);
+  static const athensGrey3 = Color(0xffFAFAFB);
+  static const athensGrey4 = Color(0xffF3F2F5);
+  static const athensGrey5 = Color(0xffE4E7EC);
+  static const athensGrey6 = Color(0xffF9F9FB);
+  static const athensGrey7 = Color(0xffEAECF0);
+  static const athensGrey8 = Color(0xffFAFAFB); //scaffold background color for light mode
+  static const athensGrey9 = Color(0xffE7E6EC);
+  static const roseWhite = Color(0xffFFF7F7);
+  static const grayGrey = Color(0xff818181);
+  static const scorpionGrey = Color(0xff575757);
+  static const fairPink = Color(0xffFFEAEB);
+  static const blackyBlack = Color(0xff030303);
+  static const mischkaGrey = Color(0xffD0D5DD);
+  static const silverGrey = Color(0xffABABAB);
+  static const shaftBlack = Color(0xff2D2D2D);
+  static const bitterSweetRed = Color(0xffFF7476);
+  static const meadowGreen = Color(0xff12B76A);
+  static const paleGrey = Color(0xff667085);
+  static const troutGrey = Color(0xff4C4D61);
+
+
+
+
+
+
+
+
+
+
+
+
+
+  static Color dynamicColor(String? hexString) {
+    // Return default color if hexString is null or empty
+    if (hexString == null || hexString.isEmpty) {
+      return redOrange;
+    }
+    try {
+      // Remove the '#' character if it exists
+      final hexCode = hexString.replaceAll('#', '');
+
+      // Parse the hexadecimal string to an integer
+      return Color(int.parse('FF$hexCode', radix: 16));
+    } catch (e) {
+      debugPrint('Error parsing color: $e');
+      return redOrange;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
