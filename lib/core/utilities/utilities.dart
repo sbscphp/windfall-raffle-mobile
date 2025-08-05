@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/app_constants.dart';
+import '../constants/color_path.dart';
 import '../data/models/grouped_list.dart';
 
 
@@ -511,5 +512,34 @@ class Utilities {
     }
     return value;
   }
+
+  //returns status container color
+  static Color statusContainerColor({required String status}) {
+    switch (status.toLowerCase()) {
+      case 'live':
+      case 'live_game':
+        return ColorPath.scandalGreen;
+      case 'upcoming':
+      case 'upcoming_game':
+        return ColorPath.dawnBrown;
+      default:
+        return ColorPath.shaftBlack.withAlpha((255 * 0.3).toInt());
+    }
+  }
+
+  //returns status color
+  static Color statusTextColor({required String status}) {
+    switch (status.toLowerCase()) {
+      case 'live':
+      case 'live_game':
+        return ColorPath.hazeGreen;
+      case 'upcoming':
+      case 'upcoming_game':
+        return ColorPath.vesuviusBrown;
+      default:
+        return ColorPath.shaftBlack;
+    }
+  }
+
 
 }

@@ -70,6 +70,7 @@ dependencies:
   geolocator: ^14.0.2
   #  geolocator: 9.0.2
   geolocator_android: ^5.0.2
+  marquee: ^2.3.0
 
 dev_dependencies:
   flutter_test:

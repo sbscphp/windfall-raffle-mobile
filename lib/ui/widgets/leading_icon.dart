@@ -12,42 +12,46 @@ class LeadingIcon extends StatelessWidget {
   final bool show;
 
   const LeadingIcon(
-      {super.key, this.onPressed, this.addPadding = true, this.show = false});
+      {super.key, this.onPressed, this.addPadding = true, this.show = true});
 
   @override
   Widget build(BuildContext context) {
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     final bool canPop = parentRoute?.canPop ?? false;
     if (canPop) {
-      return GestureDetector(
-        onTap: onPressed ?? () {
-          Navigator.pop(context);
-        },
-        child: Padding(
-          padding: EdgeInsets.only(left: 16.w),
-          child: SizedBox(
-            height: 50.h,
-            width: 30.w,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  height: 32.h,
-                  width: 32.w,
-                  decoration: const BoxDecoration(
-                      color: ColorPath.athensGrey7,
-                      shape: BoxShape.circle
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.arrow_back_ios_new, color: ColorPath.grayGrey,
-                      size: 13.w,),
-                  ),
-                )
+      if(show){
+        return GestureDetector(
+          onTap: onPressed ?? () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 16.w),
+            child: SizedBox(
+              height: 50.h,
+              width: 30.w,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    height: 32.h,
+                    width: 32.w,
+                    decoration: const BoxDecoration(
+                        color: ColorPath.athensGrey7,
+                        shape: BoxShape.circle
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_back_ios_new, color: ColorPath.grayGrey,
+                        size: 13.w,),
+                    ),
+                  )
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
+      return const SizedBox();
+
     }
-    return Container();
+    return const SizedBox();
   }
 }

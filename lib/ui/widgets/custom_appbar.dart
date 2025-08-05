@@ -17,10 +17,15 @@ AppBar customAppBar({
   final Color? textColor,
   bool useCustomTitleWidget = false,
   Widget? titleWidget,
+  bool showLeadingIcon = true,
+  double? leadingWidth,
+  Widget? leading,
+  double? appbarBottomPadding
 }){
   final textTheme = Theme.of(context).textTheme;
   final colorScheme = Theme.of(context).colorScheme;
   return AppBar(
+    leadingWidth: leadingWidth ?? MediaQuery.of(context).size.width / 4.5,
     scrolledUnderElevation: 0,
     centerTitle: centerTitle,
     title: useCustomTitleWidget ? titleWidget :
@@ -32,11 +37,12 @@ AppBar customAppBar({
           color: textColor ?? colorScheme.appbarTitle
       ),
     ):null,
-    leading: LeadingIcon(
+    leading: leading ?? LeadingIcon(
       onPressed: leadingIconOnPressed,
+      show: showLeadingIcon,
     ),
     bottom: PreferredSize(
-      preferredSize: Size.fromHeight(0.h),
+      preferredSize: Size.fromHeight(appbarBottomPadding?.h ?? 0.h),
       child: Container(
         color: ColorPath.athensGrey9,
         height: 1.h,

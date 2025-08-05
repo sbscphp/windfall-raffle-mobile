@@ -15,6 +15,12 @@ class AppAsset {
   static const String raffles = 'assets/icons/bottom_nav/raffles.svg';
   static const String myGames = 'assets/icons/bottom_nav/my_games.svg';
   static const String profile = 'assets/icons/bottom_nav/profile.svg';
+  static const String notification = 'assets/icons/notification.svg';
+  static const String topRightChevron = 'assets/icons/top_right_chevron.svg';
+  static const String drawDate = 'assets/icons/draw_date.svg';
+  static const String maxPerson = 'assets/icons/max_person.svg';
+  static const String minEntry = 'assets/icons/minimum_entry.svg';
+  static const String ticketsLeft = 'assets/icons/tickets_left.svg';
 
 
 

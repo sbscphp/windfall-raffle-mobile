@@ -19,6 +19,7 @@ class ColorPath {
   static const athensGrey7 = Color(0xffEAECF0);
   static const athensGrey8 = Color(0xffFAFAFB); //scaffold background color for light mode
   static const athensGrey9 = Color(0xffE7E6EC);
+  static const athensGrey10 = Color(0xffEFEEF2);
   static const roseWhite = Color(0xffFFF7F7);
   static const grayGrey = Color(0xff818181);
   static const scorpionGrey = Color(0xff575757);
@@ -33,6 +34,11 @@ class ColorPath {
   static const troutGrey = Color(0xff4C4D61);
   static const yourPink = Color(0xffFFBABA);
   static const shipGrey = Color(0xff48464E);
+  static const chablisPink = Color(0xffFFF1F1);
+  static const hazeGreen = Color(0xff039855);
+  static const vesuviusBrown = Color(0xffB54708);
+  static const scandalGreen = Color(0xffD1FADF);
+  static const dawnBrown = Color(0xffFFFAEB);
 
 
 
