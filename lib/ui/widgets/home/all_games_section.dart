@@ -1,20 +1,12 @@
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
-import 'package:windfall/ui/widgets/home/game_property.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
-
 import '../../../core/constants/app_asset.dart';
-import '../../../core/constants/color_path.dart';
-import '../../../core/utilities/utilities.dart';
-import '../media_placeholder.dart';
-import '../naira_display.dart';
 import '../screen_title.dart';
 
 class AllGamesSection extends StatelessWidget {

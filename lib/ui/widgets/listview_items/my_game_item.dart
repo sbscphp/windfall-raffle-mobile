@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/constants/color_path.dart';
 import '../media_placeholder.dart';
@@ -11,19 +12,11 @@ class MyGameItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WindfallContainer(
       width: 191.w,
       padding: EdgeInsets.symmetric(
           vertical: 8.h,
           horizontal: 8.w
-      ),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.whiteText,
-          border: Border.all(
-              color: ColorPath.athensGrey9,
-              width: 1.w
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(8.r))
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

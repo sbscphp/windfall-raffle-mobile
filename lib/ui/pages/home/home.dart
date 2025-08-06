@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:marquee/marquee.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
-import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/home/active_games_carousel.dart';
 import 'package:windfall/ui/widgets/home/all_games_section.dart';
 import 'package:windfall/ui/widgets/home/game_results_section.dart';
 import 'package:windfall/ui/widgets/home/my_games_section.dart';
-
 import '../../../core/constants/app_asset.dart';
-import '../../../core/constants/color_path.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/profile/in_app_display_image.dart';
 

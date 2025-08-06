@@ -3,13 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/cart/cart_icon.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
-
-import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/app_dimension.dart';
 import '../../../core/constants/color_path.dart';
-import '../../widgets/clickable.dart';
 import '../../widgets/custom_appbar.dart';
-import '../../widgets/custom_svg.dart';
 import '../../widgets/filter_icon.dart';
 import '../../widgets/screen_title.dart';
 
