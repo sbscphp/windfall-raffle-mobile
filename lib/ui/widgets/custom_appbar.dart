@@ -44,7 +44,7 @@ AppBar customAppBar({
     bottom: PreferredSize(
       preferredSize: Size.fromHeight(appbarBottomPadding?.h ?? 0.h),
       child: Container(
-        color: ColorPath.athensGrey9,
+        color: ColorPath.athensGrey2,
         height: 1.h,
       ),
     ),

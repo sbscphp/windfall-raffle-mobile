@@ -8,7 +8,7 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/home/game_property.dart';
-import 'package:windfall/ui/widgets/listview_items/game_item.dart';
+import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
@@ -17,8 +17,8 @@ import '../media_placeholder.dart';
 import '../naira_display.dart';
 import '../screen_title.dart';
 
-class AllGamesSection extends StatelessWidget {
-  const AllGamesSection({super.key});
+class GameResultsSection extends StatelessWidget {
+  const GameResultsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,46 +32,46 @@ class AllGamesSection extends StatelessWidget {
             children: [
               Expanded(
                 child:ScreenTitle(
-                    title: 'Don’t Miss out, Play Now',
+                    title: 'My Games Result',
                     titleSize: 16,
                     subTitleSize: 14,
                     titleFontWeight: FontWeight.w600,
                     titleColor: Theme.of(context).colorScheme.textPrimary,
-                    subTitle: 'Start playing to win big!'
+                    subTitle: 'Track and Manage Games Result '
                 ),
               ),
-              Clickable(
-                onPressed: (){},
-                child: Row(
-                  children: [
-                    Text(
-                      "Explore Games ",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).colorScheme.textTertiary,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).colorScheme.textTertiary
-                      ),
-                    ),
-                    SizedBox(width: 2.w,),
-                    CustomSvg(asset: AppAsset.topRightChevron, height: 16.h, width: 16.w,)
-                  ],
-                ),
-              )
+              // Clickable(
+              //   onPressed: (){},
+              //   child: Row(
+              //     children: [
+              //       Text(
+              //         "Explore Games ",
+              //         style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              //             fontWeight: FontWeight.w400,
+              //             color: Theme.of(context).colorScheme.textTertiary,
+              //             decoration: TextDecoration.underline,
+              //             decorationColor: Theme.of(context).colorScheme.textTertiary
+              //         ),
+              //       ),
+              //       SizedBox(width: 2.w,),
+              //       CustomSvg(asset: AppAsset.topRightChevron, height: 16.h, width: 16.w,)
+              //     ],
+              //   ),
+              // )
 
             ],
           ),
         ),
         SizedBox(height: 24.h,),
         SizedBox(
-          height: 246.h,
+          height: 212.h,
           child: ListView.separated(
             itemCount: 3,
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.only(left: 16.w, right: 16.w,),
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return GameItem();
+              return MyGameItem();
             },
             separatorBuilder: (context, index) {
               return SizedBox(

@@ -33,14 +33,14 @@ extension CustomColorScheme on ColorScheme {
 
   //appbar
   Color get appbarTitle => brightness == Brightness.light ? ColorPath.scorpionGrey : Colors.white;
-  Color get appbarDivider => brightness == Brightness.light ? ColorPath.athensGrey9 : Colors.white;
+  Color get appbarDivider => brightness == Brightness.light ? ColorPath.athensGrey2 : Colors.white;
 
   //password requirement widget
   Color get pwdInactive => brightness == Brightness.light ? ColorPath.paleGrey : Colors.white;
 
   //pin code field
   Color get pinCodeInactiveFillColor => brightness == Brightness.light ? ColorPath.athensGrey4 : Colors.white;
-  Color get pinCodeInactiveBorderColor => brightness == Brightness.light ? ColorPath.athensGrey9 : Colors.white;
+  Color get pinCodeInactiveBorderColor => brightness == Brightness.light ? ColorPath.athensGrey2 : Colors.white;
   Color get pinCodeActiveBorderColor => brightness == Brightness.light ? ColorPath.yourPink : Colors.white;
   Color get pinCodeActiveFillColor => brightness == Brightness.light ? ColorPath.roseWhite : Colors.white;
 

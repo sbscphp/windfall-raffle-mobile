@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windfall/ui/pages/games/games.dart';
 import 'package:windfall/ui/pages/home/home.dart';
+import 'package:windfall/ui/pages/my_games/my_games.dart';
+import 'package:windfall/ui/pages/profile/profile.dart';
 
 
 
@@ -21,9 +24,9 @@ class BottomNavViewModel extends ChangeNotifier{
   //children of the bottom Nav
   final List<Widget>  _children = [
     Home(),
-    Container(),
-    Container(),
-    Container(),
+    Games(),
+    MyGames(),
+    Profile(),
   ];
   List<Widget> get children => _children;
 

@@ -7,6 +7,7 @@ import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/home/active_games_carousel.dart';
 import 'package:windfall/ui/widgets/home/all_games_section.dart';
+import 'package:windfall/ui/widgets/home/game_results_section.dart';
 import 'package:windfall/ui/widgets/home/my_games_section.dart';
 
 import '../../../core/constants/app_asset.dart';
@@ -53,16 +54,23 @@ class _HomeState extends State<Home> {
             )
           ]
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ActiveGamesCarousel(),
-            MyGamesSection(),
-            AllGamesSection()
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ActiveGamesCarousel(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  MyGamesSection(),
+                  GameResultsSection(),
+                  AllGamesSection()
+                ],
+              ),
+            ),
+          )
 
-          ],
-        ),
+        ],
       ),
     );
   }
