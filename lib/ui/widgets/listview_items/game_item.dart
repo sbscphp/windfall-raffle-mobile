@@ -1,13 +1,10 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
-
 import '../../../core/constants/app_asset.dart';
-import '../../../core/constants/color_path.dart';
 import '../../../core/utilities/utilities.dart';
 import '../home/game_property.dart';
 import '../media_placeholder.dart';
