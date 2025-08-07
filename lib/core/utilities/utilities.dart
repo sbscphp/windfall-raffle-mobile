@@ -421,6 +421,8 @@ class Utilities {
     switch (status.toLowerCase()) {
       case 'closed':
         return 'Completed';
+      case 'upcoming':
+        return 'Upcoming Game';
       default:
         return status.isEmpty ? 'N/A' : status;
     }
@@ -521,7 +523,7 @@ class Utilities {
         return ColorPath.scandalGreen;
       case 'upcoming':
       case 'upcoming_game':
-        return ColorPath.dawnBrown;
+        return ColorPath.salomieBrown; //dawnBrown
       default:
         return ColorPath.shaftBlack.withAlpha((255 * 0.3).toInt());
     }

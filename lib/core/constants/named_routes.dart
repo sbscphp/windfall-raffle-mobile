@@ -13,6 +13,7 @@ class NamedRoutes {
   static const bottomNav = '/bottomNav';
 
   //game
+  static const gameDetails = '/gameDetails';
 
 
   //my games

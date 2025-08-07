@@ -5,6 +5,7 @@ import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
+import 'package:windfall/ui/widgets/empty_state.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 import '../../../core/constants/app_asset.dart';
 import '../screen_title.dart';
@@ -55,7 +56,16 @@ class MyGamesSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h,),
-        SizedBox(
+        if(1 + 1 == 3) Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
+          child: EmptyState(
+              asset: AppAsset.gamesEmptyState,
+              title: 'No Games',
+              subtitle: "You are yet to Play any Games",
+            ctaText: 'View Games',
+          ),
+        )
+        else SizedBox(
           height: 212.h,
           child: ListView.separated(
             itemCount: 3,

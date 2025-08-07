@@ -30,6 +30,10 @@ class AppAsset {
   static const String transactions = 'assets/icons/transactions.svg';
   static const String notifications = 'assets/icons/notifications.svg';
   static const String settings = 'assets/icons/settings.svg';
+  static const String gamesEmptyState = 'assets/icons/games_empty_state.svg';
+  static const String subtract = 'assets/icons/subtract.svg';
+  static const String add = 'assets/icons/add.svg';
+  static const String ticketSlider = 'assets/icons/ticket_slider.svg';
 
 
 

@@ -34,7 +34,7 @@ class ActiveGamesCarousel extends StatelessWidget {
             color: ColorPath.chablisPink,
             child: Center(
               child: Marquee(
-                text: 'Sample text',
+                text: 'Sample text a a a a a  ',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: ColorPath.shaftBlack
@@ -42,7 +42,7 @@ class ActiveGamesCarousel extends StatelessWidget {
                 scrollAxis: Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 blankSpace: 60.w,
-                velocity: 50.0,
+                velocity:50.0,
                 //pauseAfterRound: Duration(seconds: 1),
                 //startPadding: 10.0,
                 //accelerationDuration: Duration(seconds: 1),

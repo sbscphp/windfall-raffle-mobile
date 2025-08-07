@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
+import '../../../core/constants/app_asset.dart';
+import '../empty_state.dart';
 import '../screen_title.dart';
 
 class GameResultsSection extends StatelessWidget {
@@ -52,7 +54,16 @@ class GameResultsSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h,),
-        SizedBox(
+        if(1 + 1 == 3) Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
+          child: EmptyState(
+            asset: AppAsset.gamesEmptyState,
+            title: 'No Result',
+            subtitle: "You have no games result yet.",
+            ctaText: 'Start Playing',
+          ),
+        )
+        else SizedBox(
           height: 212.h,
           child: ListView.separated(
             itemCount: 3,

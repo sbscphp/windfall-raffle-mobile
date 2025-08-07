@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/cart/cart_icon.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
 import '../../../core/constants/app_dimension.dart';
@@ -34,23 +35,7 @@ class _GamesState extends State<Games> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              vertical: 24.h,
-              horizontal: AppDimension.paddingRight
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: ColorPath.frenchGrey.withAlpha((255 * 0.18).toInt()),
-                  spreadRadius: 0,
-                  blurRadius: 200,
-                  offset: const Offset(0, 100),
-                ),
-              ],
-            ),
+          BodyHeader(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

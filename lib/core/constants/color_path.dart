@@ -40,6 +40,11 @@ class ColorPath {
   static const dawnBrown = Color(0xffFFFAEB);
   static const frondGreen = Color(0xff4F7A21);
   static const frenchGrey = Color(0xffBABEC6);
+  static const cosmosPink = Color(0xffFFD5D6);
+  static const bayBlue = Color(0xff3538CD);
+  static const solitudeBlue = Color(0xffE0EAFF);
+  static const salomieBrown = Color(0xffFEDF89);
+  static const whisperGrey = Color(0xffEDEDF6);
 
 
 
