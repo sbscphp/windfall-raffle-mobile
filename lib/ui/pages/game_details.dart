@@ -9,14 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
-
 import '../../core/constants/app_dimension.dart';
 import '../../core/constants/color_path.dart';
 import '../../core/utilities/utilities.dart';
 import '../widgets/cart/cart_icon.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_dot.dart';
-import '../widgets/custom_painter/custom_slider_thumb_shape.dart';
 import '../widgets/media_placeholder.dart';
 import '../widgets/naira_display.dart';
 import '../widgets/quantity_counter.dart';

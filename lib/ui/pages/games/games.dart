@@ -5,7 +5,6 @@ import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/cart/cart_icon.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
 import '../../../core/constants/app_dimension.dart';
-import '../../../core/constants/color_path.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/filter_icon.dart';
 import '../../widgets/screen_title.dart';
