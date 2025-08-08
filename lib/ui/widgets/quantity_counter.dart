@@ -15,6 +15,7 @@ class QuantityCounter extends StatefulWidget {
   final double? buttonSpacing;
   final double? labelBgWidth;
   final double? labelSize;
+  final bool swapButtons;
   const QuantityCounter({
     super.key,
     this.value = 1,
@@ -25,7 +26,8 @@ class QuantityCounter extends StatefulWidget {
     this.buttonSize,
     this.buttonSpacing,
     this.labelBgWidth,
-    this.labelSize
+    this.labelSize,
+    this.swapButtons = false
   });
 
   @override
@@ -66,49 +68,8 @@ class _QuantityCounterState extends State<QuantityCounter> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Clickable(
-          onPressed: (){
-            _fn.unfocus();
-            if(int.tryParse(_quantity.text) == widget.lowerLimit){
-              return;
-            }
-
-            setState(() {
-              _quantity.text = ((int.tryParse(_quantity.text) ?? 0) - widget.stepValue).toString();
-              widget.onChanged(int.tryParse(_quantity.text));
-            });
-
-          },
-          child: Opacity(
-            opacity: int.tryParse(_quantity.text) == widget.lowerLimit ? 0.3 : 1,
-            child: Container(
-              height: widget.buttonSize?.h ?? 40.h,
-              width: widget.buttonSize?.w ??40.w,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.whiteText,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: ColorPath.whisperGrey.withAlpha((255 * 0.1).toInt()),
-                    spreadRadius: 0,
-                    blurRadius: 22.86,
-                    offset: const Offset(0, 2.86),
-                    //spreadRadius: -12, // Spread radius
-                    //blurRadius: 64, // Blur radius
-                    //offset: const Offset(0, 32),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: CustomSvg(
-                  asset:AppAsset.subtract,
-                  height: 17.14.h,
-                  width: 17.14.w,
-                ),
-              ),
-            ),
-          ),
-        ),
+        if(widget.swapButtons)addButton(context)
+        else subtractButton(context),
         SizedBox(width: widget.buttonSpacing?.w ?? 21.w,),
         Container(
           width: widget.labelBgWidth?.w ?? 67.w,
@@ -168,48 +129,99 @@ class _QuantityCounterState extends State<QuantityCounter> {
         //   ),
         // ),
         SizedBox(width: widget.buttonSpacing?.w ?? 21.w,),
-        Clickable(
-          onPressed: (){
-            _fn.unfocus();
-            if(int.tryParse(_quantity.text) == widget.upperLimit){
-              return;
-            }
-            setState(() {
-              _quantity.text = ((int.tryParse(_quantity.text) ?? 0) + widget.stepValue).toString();
-            });
-            widget.onChanged(int.tryParse(_quantity.text));
-          },
-          child: Opacity(
-            opacity: int.tryParse(_quantity.text) == widget.upperLimit ? 0.3 : 1,
-            child: Container(
-              height: widget.buttonSize?.h ?? 40.h,
-              width: widget.buttonSize?.w ??40.w,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.whiteText,
-                boxShadow: [
-                  BoxShadow(
-                    color: ColorPath.whisperGrey.withAlpha((255 * 0.1).toInt()),
-                    spreadRadius: 0,
-                    blurRadius: 22.86,
-                    offset: const Offset(0, 2.86),
-                    //spreadRadius: -12, // Spread radius
-                    //blurRadius: 64, // Blur radius
-                    //offset: const Offset(0, 32),
-                  ),
-                ],
+        if(widget.swapButtons)subtractButton(context)
+        else addButton(context),
+      ],
+    );
+  }
+
+  Widget subtractButton(BuildContext context){
+    return Clickable(
+      onPressed: (){
+        _fn.unfocus();
+        if(int.tryParse(_quantity.text) == widget.lowerLimit){
+          return;
+        }
+
+        setState(() {
+          _quantity.text = ((int.tryParse(_quantity.text) ?? 0) - widget.stepValue).toString();
+          widget.onChanged(int.tryParse(_quantity.text));
+        });
+
+      },
+      child: Opacity(
+        opacity: int.tryParse(_quantity.text) == widget.lowerLimit ? 0.3 : 1,
+        child: Container(
+          height: widget.buttonSize?.h ?? 40.h,
+          width: widget.buttonSize?.w ??40.w,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.whiteText,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: ColorPath.whisperGrey.withAlpha((255 * 0.1).toInt()),
+                spreadRadius: 0,
+                blurRadius: 22.86,
+                offset: const Offset(0, 2.86),
+                //spreadRadius: -12, // Spread radius
+                //blurRadius: 64, // Blur radius
+                //offset: const Offset(0, 32),
               ),
-              child: Center(
-                child: CustomSvg(
-                  asset:AppAsset.add,
-                  height: 17.14.h,
-                  width: 17.14.w,
-                ),
-              ),
+            ],
+          ),
+          child: Center(
+            child: CustomSvg(
+              asset:AppAsset.subtract,
+              height: 17.14.h,
+              width: 17.14.w,
             ),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget addButton(BuildContext context){
+    return Clickable(
+      onPressed: (){
+        _fn.unfocus();
+        if(int.tryParse(_quantity.text) == widget.upperLimit){
+          return;
+        }
+        setState(() {
+          _quantity.text = ((int.tryParse(_quantity.text) ?? 0) + widget.stepValue).toString();
+        });
+        widget.onChanged(int.tryParse(_quantity.text));
+      },
+      child: Opacity(
+        opacity: int.tryParse(_quantity.text) == widget.upperLimit ? 0.3 : 1,
+        child: Container(
+          height: widget.buttonSize?.h ?? 40.h,
+          width: widget.buttonSize?.w ??40.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).colorScheme.whiteText,
+            boxShadow: [
+              BoxShadow(
+                color: ColorPath.whisperGrey.withAlpha((255 * 0.1).toInt()),
+                spreadRadius: 0,
+                blurRadius: 22.86,
+                offset: const Offset(0, 2.86),
+                //spreadRadius: -12, // Spread radius
+                //blurRadius: 64, // Blur radius
+                //offset: const Offset(0, 32),
+              ),
+            ],
+          ),
+          child: Center(
+            child: CustomSvg(
+              asset:AppAsset.add,
+              height: 17.14.h,
+              width: 17.14.w,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
