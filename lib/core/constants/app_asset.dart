@@ -36,6 +36,8 @@ class AppAsset {
   static const String subtract = 'assets/icons/subtract.svg';
   static const String add = 'assets/icons/add.svg';
   static const String ticketSlider = 'assets/icons/ticket_slider.svg';
+  static const String cart2 = 'assets/icons/cart2.svg';
+  static const String buyNow = 'assets/icons/buy_now.svg';
 
 
 

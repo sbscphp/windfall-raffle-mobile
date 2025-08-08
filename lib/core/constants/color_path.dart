@@ -47,6 +47,8 @@ class ColorPath {
   static const whisperGrey = Color(0xffEDEDF6);
   static const wildGrey = Color(0xffF5F5F5);
   static const altoGrey = Color(0xffD5D5D5);
+  static const regentGrey = Color(0xff8A94A4);
+  static const lisaPink = Color(0xffFF9798);
 
 
 
