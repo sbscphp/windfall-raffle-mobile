@@ -4,6 +4,7 @@ class AppAsset {
 
   //icons
   static const String avatar = 'assets/icons/avatar.svg';
+  static const String avatar2 = 'assets/icons/avatar_2.svg';
   static const String pwdVisible = 'assets/icons/pwd_visible.svg';
   static const String pwdHidden = 'assets/icons/pwd_hidden.svg';
   static const String biometrics = 'assets/icons/biometrics.svg';
@@ -20,6 +21,7 @@ class AppAsset {
   static const String drawDate = 'assets/icons/draw_date.svg';
   static const String maxPerson = 'assets/icons/max_person.svg';
   static const String minEntry = 'assets/icons/minimum_entry.svg';
+  static const String minEntry2 = 'assets/icons/min_entry.svg';
   static const String ticketsLeft = 'assets/icons/tickets_left.svg';
   static const String cart = 'assets/icons/cart.svg';
   static const String filter = 'assets/icons/filter.svg';

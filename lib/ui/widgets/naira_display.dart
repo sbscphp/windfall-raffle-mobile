@@ -14,6 +14,7 @@ class NairaDisplay extends StatelessWidget {
   final bool addDecimal;
   final bool showPrefixSign;
   final bool add;
+  final bool isSlashedAmount;
   const NairaDisplay(
       {super.key,
       required this.amount,
@@ -22,6 +23,7 @@ class NairaDisplay extends StatelessWidget {
         this.addDecimal = true,
         this.showPrefixSign = false,
         this.add = false,
+        this.isSlashedAmount = false,
       this.fontWeight});
 
   @override
@@ -45,7 +47,9 @@ class NairaDisplay extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: color ?? Theme.of(context).colorScheme.textPrimary,
                     fontSize: fontSize?.sp ?? 24.sp,
-                    fontWeight: fontWeight ?? FontWeight.w700
+                    fontWeight: fontWeight ?? FontWeight.w700,
+                    decoration: isSlashedAmount ? TextDecoration.lineThrough:null,
+                  decorationColor: color
                 ),
                 children: [
                   const TextSpan(

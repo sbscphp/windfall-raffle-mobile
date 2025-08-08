@@ -45,6 +45,9 @@ class ColorPath {
   static const solitudeBlue = Color(0xffE0EAFF);
   static const salomieBrown = Color(0xffFEDF89);
   static const whisperGrey = Color(0xffEDEDF6);
+  static const wildGrey = Color(0xffF5F5F5);
+  static const altoGrey = Color(0xffD5D5D5);
+
 
 
 
