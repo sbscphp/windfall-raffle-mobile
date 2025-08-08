@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-
 import '../../core/constants/color_path.dart';
 import 'custom_painter/dotted_border.dart';
-import 'naira_display.dart';
+
 
 class DottedContainer extends StatelessWidget {
   final Widget child;
