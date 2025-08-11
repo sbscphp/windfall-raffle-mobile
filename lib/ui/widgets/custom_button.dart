@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
   final Widget? childWidget;
   final Color? loaderColor;
   final bool useBorderColor;
-  final String? prefixIcon;
+  final String? buttonIcon;
   final bool showButtonIcon;
   final bool useDottedBorder;
 
@@ -44,7 +44,7 @@ class CustomButton extends StatelessWidget {
     this.childWidget,
     this.useBorderColor = false,
     this.buttonHorizontalPadding = 24,
-    this.prefixIcon,
+    this.buttonIcon,
     this.showButtonIcon = false,
     this.useDottedBorder = false
   });
@@ -70,8 +70,6 @@ class CustomButton extends StatelessWidget {
         FittedBox(
           child: Row(
             children: [
-              if(showButtonIcon)CustomSvg(asset: prefixIcon ?? AppAsset.onboarding1),
-              if(showButtonIcon)SizedBox(width: 8.w,),
               Text(
                 buttonText,
                 style: textTheme.bodyLarge?.copyWith(
@@ -82,7 +80,9 @@ class CustomButton extends StatelessWidget {
                   fontWeight: buttonTextFontWeight,
                   fontSize: buttonTextSize.sp,
                 ),
-              )
+              ),
+              if(showButtonIcon)SizedBox(width: 8.w,),
+              if(showButtonIcon)CustomSvg(asset: buttonIcon ?? AppAsset.buyNow, height: 18.h, width: 18.w,),
             ],
           ),
         );

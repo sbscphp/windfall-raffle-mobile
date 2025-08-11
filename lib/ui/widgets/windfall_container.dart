@@ -7,14 +7,16 @@ import '../../core/constants/color_path.dart';
 class WindfallContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets? padding;
+  final EdgeInsets? margin;
   final double? width;
-  const WindfallContainer({super.key, required this.child, this.padding, this.width});
+  const WindfallContainer({super.key, this.margin, required this.child, this.padding, this.width});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
       padding: padding,
+      margin: margin,
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.whiteText,
           border: Border.all(color: ColorPath.athensGrey2, width: 1.w),
