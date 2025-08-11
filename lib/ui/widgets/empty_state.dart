@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
+import 'package:windfall/ui/widgets/custom_button.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
 
@@ -12,13 +13,15 @@ import 'custom_svg.dart';
 
 class EmptyState extends StatelessWidget {
   final String asset;
+  final double? assetHeight;
+  final double? assetWidth;
   final String title;
   final String subtitle;
   final bool useBgCard;
   final String? ctaText;
   final bool showCtaButton;
   final VoidCallback? onPressed;
-  const EmptyState({super.key, this.onPressed, this.showCtaButton = true, this.ctaText, this.useBgCard = true, required this.asset, required this.title, required this.subtitle});
+  const EmptyState({super.key, this.onPressed, this.showCtaButton = true, this.ctaText, this.assetHeight, this.assetWidth, this.useBgCard = true, required this.asset, required this.title, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class EmptyState extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomSvg(asset: asset, height: 40.h, width: 40.w,),
+              CustomSvg(asset: asset, height: assetHeight ?? 40.h, width: assetWidth ?? 40.w,),
               SizedBox(height: 8.h,),
               Text(
                 title,
@@ -91,13 +94,13 @@ class EmptyState extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomSvg(asset: asset, height: 100.h, width: 100.w,),
-        SizedBox(height: 8.h,),
+        CustomSvg(asset: asset, height: assetHeight ?? 100.h, width:  assetWidth ?? 100.w,),
+        SizedBox(height: 16.h,),
         Text(
           title,
           style: Theme.of(context)
               .textTheme
-              .bodyMedium
+              .titleMedium
               ?.copyWith(
               fontWeight: FontWeight.w800,
               color:
@@ -105,20 +108,28 @@ class EmptyState extends StatelessWidget {
         ),
         SizedBox(height: 8.h,),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 59.w),
+          padding: EdgeInsets.symmetric(horizontal: 40.w),
           child: Text(
             subtitle,
             style: Theme.of(context)
                 .textTheme
-                .bodySmall
+                .bodyMedium
                 ?.copyWith(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w400,
                 color:
-                Theme.of(context).colorScheme.textPrimary),
+                Theme.of(context).colorScheme.textSecondary),
             textAlign: TextAlign.center,
           ),
 
         ),
+        SizedBox(height: 48.h,),
+        if(showCtaButton)
+        Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 16.w),
+            child: CustomButton(onPressed: onPressed,
+            useDottedBorder: true,
+            buttonText: ctaText ?? '',),
+          ),
 
       ],
     );

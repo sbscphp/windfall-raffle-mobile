@@ -8,8 +8,8 @@ import '../data/models/grouped_list.dart';
 
 
 class Utilities {
-  static const nairaSign = "\u{20A6}";
-  static const naira = "₦";
+  static const nairaSign = "\u{20A6} ";
+  static const naira = "₦ ";
   static bool unauthorizedFlag = false;
 
   static List<String> electricityPresets = [

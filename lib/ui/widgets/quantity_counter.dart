@@ -16,6 +16,7 @@ class QuantityCounter extends StatefulWidget {
   final double? labelBgWidth;
   final double? labelSize;
   final bool swapButtons;
+  final bool showBottomBorder;
   const QuantityCounter({
     super.key,
     this.value = 1,
@@ -27,7 +28,8 @@ class QuantityCounter extends StatefulWidget {
     this.buttonSpacing,
     this.labelBgWidth,
     this.labelSize,
-    this.swapButtons = false
+    this.swapButtons = false,
+    this.showBottomBorder = false
   });
 
   @override
@@ -76,7 +78,14 @@ class _QuantityCounterState extends State<QuantityCounter> {
           padding: EdgeInsets.symmetric(
             vertical: 8.h,
           ),
+          decoration: BoxDecoration(
           color: ColorPath.chablisPink,
+          border: widget.showBottomBorder ? Border(bottom: BorderSide(
+            color: ColorPath.redOrange,
+            width: 2.w,
+          )) : null,
+
+          ),
           child:  Center(
             child: Text(
              _quantity.text,
