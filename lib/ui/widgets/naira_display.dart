@@ -5,7 +5,6 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 
 import '../../core/utilities/utilities.dart';
 
-
 class NairaDisplay extends StatelessWidget {
   final double amount;
   final Color? color;
@@ -15,57 +14,62 @@ class NairaDisplay extends StatelessWidget {
   final bool showPrefixSign;
   final bool add;
   final bool isSlashedAmount;
-  const NairaDisplay(
-      {super.key,
-      required this.amount,
-      this.color,
-      this.fontSize,
-        this.addDecimal = true,
-        this.showPrefixSign = false,
-        this.add = false,
+  const NairaDisplay({
+    super.key,
+    required this.amount,
+    this.color,
+    this.fontSize,
+    this.addDecimal = true,
+    this.showPrefixSign = false,
+    this.add = false,
         this.isSlashedAmount = false,
-      this.fontWeight});
+    this.fontWeight,
+  });
 
   @override
   Widget build(BuildContext context) {
     return FittedBox(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if(showPrefixSign)
-              Text(
-                add ? '+':'-',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: color ?? Theme.of(context).colorScheme.textPrimary,
-                    fontSize: fontSize?.sp ?? 24.sp,
-                    fontWeight: fontWeight ?? FontWeight.w700
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (showPrefixSign)
+            Text(
+              add ? '+ ' : '- ',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: color ?? Theme.of(context).colorScheme.textPrimary,
+                fontSize: fontSize?.sp ?? 24.sp,
+                fontWeight: fontWeight ?? FontWeight.w700,
               ),
-            RichText(
-              textAlign: TextAlign.left,
-              text: TextSpan(
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: color ?? Theme.of(context).colorScheme.textPrimary,
-                    fontSize: fontSize?.sp ?? 24.sp,
-                    fontWeight: fontWeight ?? FontWeight.w700,
+            ),
+          RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: color ?? Theme.of(context).colorScheme.textPrimary,
+                fontSize: fontSize?.sp ?? 24.sp,
+                fontWeight: fontWeight ?? FontWeight.w700,,
                     decoration: isSlashedAmount ? TextDecoration.lineThrough:null,
                   decorationColor: color
-                ),
-                children: [
-                  const TextSpan(
-                      text: Utilities.naira,
-                      style:
-                      TextStyle(
-                        //fontFamily: Platform.isAndroid ? '' : 'BR Cobane'
-                      )),
-                  TextSpan(
-                    text: Utilities.formatAmount(amount: amount, addDecimal: addDecimal),
-                  ),
-                ],
               ),
-            )
-          ],
-        ));
+              children: [
+                const TextSpan(
+                  text: Utilities.naira,
+                  style: TextStyle(
+                    //fontFamily: Platform.isAndroid ? '' : 'BR Cobane'
+                  ),
+                ),
+                TextSpan(
+                  text: Utilities.formatAmount(
+                    amount: amount,
+                    addDecimal: addDecimal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -76,9 +80,13 @@ TextSpan textspanNairaDisplay({
   FontWeight? fontWeight,
 }) {
   return TextSpan(
-      text: '${Utilities.nairaSign}${Utilities.formatAmount(
-        amount: amount,
-      )}',
+    text: '${Utilities.nairaSign}${Utilities.formatAmount(amount: amount)}',
 
-      style: TextStyle(color: color,fontWeight: fontWeight,fontSize: fontSize, fontFamily: Platform.isAndroid ? '' : 'BR Cobane'));
+    style: TextStyle(
+      color: color,
+      fontWeight: fontWeight,
+      fontSize: fontSize,
+      fontFamily: Platform.isAndroid ? '' : 'BR Cobane',
+    ),
+  );
 }

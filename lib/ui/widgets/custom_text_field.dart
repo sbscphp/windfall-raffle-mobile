@@ -26,6 +26,7 @@ class CustomTextField extends StatefulWidget {
   final String bottomHintText;
   final double? hintSize;
   final Color? hintColor;
+  final Color? bottomHintColor;
   final bool enabled;
   final bool readOnly;
   final bool isCompulsory;
@@ -54,6 +55,7 @@ class CustomTextField extends StatefulWidget {
         this.hintText = '',
         this.hintSize,
         this.hintColor,
+        this.bottomHintColor,
         this.enabled = true,
         this.readOnly = false,
         this.prefixIcon,
@@ -182,6 +184,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     borderSide: BorderSide(color: _errorText != null ? ColorPath.redOrange:colorScheme.textFieldBorder, width: 1.w)),
               )),
         ),
+        if(widget.bottomHintText.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.only(top: 6.h),
+            child: Text(
+              widget.bottomHintText,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: widget.bottomHintColor ?? Theme.of(context).colorScheme.textFieldHint
+              ),
+            ),
+          ),
         if(_errorText != null)Padding(
           padding: EdgeInsets.only(top: 6.h),
           child: Text(

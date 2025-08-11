@@ -37,6 +37,9 @@ class NamedRoutes {
   //in-app webview
 
 
+  //cart
+  static const cart = '/cart';
+  static const checkout = '/checkout';
 
 
 
