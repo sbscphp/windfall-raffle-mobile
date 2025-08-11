@@ -18,7 +18,6 @@ class ColumnDescriptionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: crossAxisAlignment,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           description ?? "",
