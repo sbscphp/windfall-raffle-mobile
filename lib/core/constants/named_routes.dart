@@ -25,7 +25,15 @@ class NamedRoutes {
   //rewards
 
 
-  //settings
+  //settings/profile
+  static const personalInfo = '/personalInfo';
+  static const notificationSettings = '/notificationSettings';
+  static const notifications = '/notifications';
+  static const settings = '/settings';
+  static const changePassword = '/changePassword';
+
+
+
 
 
   //payment

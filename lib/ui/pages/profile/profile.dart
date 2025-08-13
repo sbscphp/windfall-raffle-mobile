@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
+import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/profile/notification_settings.dart';
+import 'package:windfall/ui/pages/profile/notifications.dart';
+import 'package:windfall/ui/pages/profile/personal_information.dart';
+import 'package:windfall/ui/pages/profile/settings.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
 import 'package:windfall/ui/widgets/profile/profile_action.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
@@ -13,16 +21,17 @@ import '../../widgets/custom_painter/dotted_border.dart';
 import '../../widgets/custom_svg.dart';
 import '../../widgets/display_image.dart';
 
-class Profile extends StatefulWidget {
+class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  ConsumerState<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends ConsumerState<Profile> {
   @override
   Widget build(BuildContext context) {
+    final bottomNavVm = ref.watch(bottomNavViewModel);
     return Scaffold(
       appBar: customAppBar(
         context: context,
@@ -45,7 +54,7 @@ class _ProfileState extends State<Profile> {
                       color: ColorPath.redOrange,
                       isCircle: true
                   ),
-                  child: 1 + 1 == 2 ? DisplayImage(
+                  child: 1 + 1 == 3 ? DisplayImage(
                     size: 54,
                     borderWidth: 0,
                     image: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
@@ -113,7 +122,9 @@ class _ProfileState extends State<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.personalInformation,
                                 label: "Personal Information",
-                                onPressed: (){}
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: PersonalInformation(),routeName: NamedRoutes.personalInfo);
+                                }
                             ),
                             CustomDivider(
                               verticalSpace: 16.h,
@@ -121,7 +132,9 @@ class _ProfileState extends State<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.ticketsLeft,
                                 label: "My Games",
-                                onPressed: (){}
+                                onPressed: (){
+                                  bottomNavVm.setCurrentIndex(2);
+                                }
                             ),
                             CustomDivider(
                               verticalSpace: 16.h,
@@ -153,7 +166,9 @@ class _ProfileState extends State<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.notifications,
                                 label: "Notifications",
-                                onPressed: (){}
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: Notifications(),routeName: NamedRoutes.notifications);
+                                }
                             ),
                             CustomDivider(
                               verticalSpace: 16.h,
@@ -161,7 +176,10 @@ class _ProfileState extends State<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.settings,
                                 label: "Settings",
-                                onPressed: (){}
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: Settings(),routeName: NamedRoutes.settings);
+
+                                }
                             ),
 
                           ],

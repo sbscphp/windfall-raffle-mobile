@@ -40,7 +40,16 @@ class AppAsset {
   static const String buyNow = 'assets/icons/buy_now.svg';
   static const String emptyCart = 'assets/icons/empty_cart.svg';
   static const String delete = 'assets/icons/delete.svg';
-
+  static const String camera = 'assets/icons/camera.svg';
+  static const String warning = 'assets/icons/warning.svg';
+  static const String success = 'assets/icons/success.svg';
+  static const String emptyNotification = 'assets/icons/empty_notifications.svg';
+  static const String settingsAccount = 'assets/icons/settings_account.svg';
+  static const String settingsNotification = 'assets/icons/settings_notification.svg';
+  static const String logout = 'assets/icons/logout.svg';
+  static const String security = 'assets/icons/security.svg';
+  static const String security2 = 'assets/icons/security2.svg';
+  static const String security3 = 'assets/icons/security3.svg';  
 
 
 

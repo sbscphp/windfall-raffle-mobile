@@ -21,14 +21,15 @@ class EmptyState extends StatelessWidget {
   final String? ctaText;
   final bool showCtaButton;
   final VoidCallback? onPressed;
-  const EmptyState({super.key, this.onPressed, this.showCtaButton = true, this.ctaText, this.assetHeight, this.assetWidth, this.useBgCard = true, required this.asset, required this.title, required this.subtitle});
+  final EdgeInsets? padding;
+  const EmptyState({super.key, this.onPressed, this.showCtaButton = true, this.ctaText, this.assetHeight, this.assetWidth, this.useBgCard = true, required this.asset, required this.title, required this.subtitle,this.padding});
 
   @override
   Widget build(BuildContext context) {
 
     if(useBgCard){
       return WindfallContainer(
-        padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight, vertical: 16.h),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: AppDimension.paddingRight, vertical: 16.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
