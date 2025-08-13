@@ -49,6 +49,9 @@ class ColorPath {
   static const altoGrey = Color(0xffD5D5D5);
   static const regentGrey = Color(0xff8A94A4);
   static const lisaPink = Color(0xffFF9798);
+  static const californiaOrange = Color(0xffF79009);
+  static const pippinPink = Color(0xffFFE4E8);
+  static const shirazRed = Color(0xffC01048);
 
 
 

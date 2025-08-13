@@ -12,6 +12,7 @@ import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/dotted_container.dart';
 import 'package:windfall/ui/widgets/home/game_details_section.dart';
 import 'package:windfall/ui/widgets/home/related_games_section.dart';
+import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_dimension.dart';
 import '../../../core/constants/color_path.dart';
 import '../../../core/utilities/utilities.dart';
@@ -20,6 +21,7 @@ import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_dot.dart';
 import '../../widgets/custom_painter/dotted_border.dart';
+import '../../widgets/home/game_property.dart';
 import '../../widgets/media_placeholder.dart';
 import '../../widgets/naira_display.dart';
 import '../../widgets/quantity_counter.dart';
@@ -60,10 +62,23 @@ class _GameDetailsState extends State<GameDetails> {
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(bottom: 20.h),
-              child: Column(
+              child: 1 + 1 == 3 ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  imagesAndPrice(context),
+                  imageAndName(context),
+                  SizedBox(height: 8.h,),
+                  gameStatus(context),
+                  SizedBox(height: 32.h,),
+                  winnerDetails(context)
+                ],
+              ):Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  imageAndName(context),
+                  SizedBox(height: 8.h,),
+                  gameStatus(context),
+                  SizedBox(height: 32.h,),
+                  priceDetails(context),
                   SizedBox(height: 32.h,),
                   GameDetailsSection(
                     margin: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight,
@@ -80,7 +95,6 @@ class _GameDetailsState extends State<GameDetails> {
                   ),
                   SizedBox(height: 24.h,),
                   RelatedGamesSection()
-
                 ],
               ),
             ),
@@ -101,7 +115,12 @@ class _GameDetailsState extends State<GameDetails> {
               ],
             ),
             child: SafeArea(
-              child: Column(
+              child: 1 + 1 == 2 ? CustomButton(
+                  useDottedBorder: true,
+                  disableBgColor: ColorPath.californiaOrange,
+                  buttonText:'Upcoming Game ~ Coming Soon ',
+                  onPressed: null
+              ):Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomButton(
@@ -134,138 +153,327 @@ class _GameDetailsState extends State<GameDetails> {
       ),
     );
   }
-  
-  Widget imagesAndPrice(BuildContext context){
+
+  Widget imageAndName(BuildContext context){
     return Padding(
       padding: EdgeInsets.only(
-        top: AppDimension.paddingTop,
+          top: AppDimension.paddingTop,
+          left: AppDimension.paddingLeft,
+          right: AppDimension.paddingRight
+      ),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 168.h,
+              child: Align(
+                alignment: Alignment.center,
+                child: Swiper(
+                  //autoplay: true,
+                  //autoplayDisableOnInteraction: true,
+                  itemCount:3,
+                  duration: 400,
+                  //autoplayDelay: 3000, // Delay in milliseconds
+                  curve: Curves.easeInOut,
+                  itemHeight: double.infinity,
+                  itemWidth: double.infinity,
+                  onIndexChanged: (index){
+                  },
+                  scale: 0.7,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                        placeholder: (context, url) => const MediaPlaceholder(),
+                        errorWidget: (context, url, error) => const MediaPlaceholder(),
+                      ),
+                    );
+
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 16.h,),
+            Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                    3,
+                        (index) => CustomDot(
+                      height: 14,
+                      width: 14,
+                      activeColor: ColorPath.redOrange,
+                      inactiveColor: ColorPath.cosmosPink,
+                      useRoundCircles: true,
+                      isActive: index == 2,
+                    )),
+              ),
+            ),
+            SizedBox(height: 24.h,),
+            Text(
+              "Secure a Luxury Studio Apartment in Lekki, Lagos State, Nigeria. ",
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.textPrimary,
+              ),
+            ),
+            SizedBox(height: 4.h,),
+            Text(
+              "Enter now to grab the opportunity of a brand new Samsung",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.textSecondary,
+              ),
+            ),
+          ]
+      ),
+    );
+  }
+
+  Widget gameStatus(BuildContext context){
+    if(1 + 1 == 3){
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+              decoration: BoxDecoration(
+                  color: Utilities.statusContainerColor(status: 'live'),
+                  borderRadius: BorderRadius.all(Radius.circular(16.r))
+              ),
+              child: Text(
+                Utilities.statusText(status: 'Live Game'),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Utilities.statusTextColor(status: 'live')
+                ),
+              ),
+            ),
+            SizedBox(width: 8.w,),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+              decoration: BoxDecoration(
+                  color: ColorPath.solitudeBlue,
+                  borderRadius: BorderRadius.all(Radius.circular(16.r))
+              ),
+              child: Text(
+                'Draw Date: April 11',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: ColorPath.bayBlue
+                ),
+              ),
+            ),
+
+          ],
+        ),
+      );
+    }
+    if(1 + 1 == 2){
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+              decoration: BoxDecoration(
+                  color: ColorPath.scandalGreen,
+                  borderRadius: BorderRadius.all(Radius.circular(16.r))
+              ),
+              child: Text(
+                'Winner Announced',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: ColorPath.hazeGreen
+                ),
+              ),
+            ),
+            SizedBox(width: 8.w,),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+              decoration: BoxDecoration(
+                  color: ColorPath.pippinPink,
+                  borderRadius: BorderRadius.all(Radius.circular(16.r))
+              ),
+              child: Text(
+                'Draw Closed',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: ColorPath.shirazRed
+                ),
+              ),
+            ),
+
+          ],
+        ),
+      );
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+      margin: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+      decoration: BoxDecoration(
+          color: Utilities.statusContainerColor(status: 'upcoming'),
+          borderRadius: BorderRadius.all(Radius.circular(16.r))
+      ),
+      child: Text(
+        Utilities.statusText(status: 'upcoming'),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Utilities.statusTextColor(status: 'upcoming')
+        ),
+      ),
+    );
+  }
+
+  Widget winnerDetails(BuildContext context){
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Draw Winner Announcement 🚀",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.textPrimary,
+            ),
+          ),
+          SizedBox(height: 16.h,),
+          WindfallContainer(
+            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 150.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4.r))
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                        placeholder: (context, url) => const MediaPlaceholder(),
+                        errorWidget: (context, url, error) => const MediaPlaceholder(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h,),
+                  GameProperty(
+                      imageAsset: AppAsset.drawDate,
+                      label: 'Draw Date:',
+                      value: Expanded(
+                        child: Text(
+                          "April 11, 2025",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.textSecondary,
+                          ),
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 8.h,),
+                  GameProperty(
+                      imageAsset: AppAsset.ticketsLeft,
+                      label: 'Total Tickets:',
+                      value: Expanded(
+                        child: Text(
+                          "1,000 Tickets",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.textSecondary,
+                          ),
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 8.h,),
+                  GameProperty(
+                      imageAsset: AppAsset.maxPerson,
+                      label: 'No of Winners:',
+                      value: Expanded(
+                        child: Text(
+                          "200",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.textSecondary,
+                          ),
+                        ),
+                      )
+                  ),
+
+
+
+                ],
+              )
+          ),
+          SizedBox(height: 24.h,),
+          DottedContainer(
+              borderRadius:8,
+              padding: EdgeInsets.symmetric(
+                  vertical: 16.h,
+                  horizontal: 24.w
+              ),
+              decoration: BoxDecoration(
+                  color: ColorPath.fairPink,
+                  borderRadius: BorderRadius.all(Radius.circular(8.r))
+              ),
+              child: Center(
+                child: FittedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Winner Announced",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.textTertiary,
+                        ),
+                      ),
+                      SizedBox(height: 5.h,),
+                      Text(
+                        "Dariye Damilola Fiyin",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: ColorPath.redOrange,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+          )
+
+        ],
+      ),
+    );
+  }
+  
+  Widget priceDetails(BuildContext context){
+    return Padding(
+      padding: EdgeInsets.only(
         left: AppDimension.paddingLeft,
         right: AppDimension.paddingRight
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 168.h,
-            child: Align(
-              alignment: Alignment.center,
-              child: Swiper(
-                //autoplay: true,
-                //autoplayDisableOnInteraction: true,
-                itemCount:3,
-                duration: 400,
-                //autoplayDelay: 3000, // Delay in milliseconds
-                curve: Curves.easeInOut,
-                itemHeight: double.infinity,
-                itemWidth: double.infinity,
-                onIndexChanged: (index){
-                },
-                scale: 0.7,
-                itemBuilder: (BuildContext context, int index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
-                      placeholder: (context, url) => const MediaPlaceholder(),
-                      errorWidget: (context, url, error) => const MediaPlaceholder(),
-                    ),
-                  );
-
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 16.h,),
-          Align(
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                  3,
-                      (index) => CustomDot(
-                    height: 14,
-                    width: 14,
-                    activeColor: ColorPath.redOrange,
-                    inactiveColor: ColorPath.cosmosPink,
-                    useRoundCircles: true,
-                    isActive: index == 2,
-                  )),
-            ),
-          ),
-          SizedBox(height: 24.h,),
-          Text(
-            "Secure a Luxury Studio Apartment in Lekki, Lagos State, Nigeria. ",
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: Theme.of(context).colorScheme.textPrimary,
-            ),
-          ),
-          SizedBox(height: 4.h,),
-          Text(
-            "Enter now to grab the opportunity of a brand new Samsung",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.textSecondary,
-            ),
-          ),
-          SizedBox(height: 8.h,),
-          1 + 1 == 2 ? Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                decoration: BoxDecoration(
-                    color: Utilities.statusContainerColor(status: 'live'),
-                    borderRadius: BorderRadius.all(Radius.circular(16.r))
-                ),
-                child: Text(
-                  Utilities.statusText(status: 'Live Game'),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Utilities.statusTextColor(status: 'live')
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w,),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                decoration: BoxDecoration(
-                    color: ColorPath.solitudeBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(16.r))
-                ),
-                child: Text(
-                  'Draw Date: April 11',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: ColorPath.bayBlue
-                  ),
-                ),
-              ),
-
-            ],
-          )
-              :Container(
-            padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-            decoration: BoxDecoration(
-                color: Utilities.statusContainerColor(status: 'upcoming'),
-                borderRadius: BorderRadius.all(Radius.circular(16.r))
-            ),
-            child: Text(
-              Utilities.statusText(status: 'upcoming'),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Utilities.statusTextColor(status: 'upcoming')
-              ),
-            ),
-          ),
-          SizedBox(height: 32.h,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              QuantityCounter(
+              1 + 1 == 3 ? QuantityCounter(
                   value: quantity.toInt(),
                   upperLimit: 33,
                   onChanged: (value){
@@ -273,7 +481,29 @@ class _GameDetailsState extends State<GameDetails> {
                       quantity = value.toDouble() ?? 1;
                     });
                   }
-              ),
+              ):Container(
+    padding: EdgeInsets.symmetric(
+    vertical: 8.h,
+      horizontal: 16.w
+    ),
+    decoration: BoxDecoration(
+    color: ColorPath.chablisPink,
+    border: Border(bottom: BorderSide(
+    color: ColorPath.redOrange,
+    width: 2.w,
+    )),
+
+    ),
+    child:  Center(
+    child: Text(
+    'Coming Soon',
+    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+    fontWeight: FontWeight.w800,
+    color: ColorPath.redOrange,
+    ),
+    ),
+    ),
+    ),
               SizedBox(width: 10.w,),
               Flexible(
                 child: Column(
@@ -629,4 +859,6 @@ class _GameDetailsState extends State<GameDetails> {
       ),
     );
   }
+
+
 }
