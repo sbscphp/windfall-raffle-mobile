@@ -64,7 +64,7 @@ class _CartState extends State<Cart> {
                     ),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return CartItem();
+                      return CartItem(isInstantGame: index % 2 == 0);
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(height: 16.h);
@@ -138,7 +138,11 @@ class _CartState extends State<Cart> {
                         SizedBox(height: 16.h),
                         CustomButton(
                           onPressed: () {
-                            pushNavigation(context: context, widget: Checkout(),routeName: NamedRoutes.checkout);
+                            pushNavigation(
+                              context: context,
+                              widget: Checkout(),
+                              routeName: NamedRoutes.checkout,
+                            );
                           },
                           useDottedBorder: true,
                           buttonText: "Checkout ~ ₦480,000",

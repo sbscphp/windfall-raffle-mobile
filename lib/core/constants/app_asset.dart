@@ -9,6 +9,7 @@ class AppAsset {
   static const String pwdHidden = 'assets/icons/pwd_hidden.svg';
   static const String biometrics = 'assets/icons/biometrics.svg';
   static const String calendar = 'assets/icons/calendar.svg';
+  static const String calendar2 = 'assets/icons/calendar2.svg';
   static const String checkMark = 'assets/icons/check_mark.svg';
   static const String emailVerification = 'assets/icons/email_verification.svg';
   static const String createPassword = 'assets/icons/create_new_password.svg';
@@ -23,6 +24,7 @@ class AppAsset {
   static const String minEntry = 'assets/icons/minimum_entry.svg';
   static const String minEntry2 = 'assets/icons/min_entry.svg';
   static const String ticketsLeft = 'assets/icons/tickets_left.svg';
+  static const String ticket2 = 'assets/icons/ticket2.svg';
   static const String cart = 'assets/icons/cart.svg';
   static const String filter = 'assets/icons/filter.svg';
   static const String rightChevron = 'assets/icons/right_chevron.svg';
@@ -53,6 +55,9 @@ class AppAsset {
   static const String close = 'assets/icons/close.svg';
   static const String downloadTicket = 'assets/icons/download_ticket.svg';
   static const String copy = 'assets/icons/copy.svg';
+  static const String zap = 'assets/icons/zap.svg';
+  static const String wallet = 'assets/icons/wallet.svg';
+  static const String walletImg = 'assets/icons/wallet.png';
 
 
 
