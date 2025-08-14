@@ -47,7 +47,7 @@ class NairaDisplay extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: color ?? Theme.of(context).colorScheme.textPrimary,
                 fontSize: fontSize?.sp ?? 24.sp,
-                fontWeight: fontWeight ?? FontWeight.w700,,
+                fontWeight: fontWeight ?? FontWeight.w700,
                     decoration: isSlashedAmount ? TextDecoration.lineThrough:null,
                   decorationColor: color
               ),
