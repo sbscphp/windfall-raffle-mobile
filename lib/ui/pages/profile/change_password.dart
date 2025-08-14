@@ -45,6 +45,8 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
             BodyHeader(
               child: ScreenTitle(
                 title: "Account Security: ",
+                titleSize: 16.sp,
+                subTitleSize: 12.sp,
                 titleExtension: "Change your Password",
                 subTitle: "Create a new password to secure your account.",
               ),
@@ -189,6 +191,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 },
               ),
             ),
+            SizedBox(height: 16.h),
           ],
         ),
       ),

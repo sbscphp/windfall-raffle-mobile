@@ -18,7 +18,38 @@ class CustomSvg extends StatelessWidget {
       width: width?.w ?? 24.w,
       fit: fit ?? BoxFit.cover,
       colorFilter: colorFilter,
-
-    );
+    ); 
   }
+}
+
+class CustomAssetViewer extends StatelessWidget {
+  final String asset;
+  final double? height;
+  final double? width;
+  final ColorFilter? colorFilter;
+  const CustomAssetViewer({
+    super.key,
+    required this.asset,
+    this.height,
+    this.width,
+    this.colorFilter,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return isSvg()
+        ? CustomSvg(
+            asset: asset,
+            height: height,
+            width: width,
+            colorFilter: colorFilter,
+          )
+        : Image.asset(
+            asset,
+            height: height?.h ?? 24.h,
+            width: width?.w ?? 24.w,
+          );
+  }
+
+  bool isSvg() => asset.endsWith('.svg');
 }

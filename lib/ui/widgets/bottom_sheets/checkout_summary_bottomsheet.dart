@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/receipt/payment_receipt.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/custom_button.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
@@ -99,10 +102,12 @@ class CheckoutSummaryBottomsheet extends StatelessWidget {
           SizedBox(height: 24.h),
           CustomButton(
             onPressed: () {
-              //    baseBottomSheet(
-              //     context: context,
-              //     content: CheckoutSummaryBottomsheet()
-              // );
+              popNavigation(context: context);
+              pushNavigation(
+                context: context,
+                widget: PaymentReceipt(),
+                routeName: NamedRoutes.paymentReceipt,
+              );
             },
             buttonText: "Go to Payment (₦470,000)",
             useDottedBorder: true,

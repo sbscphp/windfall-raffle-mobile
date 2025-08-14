@@ -50,6 +50,7 @@ class NamedRoutes {
   //cart
   static const cart = '/cart';
   static const checkout = '/checkout';
+  static const paymentReceipt = '/paymentReceipt';
 
 
 
