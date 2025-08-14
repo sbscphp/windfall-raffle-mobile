@@ -9,10 +9,12 @@ class ScreenTitle extends StatelessWidget {
   final double? titleSize;
   final double? subTitleSize;
   final Color? titleColor;
+  final Color? subTitleColor;
   final Color? titleExtensionColor;
   final FontWeight? titleFontWeight;
+  final FontWeight? subTitleFontWeight;
   final FontWeight? titleExtensionFontWeight;
-  const ScreenTitle({super.key, this.titleFontWeight, this.titleColor, this.titleSize, this.subTitleSize, required this.title, required this.subTitle,this.titleExtension,this.titleExtensionColor, this.titleExtensionFontWeight});
+  const ScreenTitle({super.key, this.subTitleColor, this.subTitleFontWeight, this.titleFontWeight, this.titleColor, this.titleSize, this.subTitleSize, required this.title, required this.subTitle,this.titleExtension,this.titleExtensionColor, this.titleExtensionFontWeight});
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +48,8 @@ class ScreenTitle extends StatelessWidget {
           subTitle,
           style: textTheme.bodyLarge?.copyWith(
               fontSize: subTitleSize?.sp,
-              fontWeight: FontWeight.w400,
-              color: colorScheme.textSecondary
+              fontWeight: subTitleFontWeight ?? FontWeight.w400,
+              color: subTitleColor ?? colorScheme.textSecondary
           ),
         ),
       ],

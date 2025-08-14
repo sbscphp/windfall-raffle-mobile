@@ -17,6 +17,7 @@ class NamedRoutes {
 
 
   //my games
+  static const gameTickets = '/gameTickets';
 
 
   //bottom nav

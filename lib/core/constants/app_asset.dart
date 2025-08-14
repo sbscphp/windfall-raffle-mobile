@@ -49,7 +49,10 @@ class AppAsset {
   static const String logout = 'assets/icons/logout.svg';
   static const String security = 'assets/icons/security.svg';
   static const String security2 = 'assets/icons/security2.svg';
-  static const String security3 = 'assets/icons/security3.svg';  
+  static const String security3 = 'assets/icons/security3.svg';
+  static const String close = 'assets/icons/close.svg';
+  static const String downloadTicket = 'assets/icons/download_ticket.svg';
+  static const String copy = 'assets/icons/copy.svg';
 
 
 

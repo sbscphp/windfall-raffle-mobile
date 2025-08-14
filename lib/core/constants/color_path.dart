@@ -52,6 +52,14 @@ class ColorPath {
   static const californiaOrange = Color(0xffF79009);
   static const pippinPink = Color(0xffFFE4E8);
   static const shirazRed = Color(0xffC01048);
+  static const foamGreen = Color(0xffECFDF3);
+  static const provincialPink = Color(0xffFEF3F2);
+  static const thunderbirdRed = Color(0xffB42318);
+  static const funGreen = Color(0xff027A48);
+  static const fetaGreen = Color(0xffF6FEF9);
+  static const shamrockGreen = Color(0xff32D583);
+  static const mistGrey = Color(0xff9A999D);
+
 
 
 
