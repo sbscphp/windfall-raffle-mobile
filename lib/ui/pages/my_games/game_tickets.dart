@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/ui/widgets/bottom_sheets/ticket_actions.dart';
-import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
-
-import '../../../core/constants/color_path.dart';
 import '../../widgets/body_header.dart';
-import '../../widgets/bottom_sheets/base_bottom_sheet.dart';
 import '../../widgets/custom_appbar.dart';
-import '../../widgets/dotted_container.dart';
 import '../../widgets/screen_title.dart';
 
 class GameTickets extends StatefulWidget {
