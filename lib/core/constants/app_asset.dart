@@ -55,6 +55,7 @@ class AppAsset {
   static const String close = 'assets/icons/close.svg';
   static const String downloadTicket = 'assets/icons/download_ticket.svg';
   static const String copy = 'assets/icons/copy.svg';
+  static const String gameResultsEmptyState = 'assets/icons/game_results_empty_state.svg';
   static const String zap = 'assets/icons/zap.svg';
   static const String wallet = 'assets/icons/wallet.svg';
   static const String walletImg = 'assets/icons/wallet.png';
