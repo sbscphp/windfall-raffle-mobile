@@ -7,7 +7,6 @@ import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
-import 'package:windfall/ui/pages/profile/notification_settings.dart';
 import 'package:windfall/ui/pages/profile/notifications.dart';
 import 'package:windfall/ui/pages/profile/personal_information.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
