@@ -33,7 +33,8 @@ class NamedRoutes {
   static const settings = '/settings';
   static const changePassword = '/changePassword';
   static const gameResults = '/gameResults';
-
+  static const claimPrize = '/claimPrize';
+  static const rewards = '/rewards';
 
 
 

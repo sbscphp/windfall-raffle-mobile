@@ -62,6 +62,8 @@ class ColorPath {
   static const allPortBlue = Color(0xff026AA2);
   static const pattensBlue = Color(0xffE0F2FE);
 
+  static var textPrimary;
+
 
 
 

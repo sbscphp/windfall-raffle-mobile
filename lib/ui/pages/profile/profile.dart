@@ -9,6 +9,7 @@ import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
 import 'package:windfall/ui/pages/profile/notifications.dart';
 import 'package:windfall/ui/pages/profile/personal_information.dart';
+import 'package:windfall/ui/pages/profile/rewards.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
 import 'package:windfall/ui/widgets/profile/profile_action.dart';
@@ -152,7 +153,9 @@ class _ProfileState extends ConsumerState<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.rewards,
                                 label: "Rewards",
-                                onPressed: (){}
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: const Rewards(), routeName: NamedRoutes.rewards);
+                                }
                             ),
                             CustomDivider(
                               verticalSpace: 16.h,

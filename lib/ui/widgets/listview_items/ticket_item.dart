@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/my_games/claim_prize.dart';
 
 import '../../../core/constants/color_path.dart';
 import '../bottom_sheets/base_bottom_sheet.dart';
@@ -9,27 +12,35 @@ import '../clickable.dart';
 import '../dotted_container.dart';
 
 class TicketItem extends StatelessWidget {
-  const TicketItem({super.key});
+  final bool isWon;
+  final bool showResultTag;
+  final bool clickable;
+  const TicketItem({super.key, this.isWon = true, this.showResultTag = false, this.clickable = true});
 
   @override
   Widget build(BuildContext context) {
     return Clickable(
-      onPressed: (){
+      onPressed: clickable ?(){
+        if(isWon){
+          pushNavigation(context: context, widget: ClaimPrize(),routeName: NamedRoutes.claimPrize);
+          return;
+        }
         baseBottomSheet(
             context: context,
             content: TicketActions()
         );
-      },
+      } : null,
       child: DottedContainer(
           borderRadius:8,
-          borderColor: 1 + 1 == 3 ? ColorPath.shamrockGreen :
+          //todo::: properly handle color predicate
+          borderColor: isWon ? ColorPath.shamrockGreen :
           1 + 1 == 3 ? ColorPath.redOrange:ColorPath.mistGrey,
           padding: EdgeInsets.symmetric(
               vertical: 16.h,
               horizontal: 16.w
           ),
           decoration: BoxDecoration(
-              color: 1 + 1 == 3 ? ColorPath.fetaGreen :
+              color: isWon ? ColorPath.fetaGreen :
               1 + 1 == 3 ? ColorPath.chablisPink:Theme.of(context).colorScheme.whiteText,
               borderRadius: BorderRadius.all(Radius.circular(8.r))
           ),
@@ -52,7 +63,7 @@ class TicketItem extends StatelessWidget {
                     Text(
                       "#WF100423X8",
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: 1 + 1 == 3 ? ColorPath.funGreen
+                          color: isWon ? ColorPath.funGreen
                               : 1 + 1 == 3 ? ColorPath.thunderbirdRed
                               : Theme.of(context).colorScheme.textPrimary,
                           fontWeight: FontWeight.w700
@@ -73,18 +84,18 @@ class TicketItem extends StatelessWidget {
                         fontWeight: FontWeight.w400
                     ),
                   ),
-                  if(1 + 1 == 3)Container(
+                  if(showResultTag)Container(
                     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
                     margin: EdgeInsets.only(top:4.h),
                     decoration: BoxDecoration(
-                        color: 1 + 1 == 3 ? ColorPath.foamGreen:ColorPath.provincialPink,
+                        color: isWon ? ColorPath.foamGreen:ColorPath.provincialPink,
                         borderRadius: BorderRadius.all(Radius.circular(16.r))
                     ),
                     child: Center(
                       child: Text(
-                        1 + 1 == 2 ? "Won":"Lost",
+                        isWon ? "Won":"Lost",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: 1 + 1 == 2 ? ColorPath.funGreen:ColorPath.thunderbirdRed,
+                            color: isWon ? ColorPath.funGreen:ColorPath.thunderbirdRed,
                             fontWeight: FontWeight.w600
                         ),
                       ),

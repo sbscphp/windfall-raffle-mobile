@@ -45,6 +45,7 @@ class AppAsset {
   static const String camera = 'assets/icons/camera.svg';
   static const String warning = 'assets/icons/warning.svg';
   static const String success = 'assets/icons/success.svg';
+  static const String successImg = 'assets/icons/success.png';
   static const String emptyNotification = 'assets/icons/empty_notifications.svg';
   static const String settingsAccount = 'assets/icons/settings_account.svg';
   static const String settingsNotification = 'assets/icons/settings_notification.svg';
@@ -59,6 +60,7 @@ class AppAsset {
   static const String zap = 'assets/icons/zap.svg';
   static const String wallet = 'assets/icons/wallet.svg';
   static const String walletImg = 'assets/icons/wallet.png';
+  static const String upload = 'assets/icons/upload.svg';
 
 
 
