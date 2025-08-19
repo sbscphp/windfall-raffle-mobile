@@ -13,6 +13,7 @@ import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/quantity_counter.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
+import 'package:windfall/ui/widgets/windfall_tag.dart';
 
 class CartItem extends StatefulWidget {
   final bool isShowCounter;
@@ -122,34 +123,7 @@ class _CartItemState extends State<CartItem> {
                       Column(
                         children: [
                           SizedBox(height: 8.w),
-                          Container(
-                            padding: EdgeInsets.all(6.w),
-                            decoration: BoxDecoration(
-                              color: ColorPath.pattensBlue,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12.r),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Instant Game",
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: ColorPath.allPortBlue,
-                                      ),
-                                ),
-                                SizedBox(width: 4.w),
-                                CustomSvg(
-                                  asset: AppAsset.zap,
-                                  width: 12.sp,
-                                  height: 12.sp,
-                                ),
-                              ],
-                            ),
-                          ),
+                          WindfallTag(tag: TagType.instantGame),
                         ],
                       ),
                     SizedBox(height: 16.h),

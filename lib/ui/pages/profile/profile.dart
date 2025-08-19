@@ -8,6 +8,7 @@ import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
 import 'package:windfall/ui/pages/profile/notifications.dart';
+import 'package:windfall/ui/pages/profile/order/order_history.dart';
 import 'package:windfall/ui/pages/profile/personal_information.dart';
 import 'package:windfall/ui/pages/profile/rewards.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
@@ -163,7 +164,9 @@ class _ProfileState extends ConsumerState<Profile> {
                             ProfileAction(
                                 imageAsset: AppAsset.transactions,
                                 label: "Transactions",
-                                onPressed: (){}
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: const OrderHistory(), routeName: NamedRoutes.orderHistory);
+                                }
                             ),
                             CustomDivider(
                               verticalSpace: 16.h,

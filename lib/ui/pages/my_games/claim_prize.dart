@@ -211,8 +211,8 @@ class _ClaimPrizeState extends State<ClaimPrize> {
 
   Widget form2() => Column(
     children: [
-      CustomTextField(label: "Your Full Name", hintText: "Enter Full Name"),
-      SizedBox(height: 16.h),
+      // CustomTextField(label: "Your Full Name", hintText: "Enter Full Name"),
+      // SizedBox(height: 16.h),
       FormMediaUploader(title: "Passport photo"),
       SizedBox(height: 16.h),
       CustomTextField(

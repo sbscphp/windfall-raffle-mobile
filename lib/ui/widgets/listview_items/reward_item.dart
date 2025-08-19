@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/utilities/date_utilitites.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
+import 'package:windfall/ui/widgets/windfall_tag.dart';
 
 class RewardItem extends StatelessWidget {
   final String? rewardData;
@@ -62,26 +62,7 @@ class RewardItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 2.h,
-                  ),
-                  margin: EdgeInsets.only(top: 4.h),
-                  decoration: BoxDecoration(
-                    color: ColorPath.foamGreen,
-                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Successful",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ColorPath.funGreen,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
+                WindfallTag(tag: TagType.success),
                 SizedBox(height: 8.h),
                 NairaDisplay(
                   amount: 2000,

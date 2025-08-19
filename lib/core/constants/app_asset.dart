@@ -61,7 +61,7 @@ class AppAsset {
   static const String wallet = 'assets/icons/wallet.svg';
   static const String walletImg = 'assets/icons/wallet.png';
   static const String upload = 'assets/icons/upload.svg';
-
+  static const String search = 'assets/icons/search.svg';
 
 
 

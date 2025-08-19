@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
+import 'package:windfall/core/data/view_models/media_uploader_view_model.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
-class FormMediaUploader extends StatelessWidget {
+class FormMediaUploader extends ConsumerWidget {
   final String title;
   final String? titleExtension;
   final bool isCompulsory;
@@ -19,7 +21,8 @@ class FormMediaUploader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mediaVm = ref.watch(mediaUploaderViewModel);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,6 +55,7 @@ class FormMediaUploader extends StatelessWidget {
         Clickable(
           onPressed: () {
             // todo::: handle upload here.
+            mediaVm.uploadImage(context);
           },
           child: WindfallContainer(
             padding: EdgeInsets.all(16.w),

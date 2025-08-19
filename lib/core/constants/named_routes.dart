@@ -35,7 +35,8 @@ class NamedRoutes {
   static const gameResults = '/gameResults';
   static const claimPrize = '/claimPrize';
   static const rewards = '/rewards';
-
+  static const orderHistory = '/orderHistory';
+  static const orderDetails = '/orderDetails';
 
 
 
