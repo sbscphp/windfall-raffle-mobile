@@ -78,7 +78,10 @@ class _GameTicketsState extends State<GameTickets> {
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
         
-                  return TicketItem();
+                  return TicketItem(
+                    isWon: index == 2,
+                    showResultTag: index == 2,
+                  );
                 },
                 separatorBuilder: (context, index) {
                   return SizedBox(height: 16.h,);
