@@ -33,8 +33,10 @@ class NamedRoutes {
   static const settings = '/settings';
   static const changePassword = '/changePassword';
   static const gameResults = '/gameResults';
-
-
+  static const claimPrize = '/claimPrize';
+  static const rewards = '/rewards';
+  static const orderHistory = '/orderHistory';
+  static const orderDetails = '/orderDetails';
 
 
 
@@ -50,6 +52,7 @@ class NamedRoutes {
   //cart
   static const cart = '/cart';
   static const checkout = '/checkout';
+  static const paymentReceipt = '/paymentReceipt';
 
 
 

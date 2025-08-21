@@ -11,11 +11,18 @@ import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/media_placeholder.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/quantity_counter.dart';
+import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
+import 'package:windfall/ui/widgets/windfall_tag.dart';
 
 class CartItem extends StatefulWidget {
   final bool isShowCounter;
-  const CartItem({super.key, this.isShowCounter = true});
+  final bool isInstantGame;
+  const CartItem({
+    super.key,
+    this.isShowCounter = true,
+    this.isInstantGame = false,
+  });
 
   @override
   State<CartItem> createState() => _CartItemState();
@@ -63,6 +70,7 @@ class _CartItemState extends State<CartItem> {
               SizedBox(width: 16.w),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +104,13 @@ class _CartItemState extends State<CartItem> {
                         ),
                         SizedBox(width: 16.w),
                         Clickable(
-                          onPressed: () {},
+                          onPressed: () {
+                            showFlushBar(
+                              context: context,
+                              message: "Product removed from Cart Successfuly",
+                              success: false,
+                            );
+                          },
                           child: CustomSvg(
                             asset: AppAsset.delete,
                             height: 24.h,
@@ -105,6 +119,13 @@ class _CartItemState extends State<CartItem> {
                         ),
                       ],
                     ),
+                    if (widget.isInstantGame)
+                      Column(
+                        children: [
+                          SizedBox(height: 8.w),
+                          WindfallTag(tag: TagType.instantGame),
+                        ],
+                      ),
                     SizedBox(height: 16.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -172,7 +193,7 @@ class _CartItemState extends State<CartItem> {
           RowDescriptionItem(
             description: widget.isShowCounter ? "Subtotal:" : "Total Price:",
             item: NairaDisplay(
-              amount: 80000,
+              amount: quantity * 4000,
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
               addDecimal: false,

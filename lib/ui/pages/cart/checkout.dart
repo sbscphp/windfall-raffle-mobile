@@ -64,7 +64,7 @@ class _CheckoutState extends State<Checkout> {
                   ),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return CartItem(isShowCounter: false);
+                    return CartItem(isShowCounter: false, isInstantGame: index % 2 == 0);
                   },
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 16.h);
