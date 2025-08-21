@@ -59,12 +59,11 @@ class AppAsset {
   static const String gameResultsEmptyState = 'assets/icons/game_results_empty_state.svg';
   static const String gift = 'assets/icons/gift.svg';
   static const String search = 'assets/icons/search.svg';
-
   static const String zap = 'assets/icons/zap.svg';
   static const String wallet = 'assets/icons/wallet.svg';
   static const String walletImg = 'assets/icons/wallet.png';
   static const String upload = 'assets/icons/upload.svg';
-  static const String search = 'assets/icons/search.svg';
+
 
 
 
