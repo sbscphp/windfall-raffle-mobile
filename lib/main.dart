@@ -11,8 +11,11 @@ import 'package:windfall/ui/widgets/system_ui_wrapper.dart';
 import 'core/constants/app_config.dart';
 import 'core/constants/app_theme/app_theme.dart';
 import 'core/data/enum/environment.dart';
+import 'core/data/services/geolocator_service.dart';
 import 'core/data/services/navigation_service.dart';
 import 'core/data/view_models/theme_selection_view_model.dart';
+import 'core/data/view_models/utility_view_models/lga_details_view_model.dart';
+import 'core/utilities/firebase_messaging_utils.dart';
 import 'core/utilities/secure_storage/secure_storage_init.dart';
 import 'locator.dart';
 
@@ -41,10 +44,38 @@ void main() async{
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //ref.read(configViewModel).fetchConfig();
+      ref.read(lgaDetailsViewModel).fetchLgaDetails();
+      //ref.read(hearAboutUsViewModel).fetchHearAboutUs();
+    });
+
+    //push notification initial set up
+   // FirebaseMessagingUtils.requestPushNotificationPermission();
+
+    //location permission
+    final locationService = locator<GeoLocatorService>();
+    locationService.requestPermission();
+
+    super.initState();
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

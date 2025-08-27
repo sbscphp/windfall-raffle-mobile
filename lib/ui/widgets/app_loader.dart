@@ -17,7 +17,7 @@ class AppLoader extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
 
           return CustomSvg(
-            asset: AppAsset.onboarding1,
+            asset: AppAsset.wallet, //todo: update app loader
             height: size?.h,
             width: size?.w,
           );

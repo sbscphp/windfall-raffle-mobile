@@ -39,7 +39,7 @@ class ErrorState extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 24.w),
                 elevation: 0,
-                backgroundColor: buttonColor ?? colorScheme.textPrimary,
+                backgroundColor: buttonColor ?? colorScheme.brandColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.r),
                 ),
@@ -77,7 +77,7 @@ class ErrorState extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 24.w),
               elevation: 0,
-              backgroundColor: buttonColor ?? colorScheme.textPrimary,
+              backgroundColor: buttonColor ?? colorScheme.brandColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100.r),
               ),

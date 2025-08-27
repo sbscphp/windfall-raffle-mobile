@@ -17,7 +17,7 @@ class ApiRoutes {
   static verifyForgotPasswordOtp({required String? userId}) =>
       "${dotenv.env['AUTH']}/forgot-password/confirm-code/$userId";
   static var register =
-      "${dotenv.env['AUTH']}/signup";
+      "${dotenv.env['AUTH']}/signup_only";
   static createPassword({required String? userId}) =>
       "${dotenv.env['AUTH']}/forgot-password/create-password/$userId";
   static var login =
@@ -82,7 +82,7 @@ class ApiRoutes {
 
   //utility
   static var fetchLgaDetails =
-      "${dotenv.env['GUEST']}/lagos-lgas";
+      "${dotenv.env['GUEST']}/dropdown/lagos-lgas";
   static var fetchHearAboutUs =
       "${dotenv.env['GUEST']}/hear_about_us";
   static var fetchConfig =

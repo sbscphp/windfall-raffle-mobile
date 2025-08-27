@@ -1,30 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
 import '../../../core/constants/color_path.dart';
+import '../../../core/data/enum/otp_type.dart';
+import '../../../core/data/enum/view_state.dart';
+import '../../../core/data/view_models/authentication_vms/otp_vm.dart';
+import '../../../core/data/view_models/authentication_vms/registration_vm.dart';
+import '../../../core/utilities/utilities.dart';
+import '../count_down_timer.dart';
 import '../custom_button.dart';
+import '../show_flush_bar.dart';
 
-class EmailVerification extends StatefulWidget {
-  const EmailVerification({super.key});
+class EmailVerification extends ConsumerStatefulWidget {
+  final OtpType otpType;
+  final String identifier;
+  const EmailVerification({super.key, required this.otpType, required this.identifier});
 
   @override
-  State<EmailVerification> createState() => _EmailVerificationState();
+  ConsumerState<EmailVerification> createState() => _EmailVerificationState();
 }
 
-class _EmailVerificationState extends State<EmailVerification> {
+class _EmailVerificationState extends ConsumerState<EmailVerification> {
   final _otp = TextEditingController();
+  late DateTime endTime;
+  bool _timerElapsed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _resetTimer();
+  }
+
+  void _resetTimer() {
+    setState(() {
+      endTime = DateTime.now().add(const Duration(minutes: 1));
+      _timerElapsed = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final otpVm = ref.watch(otpViewModel);
+
     return Container(
       margin:EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: SingleChildScrollView(
@@ -35,7 +63,18 @@ class _EmailVerificationState extends State<EmailVerification> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomSvg(asset: AppAsset.emailVerification, height: 40.h, width: 40.w,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomSvg(asset: AppAsset.emailVerification, height: 40.h, width: 40.w,),
+                IgnorePointer(
+                  ignoring: otpVm.state == ViewState.busy || otpVm.secondState == ViewState.busy,
+                  child: Clickable(
+                    onPressed: ()=>popNavigation(context: context),
+                      child: CustomSvg(asset: AppAsset.close, height: 30.h, width: 30.w,)),
+                ),
+              ],
+            ),
             SizedBox(height: 16.h,),
             Text(
               "Email Verification",
@@ -57,7 +96,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                     text: 'We have sent a six-digit verification code to ',
                   ),
                   TextSpan(
-                    text: 'juwon****gmail.com',
+                    text: widget.otpType == OtpType.verifyEmail ? widget.identifier:Utilities.cleanPhoneNumber(phoneNumber: widget.identifier),
                     style: textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w400,
                         color:colorScheme.textPrimary
@@ -115,29 +154,42 @@ class _EmailVerificationState extends State<EmailVerification> {
                 //model.otp = value;
               },
             ),
-            Align(
-              alignment: Alignment.center,
-              child: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  style: textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: colorScheme.text5
-                  ),
-                  children: [
-                    const TextSpan(
-                      text: 'Code Expires in ',
-                    ),
-                    TextSpan(
-                      text: '15:00',
+            CountdownTimer(
+              key: ValueKey(endTime), // 👈 ensures it resets
+              endTime: endTime,
+              builder: (_, time) {
+                final minutes = time.minutes.toString().padLeft(2, '0');
+                final seconds = time.seconds.toString().padLeft(2, '0');
+                return  Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
                       style: textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color:ColorPath.redOrange
+                          fontWeight: FontWeight.w400,
+                          color: colorScheme.text5
                       ),
+                      children: [
+                        const TextSpan(
+                          text: 'Code Expires in ',
+                        ),
+                        TextSpan(
+                          text: '$minutes:$seconds',
+                          style: textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color:ColorPath.redOrange
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
+              onEnd: () {
+                setState(() {
+                  _timerElapsed = true;
+                });
+              },
             ),
             SizedBox(height: 24.h,),
             Row(
@@ -150,15 +202,39 @@ class _EmailVerificationState extends State<EmailVerification> {
                       color: Theme.of(context).colorScheme.textTertiary
                   ),
                 ),
-                Clickable(
-                  onPressed: (){},
-                  child: Text(
-                    "Resend OTP",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: ColorPath.redOrange,
-                        decoration: TextDecoration.underline,
-                        decorationColor: ColorPath.redOrange
+                IgnorePointer(
+                  ignoring: !_timerElapsed,
+                  child: Opacity(
+                    opacity: _timerElapsed ? 1 : 0.4,
+                    child: Clickable(
+                      onPressed: otpVm.state == ViewState.busy ? null : ()async{
+                        Utilities.hideKeyboard(context);
+
+                        await otpVm.sendOtp(
+                            otpType: widget.otpType,
+                            key: widget.otpType == OtpType.verifyEmail ? 'email':'phone_number',
+                            value: widget.identifier
+                        );
+
+                        if(otpVm.state == ViewState.retrieved){
+                          _resetTimer();
+                        }
+
+                        showFlushBar(
+                            context: context,
+                            message: otpVm.message,
+                            success: otpVm.state == ViewState.retrieved
+                        );
+                      },
+                      child: Text(
+                        "Resend OTP",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: ColorPath.redOrange,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ColorPath.redOrange
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -167,8 +243,36 @@ class _EmailVerificationState extends State<EmailVerification> {
             SizedBox(height: 32.h,),
             CustomButton(
                 useDottedBorder: true,
-                buttonText:'Verify Email',
-                onPressed: (){
+                showLoader: otpVm.state == ViewState.busy || otpVm.secondState == ViewState.busy,
+                buttonText:widget.otpType == OtpType.verifyEmail ? 'Verify Email':'Verify Phone Number',
+                onPressed: ()async{
+
+                  Utilities.hideKeyboard(context);
+
+                  await otpVm.validateOtp(
+                      otpType: widget.otpType,
+                      otp: _otp.text,
+                      key: widget.otpType == OtpType.verifyEmail ? 'email':'phone_number',
+                      value: widget.identifier
+                  );
+
+                  if(otpVm.secondState == ViewState.retrieved){
+                    //update verification flag
+                    final registrationVm = ref.read(registrationViewModel);
+                    widget.otpType == OtpType.verifyEmail
+                        ? registrationVm.isEmailVerified = true
+                        : registrationVm.isPhoneVerified = true;
+
+                    //close bottom-sheet
+                    popNavigation(context: context);
+                  }
+
+                  //show message(error or successful)
+                  showFlushBar(
+                      context: context,
+                      message: otpVm.message,
+                      success: otpVm.secondState == ViewState.retrieved
+                  );
 
                 }
             ),
