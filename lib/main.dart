@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/router.dart' as router;
 import 'package:windfall/ui/pages/landing.dart';
-import 'package:windfall/ui/widgets/system_ui_wrapper.dart';
-
 import 'core/constants/app_config.dart';
 import 'core/constants/app_theme/app_theme.dart';
 import 'core/data/enum/environment.dart';
@@ -15,7 +12,6 @@ import 'core/data/services/geolocator_service.dart';
 import 'core/data/services/navigation_service.dart';
 import 'core/data/view_models/theme_selection_view_model.dart';
 import 'core/data/view_models/utility_view_models/lga_details_view_model.dart';
-import 'core/utilities/firebase_messaging_utils.dart';
 import 'core/utilities/secure_storage/secure_storage_init.dart';
 import 'locator.dart';
 

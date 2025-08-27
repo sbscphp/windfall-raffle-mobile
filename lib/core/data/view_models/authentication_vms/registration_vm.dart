@@ -10,7 +10,7 @@ import '../../data_provider/auth_data_provider/auth_data_provider.dart';
 import '../../enum/view_state.dart';
 import '../../models/user.dart';
 import '../../states/base_state.dart';
-import '../utility_view_models/config_view_model.dart';
+
 
 class RegistrationVm extends BaseState {
 
