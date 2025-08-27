@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:windfall/core/utilities/secure_storage/secure_storage_init.dart';
 import '../../constants/secure_storage_constants.dart';
+import '../../data/models/user.dart';
 
 
 class SecureStorageUtils{
@@ -32,14 +35,14 @@ class SecureStorageUtils{
   }
 
   ///retrieve user details
-  // static Future<User?> retrieveUser() async{
-  //   final userString = await SecureStorageInit.storage.read(key: SecuredStorageConstants.user);
-  //   if(userString != null) {
-  //     final user = User.fromJson(json.decode(userString));
-  //     return user;
-  //   }
-  //   return null;
-  // }
+  static Future<User?> retrieveUser() async{
+    final userString = await SecureStorageInit.storage.read(key: SecuredStorageConstants.user);
+    if(userString != null) {
+      final user = User.fromJson(json.decode(userString));
+      return user;
+    }
+    return null;
+  }
 
   ///save password
   static savePassword({required String? value}) async{

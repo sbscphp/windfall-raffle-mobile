@@ -11,24 +11,53 @@ import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
 import '../../../core/constants/color_path.dart';
+import '../../../core/data/models/user.dart';
+import '../../../core/utilities/biometric_utils.dart';
+import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
 import '../../../core/utilities/validator.dart';
 import '../../widgets/clickable.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_painter/dotted_border.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/display_image.dart';
+import '../../widgets/show_flush_bar.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final bool sessionExpired;
+  const Login({super.key, this.sessionExpired = false});
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  bool _hidePwd = true;
 
-  final _pwd = TextEditingController();
+  bool _userExist = false;
+  User? _savedUser;
+  bool _hasImage = false;
+  bool _hidePassword = true;
+  bool _canUseBiometrics = false;
+  bool _biometricsEnabled = false;
+  String? _savedPassword;
+  late bool rememberMe = false;
+
+
+
+  bool _hidePwd = true;
+  final _formKey = GlobalKey<FormState>();
+  final _phoneNumber = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.sessionExpired){
+      _sessionExpiredPrompt();
+    }
+    _initBiometrics();
+    _initLogInDynamics();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +89,14 @@ class _LoginState extends State<Login> {
                                 color: ColorPath.redOrange,
                                 isCircle: true
                             ),
-                            child: 1 + 1 == 2 ? DisplayImage(
+                            child: _userExist && _hasImage ? DisplayImage(
                               size: 54,
                               borderWidth: 0,
-                              image: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                              image: _savedUser?.avatar ?? '',
                               useGradient:  false,
                               borderColor: Theme.of(context).colorScheme.whiteText,
-                              firstName: 'A',
-                              lastName: 'D',
+                              firstName: _savedUser?.firstname ?? '',
+                              lastName: _savedUser?.lastname ?? '',
                               fontSize: 14.sp,
                             ):Container(
                               height: 54.h,
@@ -87,7 +116,7 @@ class _LoginState extends State<Login> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  1 + 1 == 2 ? 'Damilola Aremu 🌹':'Log In',
+                                  _userExist ? '${_savedUser?.firstname ?? ''} ${_savedUser?.lastname ?? ''} 🌹':'Log In',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                       fontWeight: FontWeight.w700,
                                       color: Theme.of(context).colorScheme.brandColor
@@ -110,7 +139,7 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                         label: 'Your Email Address',
                         hintText: 'example@email.com',
-                        //controller: _loginChoice,
+                        controller: _email,
                         keyboardType: TextInputType.emailAddress,
                         validator: EmailValidator.validateEmail,
                       ),
@@ -119,7 +148,7 @@ class _LoginState extends State<Login> {
                         label: 'Password',
                         hintText: 'Enter your password',
                         obscure: _hidePwd,
-                        controller: _pwd,
+                        controller: _password,
                         validator: FieldValidator.validate,
                         keyboardType: TextInputType.text,
                         suffixIcon: Padding(
@@ -196,7 +225,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              Align(
+              if(_canUseBiometrics && _biometricsEnabled)Align(
                 alignment: Alignment.center,
                   child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,))
             ],
@@ -204,5 +233,36 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  _initLogInDynamics()async{
+    //retrieve user from secure storage
+    _savedUser = await SecureStorageUtils.retrieveUser();
+    _userExist = _savedUser != null;
+    if(_userExist){
+      _email.text = _savedUser?.email ?? '';
+      _hasImage = _savedUser?.avatar?.isNotEmpty ?? false;
+    }
+
+    setState(() {});
+  }
+
+  _sessionExpiredPrompt(){
+    Future.delayed(const Duration(milliseconds: 800),
+            (){
+          showFlushBar(
+              context: context,
+              success: false,
+              message: 'Session Expired. Kindly Login',
+              duration: 5
+          );
+        });
+  }
+
+  _initBiometrics()async{
+    _canUseBiometrics = await BiometricUtils.canAuthenticate();
+    _biometricsEnabled = await SecureStorageUtils.retrieveBiometricPref();
+    _savedPassword = await SecureStorageUtils.retrievePassword();
+    setState(() {});
   }
 }

@@ -17,6 +17,7 @@ class User {
   final DateTime? lastLogin;
   final int? loginCount;
   final String? referralLink;
+  final String? avatar;
 
   User({
     this.uuid,
@@ -37,11 +38,13 @@ class User {
     this.lastLogin,
     this.loginCount,
     this.referralLink,
+    this.avatar
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     uuid: json["uuid"],
     email: json["email"],
+    avatar: json["avatar"],
     phoneNumber: json["phone_number"],
     dateOfBirth: json["date_of_birth"] == null ? null : DateTime.parse(json["date_of_birth"]),
     firstname: json["firstname"],
@@ -63,6 +66,7 @@ class User {
   Map<String, dynamic> toJson() => {
     "uuid": uuid,
     "email": email,
+    "avatar": avatar,
     "phone_number": phoneNumber,
     "date_of_birth": "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
     "firstname": firstname,
