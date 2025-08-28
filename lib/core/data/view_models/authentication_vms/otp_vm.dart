@@ -18,6 +18,8 @@ class OtpVm extends BaseState {
 
   String? userId;
 
+  DateTime get endTime => DateTime.now().add(const Duration(minutes: 1));
+
   //send otp based on otp type
   sendOtp({
     required OtpType otpType,

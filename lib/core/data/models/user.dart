@@ -1,87 +1,77 @@
+import 'notification_setting.dart';
+
 class User {
   final String? uuid;
   final String? email;
   final String? phoneNumber;
-  final DateTime? dateOfBirth;
+  final dynamic avatar;
   final String? firstname;
   final String? lastname;
-  final dynamic referrerId;
-  final String? confirmResident;
-  final String? platform;
-  final dynamic merchant;
-  final dynamic merchantId;
-  final String? uniqueId;
+  final DateTime? dateOfBirth;
+  final dynamic lga;
+  final dynamic area;
+  final dynamic spendLimitStatus;
   final String? referralCode;
-  final DateTime? updatedAt;
-  final DateTime? createdAt;
-  final DateTime? lastLogin;
-  final int? loginCount;
   final String? referralLink;
-  final String? avatar;
+  final String? referralBalance;
+  final dynamic exclusionType;
+  final dynamic excludeTill;
+  final NotificationSetting? notificationSetting;
 
   User({
     this.uuid,
     this.email,
     this.phoneNumber,
-    this.dateOfBirth,
+    this.avatar,
     this.firstname,
     this.lastname,
-    this.referrerId,
-    this.confirmResident,
-    this.platform,
-    this.merchant,
-    this.merchantId,
-    this.uniqueId,
+    this.dateOfBirth,
+    this.lga,
+    this.area,
+    this.spendLimitStatus,
     this.referralCode,
-    this.updatedAt,
-    this.createdAt,
-    this.lastLogin,
-    this.loginCount,
     this.referralLink,
-    this.avatar
+    this.referralBalance,
+    this.exclusionType,
+    this.excludeTill,
+    this.notificationSetting,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     uuid: json["uuid"],
     email: json["email"],
-    avatar: json["avatar"],
     phoneNumber: json["phone_number"],
-    dateOfBirth: json["date_of_birth"] == null ? null : DateTime.parse(json["date_of_birth"]),
+    avatar: json["avatar"],
     firstname: json["firstname"],
     lastname: json["lastname"],
-    referrerId: json["referrer_id"],
-    confirmResident: json["confirm_resident"],
-    platform: json["platform"],
-    merchant: json["merchant"],
-    merchantId: json["merchant_id"],
-    uniqueId: json["uniqueID"],
+    dateOfBirth: json["date_of_birth"] == null ? null : DateTime.parse(json["date_of_birth"]),
+    lga: json["lga"],
+    area: json["area"],
+    spendLimitStatus: json["spend_limit_status"],
     referralCode: json["referral_code"],
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    lastLogin: json["last_login"] == null ? null : DateTime.parse(json["last_login"]),
-    loginCount: json["login_count"],
     referralLink: json["referral_link"],
+    referralBalance: json["referral_balance"],
+    exclusionType: json["exclusion_type"],
+    excludeTill: json["exclude_till"],
+    notificationSetting: json["notification_setting"] == null ? null : NotificationSetting.fromJson(json["notification_setting"]),
   );
 
   Map<String, dynamic> toJson() => {
     "uuid": uuid,
     "email": email,
-    "avatar": avatar,
     "phone_number": phoneNumber,
-    "date_of_birth": "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
+    "avatar": avatar,
     "firstname": firstname,
     "lastname": lastname,
-    "referrer_id": referrerId,
-    "confirm_resident": confirmResident,
-    "platform": platform,
-    "merchant": merchant,
-    "merchant_id": merchantId,
-    "uniqueID": uniqueId,
+    "date_of_birth": "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
+    "lga": lga,
+    "area": area,
+    "spend_limit_status": spendLimitStatus,
     "referral_code": referralCode,
-    "updated_at": updatedAt?.toIso8601String(),
-    "created_at": createdAt?.toIso8601String(),
-    "last_login": lastLogin?.toIso8601String(),
-    "login_count": loginCount,
     "referral_link": referralLink,
+    "referral_balance": referralBalance,
+    "exclusion_type": exclusionType,
+    "exclude_till": excludeTill,
+    "notification_setting": notificationSetting?.toJson(),
   };
 }

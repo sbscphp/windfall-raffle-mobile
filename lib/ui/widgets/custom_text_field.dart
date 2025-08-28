@@ -121,13 +121,28 @@ class _CustomTextFieldState extends State<CustomTextField> {
               enabled: widget.enabled,
               readOnly: widget.readOnly,
               validator: (value) {
-                if(widget.validator != null){
+                // if(widget.validator != null){
+                //   final error = widget.validator!(value);
+                //   SchedulerBinding.instance.addPostFrameCallback((_) {
+                //     setState(() {
+                //       _errorText = error;
+                //     });
+                //   });
+                // }
+                // return null;
+
+                if (widget.validator != null) {
                   final error = widget.validator!(value);
+
                   SchedulerBinding.instance.addPostFrameCallback((_) {
-                    setState(() {
-                      _errorText = error;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _errorText = error;
+                      });
+                    }
                   });
+
+                  return error == null ? null : '';
                 }
                 return null;
               },
@@ -150,7 +165,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               maxLines: widget.maxLines,
               decoration: InputDecoration(
                 errorText: null,
-                errorMaxLines: 3,
+                errorMaxLines: 1,
+                errorStyle: const TextStyle(height: 0, fontSize: 0),
                 hintText: widget.hintText,
                 hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w400,
@@ -176,9 +192,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   borderSide: BorderSide(color: _errorText != null ? ColorPath.redOrange: colorScheme.textFieldBorder, width: 1.w),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide(color: _errorText != null ? ColorPath.redOrange:colorScheme.textFieldBorder, width: 1.w)),
                 disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
                     borderSide: BorderSide(color: colorScheme.textFieldBorder, width: 0.5.w)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide(color: _errorText != null ? ColorPath.redOrange:colorScheme.textFieldBorder, width: 1.w)),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
                     borderSide: BorderSide(color: _errorText != null ? ColorPath.redOrange:colorScheme.textFieldBorder, width: 1.w)),
@@ -196,7 +218,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           ),
         if(_errorText != null)Padding(
-          padding: EdgeInsets.only(top: 6.h),
+          padding: EdgeInsets.only(top: 2.h),
           child: Text(
             _errorText!,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(

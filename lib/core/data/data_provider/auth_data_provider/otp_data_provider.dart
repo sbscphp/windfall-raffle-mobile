@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:windfall/core/data/models/otp_data.dart';
+import 'package:windfall/core/data/models/responses/response_data/otp_data.dart';
 
 import '../../../constants/api_routes.dart';
 import '../../enum/otp_type.dart';
@@ -72,8 +72,8 @@ class OtpDataProvider{
 
 
   //validate otp
-  Future<ApiResponse> validateOtp({required OtpType otpType, required Map<String, dynamic> details, required String? userId}) async {
-    var completer = Completer<ApiResponse>();
+  Future<ApiResponse<OtpData>> validateOtp({required OtpType otpType, required Map<String, dynamic> details, required String? userId}) async {
+    var completer = Completer<ApiResponse<OtpData>>();
     try {
       String apiRoute = '';
       if(otpType == OtpType.forgotPassword){
@@ -93,7 +93,10 @@ class OtpDataProvider{
           useAuth: isOtpUseAuth(otpType: otpType),
           body:jsonEncode(details)
       );
-      var result = ApiResponse.fromJson(response, null);
+      var result = ApiResponse<OtpData>.fromJson(
+        response,
+            (data) => OtpData.fromJson(data as Map<String, dynamic>),
+      );
       completer.complete(result);
     } catch (e) {
       completer.completeError(e);

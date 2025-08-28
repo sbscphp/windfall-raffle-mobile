@@ -42,7 +42,7 @@ class _EmailVerificationState extends ConsumerState<EmailVerification> {
 
   void _resetTimer() {
     setState(() {
-      endTime = DateTime.now().add(const Duration(minutes: 1));
+      endTime = ref.read(otpViewModel).endTime;
       _timerElapsed = false;
     });
   }
@@ -155,7 +155,7 @@ class _EmailVerificationState extends ConsumerState<EmailVerification> {
               },
             ),
             CountdownTimer(
-              key: ValueKey(endTime), // 👈 ensures it resets
+              key: ValueKey(endTime),
               endTime: endTime,
               builder: (_, time) {
                 final minutes = time.minutes.toString().padLeft(2, '0');

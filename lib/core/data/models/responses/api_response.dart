@@ -17,7 +17,7 @@ class ApiResponse<T> {
       T Function(dynamic)? fromJsonT,
       ) {
     return ApiResponse<T>(
-      data: json['data'] == null ? null : fromJsonT!(json['data']),
+      data: json['data'] == null ? null : (fromJsonT == null ? null : fromJsonT(json['data'])),
       message: json['message'] as String?,
       error: json['error'] as bool?,
     );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:windfall/core/data/models/responses/response_data/login_data.dart';
 import 'package:windfall/core/utilities/secure_storage/secure_storage_init.dart';
 import '../../constants/secure_storage_constants.dart';
 import '../../data/models/user.dart';
@@ -101,35 +102,38 @@ class SecureStorageUtils{
   }
 
 
-  // static saveUserDetailsToStorage({required LoginResponse response, required String password})async{
-  //
-  //   //save token
-  //   await SecureStorageUtils.saveToken(token: response.data?.accessToken ?? '');
-  //
-  //   //save password
-  //   //await SecureStorageUtils.savePassword(value: password);
-  //
-  //   //retrieve saved user
-  //   final savedUser = await SecureStorageUtils.retrieveUser();
-  //
-  //   if(savedUser == null || (savedUser.phoneno != response.data?.user?.phoneno)){
-  //
-  //     //update data in secure storage
-  //     //await SecureStorageUtils.savePasskey(value: null);
-  //     //await SecureStorageUtils.saveSavingsStatBalPref(value: null);
-  //     //await SecureStorageUtils.saveInvestmentBalPref(value: null);
-  //     //await SecureStorageUtils.saveAccountBalPref(value: null);
-  //     //await SecureStorageUtils.saveBiometricsPref(value: null);
-  //   }
-  //
-  //   if(response.data?.user != null){
-  //     //convert user to string
-  //     final userString = json.encode(response.data?.user?.toJson());
-  //
-  //     //save user
-  //     await SecureStorageUtils.saveUser(user: userString);
-  //   }
-  // }
+  static saveUserDetailsToStorage({required LoginData? response, required String password})async{
+
+    //save token
+    await SecureStorageUtils.saveToken(token: response?.accessToken ?? '');
+
+    //save password
+    //await SecureStorageUtils.savePassword(value: password);
+
+    //retrieve saved user
+    final savedUser = await SecureStorageUtils.retrieveUser();
+
+    if(savedUser == null || (savedUser.phoneNumber != response?.user?.phoneNumber)){
+
+      //update data in secure storage
+      //await SecureStorageUtils.savePasskey(value: null);
+      //await SecureStorageUtils.saveSavingsStatBalPref(value: null);
+      //await SecureStorageUtils.saveInvestmentBalPref(value: null);
+      //await SecureStorageUtils.saveAccountBalPref(value: null);
+      //await SecureStorageUtils.saveBiometricsPref(value: null);
+    }
+
+    if(response?.user != null){
+      //convert user to string
+      final userString = json.encode(response?.user?.toJson());
+
+      //save user
+      await SecureStorageUtils.saveUser(user: userString);
+
+      //save password
+      await SecureStorageUtils.savePassword(value: password);
+    }
+  }
 
 
 

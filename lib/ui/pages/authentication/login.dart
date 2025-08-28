@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/forgot_password.dart';
 import 'package:windfall/ui/pages/bottom_nav.dart';
+import 'package:windfall/ui/widgets/busy_overlay.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
 import '../../../core/constants/color_path.dart';
+import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/models/user.dart';
 import '../../../core/utilities/biometric_utils.dart';
 import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
+import '../../../core/utilities/utilities.dart';
 import '../../../core/utilities/validator.dart';
 import '../../widgets/clickable.dart';
 import '../../widgets/custom_button.dart';
@@ -22,20 +27,19 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/display_image.dart';
 import '../../widgets/show_flush_bar.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   final bool sessionExpired;
   const Login({super.key, this.sessionExpired = false});
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
 
   bool _userExist = false;
   User? _savedUser;
   bool _hasImage = false;
-  bool _hidePassword = true;
   bool _canUseBiometrics = false;
   bool _biometricsEnabled = false;
   String? _savedPassword;
@@ -61,174 +65,298 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(
-          context: context,
-        title: 'Log in'
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: AppDimension.paddingTop,
-            bottom: 63.5.h,
-            left: AppDimension.paddingLeft,
-            right: AppDimension.paddingRight
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+    final vm = ref.watch(loginViewModel);
+    return BusyOverlay(
+      show: vm.state == ViewState.busy,
+      child: Scaffold(
+        appBar: customAppBar(
+            context: context,
+          title: 'Log in'
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: AppDimension.paddingTop,
+              bottom: 63.5.h,
+              left: AppDimension.paddingLeft,
+              right: AppDimension.paddingRight
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomPaint(
-                            painter: DottedBorder(
-                                color: ColorPath.redOrange,
-                                isCircle: true
-                            ),
-                            child: _userExist && _hasImage ? DisplayImage(
-                              size: 54,
-                              borderWidth: 0,
-                              image: _savedUser?.avatar ?? '',
-                              useGradient:  false,
-                              borderColor: Theme.of(context).colorScheme.whiteText,
-                              firstName: _savedUser?.firstname ?? '',
-                              lastName: _savedUser?.lastname ?? '',
-                              fontSize: 14.sp,
-                            ):Container(
-                              height: 54.h,
-                              width: 54.w,
-                              decoration: BoxDecoration(
-                                color: ColorPath.fairPink,
-                                shape: BoxShape.circle
+                          Row(
+                            children: [
+                              CustomPaint(
+                                painter: DottedBorder(
+                                    color: ColorPath.redOrange,
+                                    isCircle: true
+                                ),
+                                child: _userExist && _hasImage ? DisplayImage(
+                                  size: 54,
+                                  borderWidth: 0,
+                                  image: _savedUser?.avatar ?? '',
+                                  useGradient:  false,
+                                  borderColor: Theme.of(context).colorScheme.whiteText,
+                                  firstName: _savedUser?.firstname ?? '',
+                                  lastName: _savedUser?.lastname ?? '',
+                                  fontSize: 14.sp,
+                                ):Container(
+                                  height: 54.h,
+                                  width: 54.w,
+                                  decoration: BoxDecoration(
+                                    color: ColorPath.fairPink,
+                                    shape: BoxShape.circle
+                                  ),
+                                  child: Center(
+                                    child: CustomSvg(asset: AppAsset.avatar),
+                                  ),
+                                ),
                               ),
-                              child: Center(
-                                child: CustomSvg(asset: AppAsset.avatar),
+                              SizedBox(width: 19.w,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _userExist ? '${_savedUser?.firstname ?? ''} ${_savedUser?.lastname ?? ''} 🌹':'Log In',
+                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: Theme.of(context).colorScheme.brandColor
+                                      ),
+                                    ),
+                                    SizedBox(height: 5.h,),
+                                    Text(
+                                      'Welcome to WindFall. Play to win today 🚀 ',
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          color: Theme.of(context).colorScheme.textSecondary
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 24.h,),
+                          CustomTextField(
+                            label: 'Your Email Address',
+                            hintText: 'example@email.com',
+                            controller: _email,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: EmailValidator.validateEmail,
+                          ),
+                          SizedBox(height: 24.h,),
+                          CustomTextField(
+                            label: 'Password',
+                            hintText: 'Enter your password',
+                            obscure: _hidePwd,
+                            controller: _password,
+                            validator: FieldValidator.validate,
+                            keyboardType: TextInputType.text,
+                            suffixIcon: Padding(
+                              padding: EdgeInsets.only(right: 16.w, left: 16.w),
+                              child: Clickable(
+                                onPressed: (){
+                                  setState(() {
+                                    _hidePwd= !_hidePwd;
+                                  });
+                                },
+                                child: CustomSvg(
+                                  asset:  _hidePwd
+                                      ? AppAsset.pwdHidden
+                                      : AppAsset.pwdVisible,
+                                  height: 16.h,
+                                  width: 16.w,
+                                  colorFilter: ColorFilter.mode(
+                                    Theme.of(context).colorScheme.textFieldSuffixIcon,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          SizedBox(width: 19.w,),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _userExist ? '${_savedUser?.firstname ?? ''} ${_savedUser?.lastname ?? ''} 🌹':'Log In',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: Theme.of(context).colorScheme.brandColor
-                                  ),
-                                ),
-                                SizedBox(height: 5.h,),
-                                Text(
-                                  'Welcome to WindFall. Play to win today 🚀 ',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          SizedBox(height: 24.h,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Clickable(
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: const ForgotPassword(), routeName: NamedRoutes.forgotPassword);
+                                },
+                                child: Text(
+                                  'Forgot password ?',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
                                       fontWeight: FontWeight.w400,
-                                      color: Theme.of(context).colorScheme.textSecondary
+                                      color: ColorPath.bitterSweetRed
                                   ),
                                 ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 24.h,),
-                      CustomTextField(
-                        label: 'Your Email Address',
-                        hintText: 'example@email.com',
-                        controller: _email,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: EmailValidator.validateEmail,
-                      ),
-                      SizedBox(height: 24.h,),
-                      CustomTextField(
-                        label: 'Password',
-                        hintText: 'Enter your password',
-                        obscure: _hidePwd,
-                        controller: _password,
-                        validator: FieldValidator.validate,
-                        keyboardType: TextInputType.text,
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 16.w, left: 16.w),
-                          child: Clickable(
-                            onPressed: (){
-                              setState(() {
-                                _hidePwd= !_hidePwd;
-                              });
-                            },
-                            child: CustomSvg(
-                              asset:  _hidePwd
-                                  ? AppAsset.pwdHidden
-                                  : AppAsset.pwdVisible,
-                              height: 16.h,
-                              width: 16.w,
-                              colorFilter: ColorFilter.mode(
-                                Theme.of(context).colorScheme.textFieldSuffixIcon,
-                                BlendMode.srcIn,
                               ),
-                            ),
+                              if(_userExist)
+                                Flexible(
+                                  child: FittedBox(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Not ${_savedUser?.firstname ?? ''} ? ',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                              fontWeight: FontWeight.w400,
+                                              color: Theme.of(context).colorScheme.textPrimary,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5.w,),
+                                        Clickable(
+                                          onPressed: (){
+                                            setState(() {
+                                              _userExist = false;
+                                              //clear text controllers
+                                              _email.clear();
+                                              _password.clear();
+                                            });
+                                          },
+                                          child: Text(
+                                            'Switch Account',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                              fontWeight: FontWeight.w400,
+                                              decoration: TextDecoration.underline,
+                                              decorationColor: ColorPath.redOrange,
+                                              color: ColorPath.redOrange,
+                                            ),
+                                          ),
+                                        ),
+                                    
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            ],
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 24.h,),
-                      Clickable(
-                        onPressed: (){
-                          pushNavigation(context: context, widget: const ForgotPassword(), routeName: NamedRoutes.forgotPassword);
-                        },
-                        child: Text(
-                         'Forgot password ?',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: ColorPath.bitterSweetRed
+                          SizedBox(height: 80.h,),
+                          CustomButton(
+                              useDottedBorder: true,
+                              buttonText:'Log in',
+                              onPressed: ()async{
+
+                                final validate = _formKey.currentState!.validate();
+
+                                print('validation:$validate');
+
+                                if(validate == true){
+
+                                  //attempt login
+                                  await vm.login(
+                                      email: _email.text.trim(),
+                                      password: _password.text.trim()
+                                  );
+
+                                  if(vm.state == ViewState.retrieved){
+
+                                    //nav user into the app
+                                    pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
+
+                                  }
+                                  else{
+                                    //show error message
+                                    showFlushBar(
+                                        context: context,
+                                        message: vm.message,
+                                        success: false
+                                    );
+                                  }
+
+                                }
+                              }
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 80.h,),
-                      CustomButton(
-                          useDottedBorder: true,
-                          buttonText:'Log in',
-                          onPressed: (){
-                            pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
-                          }
-                      ),
-                      SizedBox(height: 16.h,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account? ",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: Theme.of(context).colorScheme.textTertiary
-                            ),
-                          ),
-                          Text(
-                            "Sign Up",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: ColorPath.redOrange,
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorPath.redOrange
-                            ),
-                          ),
+                          SizedBox(height: 16.h,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't have an account? ",
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: Theme.of(context).colorScheme.textTertiary
+                                ),
+                              ),
+                              Text(
+                                "Sign Up",
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: ColorPath.redOrange,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorPath.redOrange
+                                ),
+                              ),
+                            ],
+                          )
+
+
                         ],
-                      )
-
-
-                    ],
+                      ),
+                    ),
                   ),
-                ),
+                  if(_canUseBiometrics && _biometricsEnabled)Align(
+                    alignment: Alignment.center,
+                      child: Clickable(
+                        onPressed: ()async{
+                          //check if user has saved password
+                          if(_savedPassword == null || !_userExist){
+                            //prompt user to log in with password
+                            showFlushBar(
+                                context: context,
+                                success: false,
+                                message: 'Kindly login with password first to be able to use biometrics',
+                                duration: 3
+                            );
+                            return;
+                          }
+
+                          //authenticate with biometrics
+                          final authenticate = await BiometricUtils.authenticate();
+                          if(authenticate != null && authenticate){
+                            //login
+                            Utilities.hideKeyboard(context);
+                            //attempt login
+                            await vm.login(
+                                email: _email.text.trim(),
+                                password: _savedPassword!.trim(),
+                            );
+
+                            if(vm.state == ViewState.retrieved){
+
+                              //nav user into the app
+                              pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
+                            }
+                            else{
+                              //show error message
+                              showFlushBar(
+                                  context: context,
+                                  message: vm.message,
+                                  success: false
+                              );
+                            }
+                          }
+                        },
+                          child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,)))
+                ],
               ),
-              if(_canUseBiometrics && _biometricsEnabled)Align(
-                alignment: Alignment.center,
-                  child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,))
-            ],
+            ),
           ),
         ),
       ),

@@ -5,10 +5,12 @@ import 'package:windfall/core/data/states/base_state.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
 
+import '../../data_provider/auth_data_provider/auth_data_provider.dart';
+
 class PasswordViewModel extends BaseState{
 
   //auth data provider
-  //final AuthDataProvider _authDp = locator<AuthDataProvider>();
+  final AuthDataProvider _authDp = locator<AuthDataProvider>();
 
   //message
   String _message = '';
@@ -31,30 +33,30 @@ class PasswordViewModel extends BaseState{
 
 
   //create new password(forgot password)
-  // createNewPassword(
-  //     {required String pwd, required String confirmPwd, required String? userId}) async {
-  //
-  //   if(pwd != confirmPwd){
-  //     _message = "Passwords don't march";
-  //     setState(ViewState.error);
-  //     return;
-  //   }
-  //
-  //   setState(ViewState.busy);
-  //
-  //   final details = {
-  //     "password": pwd,
-  //     "password_confirmation": confirmPwd
-  //   };
-  //   await _authDp.createPassword(details: details, userId: userId).then((response) async{
-  //     _message = response.message ?? defaultSuccessMessage;
-  //     //await SecureStorageUtils.savePassword(value: password);
-  //     setState(ViewState.retrieved);
-  //   }, onError: (e) {
-  //     _message = Utilities.formatMessage(e.toString(), isSuccess: false);
-  //     setState(ViewState.error);
-  //   });
-  // }
+  createNewPassword(
+      {required String pwd, required String confirmPwd, required String? userId}) async {
+
+    if(pwd != confirmPwd){
+      _message = "Passwords don't march";
+      setState(ViewState.error);
+      return;
+    }
+
+    setState(ViewState.busy);
+
+    final details = {
+      "password": pwd,
+      "password_confirmation": confirmPwd
+    };
+    await _authDp.createPassword(details: details, userId: userId).then((response) async{
+      _message = response.message ?? defaultSuccessMessage;
+      //await SecureStorageUtils.savePassword(value: password);
+      setState(ViewState.retrieved);
+    }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setState(ViewState.error);
+    });
+  }
 
 
 
