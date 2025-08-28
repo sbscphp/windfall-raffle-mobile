@@ -1,19 +1,15 @@
-import 'dart:io';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
 import '../../../utilities/secure_storage/secure_storage_utils.dart';
-import '../../../utilities/target_device_utils.dart';
 import '../../../utilities/utilities.dart';
 import '../../data_provider/auth_data_provider/auth_data_provider.dart';
 import '../../enum/view_state.dart';
 import '../../models/user.dart';
 import '../../states/base_state.dart';
 
-class LoginViewModel extends BaseState {
+class LoginVm extends BaseState {
 
   //authentication data provider
   final AuthDataProvider _authDataProvider = locator<AuthDataProvider>();
@@ -71,6 +67,6 @@ class LoginViewModel extends BaseState {
 }
 
 final loginViewModel =
-ChangeNotifierProvider.autoDispose<LoginViewModel>((ref) {
-  return LoginViewModel();
+ChangeNotifierProvider.autoDispose<LoginVm>((ref) {
+  return LoginVm();
 });

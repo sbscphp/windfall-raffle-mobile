@@ -49,7 +49,6 @@ class _LoginState extends ConsumerState<Login> {
 
   bool _hidePwd = true;
   final _formKey = GlobalKey<FormState>();
-  final _phoneNumber = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
 
