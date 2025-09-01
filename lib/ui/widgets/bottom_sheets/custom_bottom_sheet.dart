@@ -12,7 +12,7 @@ class CustomBottomSheet extends StatelessWidget {
   final String subTitle;
   final String firstbuttonText;
   final String secondButtonText;
-  final String asset;
+  final Widget asset;
   final VoidCallback? firstButtonOnPressed;
   final VoidCallback? secondButtonOnPressed;
   final bool showSecondButton;
@@ -22,7 +22,7 @@ class CustomBottomSheet extends StatelessWidget {
     this.subTitle = '',
     required this.firstbuttonText,
     this.secondButtonText = '',
-    this.asset = AppAsset.warning,
+    required this.asset,
     this.firstButtonOnPressed,
     this.secondButtonOnPressed,
     this.showSecondButton = true,
@@ -39,7 +39,7 @@ class CustomBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
 
         children: [
-          CustomSvg(asset: asset, height: 100.h, width: 100.h),
+          asset,
           SizedBox(height: 24.h),
           Text(title, style: Theme.of(context).textTheme.titleMedium),
           SizedBox(height: 8.h),

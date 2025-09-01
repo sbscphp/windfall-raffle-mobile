@@ -37,7 +37,7 @@ class ProfileDataProvider{
     var completer = Completer<ApiResponse<User>>();
     try {
       Map<String, dynamic> response = await NetworkManager()
-          .networkRequestManager(RequestType.post, ApiRoutes.updateProfile,
+          .networkRequestManager(RequestType.put, ApiRoutes.updateProfile,
           useAuth: true,
           body: jsonEncode(details)
       );

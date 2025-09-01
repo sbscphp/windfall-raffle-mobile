@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 
+import '../../core/constants/color_path.dart';
 import '../../core/utilities/utilities.dart';
 
 class DisplayImage extends StatefulWidget {
@@ -84,7 +85,7 @@ class _DisplayImageState extends State<DisplayImage> {
         width: widget.size.w,
         height: widget.size.h,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: ColorPath.fairPink,
           shape: BoxShape.circle,
         ),
         child: _hasImage
@@ -97,9 +98,9 @@ class _DisplayImageState extends State<DisplayImage> {
             Utilities.getNameInitials(
                 firstName: widget.firstName, lastName: widget.lastName),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
                 fontSize: widget.fontSize,
-                color: Theme.of(context).colorScheme.textPrimary
+                color: ColorPath.redOrange
             ),
             textAlign: TextAlign.center,
           ),

@@ -184,7 +184,11 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                       subTitle:
                           "Congratulation, OTP has been successfully validated. Your password change is complete.",
                       firstbuttonText: "Continue",
-                      asset: AppAsset.success,
+                      asset: Image.asset(
+                        AppAsset.warning,
+                        height: 100.h,
+                        width: 100.w,
+                      ),
                       showSecondButton: false,
                     ),
                   );

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,7 @@ import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
+import '../../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_painter/dotted_border.dart';
 import '../../widgets/custom_svg.dart';
@@ -49,58 +51,57 @@ class _ProfileState extends ConsumerState<Profile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                CustomPaint(
-                  painter: DottedBorder(
-                      color: ColorPath.redOrange,
-                      isCircle: true
-                  ),
-                  child: 1 + 1 == 3 ? DisplayImage(
-                    size: 54,
-                    borderWidth: 0,
-                    image: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
-                    useGradient:  false,
-                    borderColor: Theme.of(context).colorScheme.whiteText,
-                    firstName: 'A',
-                    lastName: 'D',
-                    fontSize: 14.sp,
-                  ):Container(
-                    height: 54.h,
-                    width: 54.w,
-                    decoration: BoxDecoration(
-                        color: ColorPath.fairPink,
-                        shape: BoxShape.circle
-                    ),
-                    child: Center(
-                      child: CustomSvg(asset: AppAsset.avatar),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 19.w,),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Damilola Aremu 🌹',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).colorScheme.brandColor
-                        ),
+            Consumer(
+              builder: (context, ref, child){
+                final profileVm = ref.watch(profileViewModel);
+                if(profileVm.hasImage){
+                  final imageProvider = CachedNetworkImageProvider(profileVm.image);
+                  precacheImage(imageProvider, context);
+                }
+                return Row(
+                  children: [
+                    CustomPaint(
+                      painter: DottedBorder(
+                          color: ColorPath.redOrange,
+                          isCircle: true
                       ),
-                      SizedBox(height: 5.h,),
-                      Text(
-                        'ID: 9940🚀 ',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.textTertiary
-                        ),
+                      child: DisplayImage(
+                        size: 54,
+                        borderWidth: 0,
+                        image: profileVm.image,
+                        useGradient:  false,
+                        borderColor: Theme.of(context).colorScheme.whiteText,
+                        firstName: profileVm.firstname,
+                        lastName: profileVm.lastname,
+                        fontSize: 24.sp,
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    ),
+                    SizedBox(width: 19.w,),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${profileVm.firstname} ${profileVm.lastname} 🌹',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).colorScheme.brandColor
+                            ),
+                          ),
+                          SizedBox(height: 5.h,),
+                          Text(
+                            'ID: 9940🚀 ', //todo: ask backend
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.textTertiary
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              },
             ),
             SizedBox(height: 32.h,),
             Text(

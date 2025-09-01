@@ -7,6 +7,7 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import '../../core/constants/color_path.dart';
 import '../../core/data/view_models/authentication_vms/login_vm.dart';
 import '../../core/data/view_models/bottom_nav_view_model.dart';
+import '../../core/data/view_models/profile_vms/notification_vms/notification_settings_vm.dart';
 import '../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../widgets/bottom_nav_items.dart';
 
@@ -26,7 +27,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
     final loginVm = ref.read(loginViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       ref.read(profileViewModel).user = loginVm.user;
-      // ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
+      ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
       // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
       // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;
     });

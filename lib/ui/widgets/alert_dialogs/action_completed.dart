@@ -25,13 +25,13 @@ class ActionCompleted extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          RenderLottie(
-            lottieAsset: 'assets/json/successful.json', //todo: update lottie
-            repeat: false,
-            fit: BoxFit.contain,
-            alignment: Alignment.bottomCenter,
-          ),
-          SizedBox(height: 24.h,),
+          // RenderLottie(
+          //   lottieAsset: 'assets/json/successful.json', //todo: update lottie
+          //   repeat: false,
+          //   fit: BoxFit.contain,
+          //   alignment: Alignment.bottomCenter,
+          // ),
+          // SizedBox(height: 24.h,),
           Text(
             title,
             style: textTheme.titleMedium?.copyWith(
@@ -46,6 +46,7 @@ class ActionCompleted extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color:colorScheme.text7,
             ),
+            textAlign: TextAlign.center,
           ),
           SizedBox(height: 32.h,),
           CustomButton(

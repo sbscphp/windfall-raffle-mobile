@@ -12,6 +12,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
 
+import '../../ui/widgets/alert_dialogs/base_dialog.dart';
+import '../../ui/widgets/alert_dialogs/action_completed.dart';
+import '../../ui/widgets/alert_dialogs/error_dialog.dart';
+import 'navigator.dart';
+
 
 
 class ImageAndDocUtils{
@@ -113,50 +118,50 @@ class ImageAndDocUtils{
         }
       }
       else if(status.isPermanentlyDenied){
-        // baseDialog(
-        //   isDismissible: true,
-        //   context: context,
-        //   content: ActionSuccessful(
-        //       title: "Permission Required",
-        //       subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
-        //       buttonText: 'Open Settings',
-        //       onPressed: ()async{
-        //         popNavigation(context: context);
-        //         await openAppSettings();
-        //       }
-        //   ),
-        // );
+        baseDialog(
+          isDismissible: true,
+          context: context,
+          content: ErrorDialog(
+              title: "Permission Required",
+              subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
+              buttonText: 'Open Settings',
+              onPressed: ()async{
+                popNavigation(context: context);
+                await openAppSettings();
+              }
+          ),
+        );
       }
       else{
-        // baseDialog(
-        //   isDismissible: true,
-        //   context: context,
-        //   content: ActionSuccessful(
-        //       title: "Permission Required",
-        //       subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
-        //       buttonText: 'Open Settings',
-        //       onPressed: ()async{
-        //         popNavigation(context: context);
-        //         await openAppSettings();
-        //       }
-        //   ),
-        // );
+        baseDialog(
+          isDismissible: true,
+          context: context,
+          content: ErrorDialog(
+              title: "Permission Required",
+              subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
+              buttonText: 'Open Settings',
+              onPressed: ()async{
+                popNavigation(context: context);
+                await openAppSettings();
+              }
+          ),
+        );
       }
     }catch(e){
       if (e is PlatformException && e.code == "photo_access_denied") {
-        // baseDialog(
-        //   isDismissible: true,
-        //   context: context,
-        //   content: ActionSuccessful(
-        //       title: "Permission Required",
-        //       subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
-        //       buttonText: 'Open Settings',
-        //       onPressed: ()async{
-        //         popNavigation(context: context);
-        //         await openAppSettings();
-        //       }
-        //   ),
-        // );
+        baseDialog(
+          isDismissible: true,
+          context: context,
+          content: ErrorDialog(
+              title: "Permission Required",
+              subtitle: "${Platform.isIOS ? 'Photos':'Gallery'} access is needed to select images. Please enable it in settings.",
+              buttonText: 'Open Settings',
+              onPressed: ()async{
+                popNavigation(context: context);
+                await openAppSettings();
+              }
+          ),
+        );
       }
       else {
         // Display general error message

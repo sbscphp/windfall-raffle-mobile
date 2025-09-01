@@ -43,7 +43,7 @@ class AppAsset {
   static const String emptyCart = 'assets/icons/empty_cart.svg';
   static const String delete = 'assets/icons/delete.svg';
   static const String camera = 'assets/icons/camera.svg';
-  static const String warning = 'assets/icons/warning.svg';
+  static const String warning = 'assets/icons/warning.png';
   static const String success = 'assets/icons/success.svg';
   static const String successImg = 'assets/icons/success.png';
   static const String emptyNotification = 'assets/icons/empty_notifications.svg';

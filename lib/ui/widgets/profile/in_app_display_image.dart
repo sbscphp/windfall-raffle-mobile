@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 
 import '../../../core/constants/color_path.dart';
@@ -17,13 +18,17 @@ class InAppDisplayImage extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child){
         final profileVm = ref.watch(profileViewModel);
-        final image = 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg';
+        final image = profileVm.image;
         final hasImage = image.isNotEmpty;
-        final firstName = '';
-        final lastName = '';
+        final firstName = profileVm.firstname;
+        final lastName = profileVm.lastname;
         return Clickable(
           onPressed: (){
-
+            final container =
+            ProviderScope.containerOf(context);
+            final vm =
+            container.read(bottomNavViewModel);
+            vm.updateIndex(3);
           },
           child: Hero(
             tag: tag,
@@ -69,7 +74,7 @@ class InAppDisplayImage extends StatelessWidget {
                       color: Colors.white,
                       shape: BoxShape.circle),
                   child: CircleAvatar(
-                    backgroundColor: ColorPath.athensGrey,
+                    backgroundColor: ColorPath.fairPink,
                     radius: 40.r,
                     child: Center(
                       child: userInitials(firstName, lastName, context),
