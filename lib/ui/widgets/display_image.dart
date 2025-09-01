@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-
 import '../../core/constants/color_path.dart';
 import '../../core/utilities/utilities.dart';
 
@@ -37,38 +35,42 @@ class DisplayImage extends StatefulWidget {
 
 class _DisplayImageState extends State<DisplayImage> {
 
-  late ImageProvider _imageProvider;
-  late bool _hasImage;
+  ImageProvider? _imageProvider;
+
 
   @override
   void initState() {
-
-    final isEmpty = widget.image?.isEmpty ?? true;
-    _hasImage = widget.image != null && !isEmpty;
-
-    if(_hasImage){
-      _imageProvider = CachedNetworkImageProvider(widget.image ?? '',
-        errorListener: (value) {
-          toggle();
-        },
-      );
-    }
     super.initState();
-  }
-
-  void toggle(){
-    setState(() {
-      _hasImage = false;
-    });
+    if (_hasImage(widget.image)) {
+      _imageProvider = CachedNetworkImageProvider(widget.image!);
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if(_hasImage){
-      precacheImage(_imageProvider, context);
+    if (_imageProvider != null) {
+      precacheImage(_imageProvider!, context);
     }
+  }
 
+  @override
+  void didUpdateWidget(covariant DisplayImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.image != widget.image && _hasImage(widget.image)) {
+      setState(() {
+        _imageProvider = CachedNetworkImageProvider(widget.image!);
+      });
+      precacheImage(_imageProvider!, context);
+    } else if (!_hasImage(widget.image)) {
+      setState(() {
+        _imageProvider = null;
+      });
+    }
+  }
+
+  bool _hasImage(String? url) {
+    return url != null && url.trim().isNotEmpty;
   }
 
 
@@ -88,7 +90,7 @@ class _DisplayImageState extends State<DisplayImage> {
           color: ColorPath.fairPink,
           shape: BoxShape.circle,
         ),
-        child: _hasImage
+        child: _imageProvider != null
             ? CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: widget.size.r,
