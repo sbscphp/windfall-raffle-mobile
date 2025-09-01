@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/data/view_models/authentication_vms/password_vm.dart';
 import 'package:windfall/core/utilities/validator.dart';
 import 'package:windfall/ui/widgets/authentication/password_requirement.dart';

@@ -22,7 +22,6 @@ import '../../../core/constants/color_path.dart';
 import '../../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_painter/dotted_border.dart';
-import '../../widgets/custom_svg.dart';
 import '../../widgets/display_image.dart';
 
 class Profile extends ConsumerStatefulWidget {

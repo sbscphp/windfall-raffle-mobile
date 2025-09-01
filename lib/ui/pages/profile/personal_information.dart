@@ -25,7 +25,6 @@ import '../../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../../../core/data/view_models/utility_view_models/lga_details_view_model.dart';
 import '../../../core/utilities/image_and_doc_utils.dart';
 import '../../../core/utilities/input_formatters/nigerian_phone_number_formatter.dart';
-import '../../../core/utilities/utilities.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/show_flush_bar.dart';
 

@@ -11,9 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
-
 import '../../ui/widgets/alert_dialogs/base_dialog.dart';
-import '../../ui/widgets/alert_dialogs/action_completed.dart';
 import '../../ui/widgets/alert_dialogs/error_dialog.dart';
 import 'navigator.dart';
 

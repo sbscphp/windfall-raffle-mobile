@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../../locator.dart';
-import '../../../../../ui/pages/profile/notification_settings.dart';
 import '../../../../constants/app_constants.dart';
 import '../../../../utilities/utilities.dart';
 import '../../../data_provider/profile_data_provider/notification_data_provider.dart';

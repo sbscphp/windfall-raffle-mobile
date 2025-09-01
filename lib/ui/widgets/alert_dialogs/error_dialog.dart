@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-
 import '../custom_button.dart';
-import '../render_lottie.dart';
+
 
 class ErrorDialog extends StatelessWidget {
   final String title;
