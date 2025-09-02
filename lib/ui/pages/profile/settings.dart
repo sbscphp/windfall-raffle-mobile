@@ -6,7 +6,6 @@ import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
-import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/pages/profile/account_security.dart';

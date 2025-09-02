@@ -11,8 +11,6 @@ import 'package:windfall/core/utilities/validator.dart';
 import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/widgets/authentication/password_requirement.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
-import 'package:windfall/ui/widgets/bottom_sheets/base_bottom_sheet.dart';
-import 'package:windfall/ui/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:windfall/ui/widgets/busy_overlay.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
@@ -21,7 +19,6 @@ import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/custom_text_field.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
-
 import '../../../core/constants/secure_storage_constants.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/secure_storage/secure_storage_utils.dart';

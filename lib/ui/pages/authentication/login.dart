@@ -18,7 +18,6 @@ import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/models/user.dart';
 import '../../../core/utilities/biometric_utils.dart';
 import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
-import '../../../core/utilities/utilities.dart';
 import '../../../core/utilities/validator.dart';
 import '../../widgets/clickable.dart';
 import '../../widgets/custom_button.dart';
