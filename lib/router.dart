@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:windfall/ui/pages/authentication/login.dart';
+
+import 'core/constants/named_routes.dart';
 
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    // case NamedRoutes.profile:
-    //   return _getPageRoute(
-    //     routeName: settings.name!,
-    //     viewToShow: const Profile(),
-    //   );
+    case NamedRoutes.login:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const Login(),
+      );
     //todo::add more routes
     default:
       return MaterialPageRoute(

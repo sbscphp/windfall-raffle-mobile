@@ -9,13 +9,15 @@ import 'package:windfall/ui/pages/home/game_details.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
+import '../../../core/data/models/game.dart';
 import '../../../core/utilities/utilities.dart';
 import '../home/game_property.dart';
 import '../media_placeholder.dart';
 import '../naira_display.dart';
 
 class GameItem extends StatelessWidget {
-  const GameItem({super.key});
+  final Game game;
+  const GameItem({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {

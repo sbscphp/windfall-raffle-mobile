@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 
 import 'core/data/data_provider/auth_data_provider/auth_data_provider.dart';
 import 'core/data/data_provider/auth_data_provider/otp_data_provider.dart';
+import 'core/data/data_provider/game_data_provider.dart';
 import 'core/data/data_provider/profile_data_provider/notification_data_provider.dart';
 import 'core/data/data_provider/profile_data_provider/profile_data_provider.dart';
 import 'core/data/data_provider/utility_data_provider/utility_data_provider.dart';
@@ -19,6 +20,7 @@ void setupLocator() {
   locator.registerLazySingleton<OtpDataProvider>(() => OtpDataProvider());
   locator.registerLazySingleton<ProfileDataProvider>(() => ProfileDataProvider());
   locator.registerLazySingleton<NotificationDataProvider>(() => NotificationDataProvider());
+  locator.registerLazySingleton<GameDataProvider>(() => GameDataProvider());
 
 
 

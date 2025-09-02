@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:windfall/core/constants/app_constants.dart';
 
 class ApiRoutes {
   //auth
@@ -43,7 +44,7 @@ class ApiRoutes {
 
   //Game
   static fetchGames({required int? pageNumber}) =>
-      "${dotenv.env['GUEST']}/all-featured-games?page=$pageNumber";
+      "${dotenv.env['GUEST']}/games/all-games?paginate=1&limit=$paginationLimit&page=$pageNumber";
   static fetchSingleGame({required String? gameId}) =>
       "${dotenv.env['GUEST']}/game/$gameId";
   static getTicketsByOrderId({required String? orderId}) =>

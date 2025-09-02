@@ -20,12 +20,8 @@ class GameDataProvider{
     var completer = Completer<ApiResponse<PaginationData<Game>>>();
     try {
       Map<String, dynamic> response = await NetworkManager()
-          .networkRequestManager(RequestType.post, ApiRoutes.fetchGames(pageNumber: pageNumber),
-          useAuth: false,
-          body: jsonEncode({
-            "paginate": true,
-            "limit": 10
-          })
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchGames(pageNumber: pageNumber),
+          useAuth: false
       );
       var result = ApiResponse<PaginationData<Game>>.fromJson(
         response,

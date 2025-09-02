@@ -4,10 +4,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../../locator.dart';
 import '../../constants/app_config.dart';
+import '../../constants/named_routes.dart';
 import '../../utilities/secure_storage/secure_storage_utils.dart';
 import '../../utilities/utilities.dart';
 import '../enum/request_type.dart';
+import '../services/navigation_service.dart';
 
 
 /////A WORK IN PROGRESS //////////
@@ -178,7 +181,10 @@ extension Range2 on num {
 }
 
 sessionExpired() {
-  // Utilities.unauthorizedFlag = true;
-  // NavigationService navigationService = locator<NavigationService>();
-  // navigationService.clearAllRoutes(routeName: NamedRoutes.login);
+  Utilities.unauthorizedFlag = true;
+  NavigationService navigationService = locator<NavigationService>();
+  navigationService.pushAndClearRoutes(
+   routeName: NamedRoutes.login,
+   clearRoute: NamedRoutes.onboarding
+  );
 }

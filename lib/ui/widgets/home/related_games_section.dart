@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/models/game.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
@@ -63,7 +64,7 @@ class RelatedGamesSection extends StatelessWidget {
             padding: EdgeInsets.only(left: 16.w, right: 16.w,),
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return GameItem();
+              return GameItem(game: Game(),);
             },
             separatorBuilder: (context, index) {
               return SizedBox(

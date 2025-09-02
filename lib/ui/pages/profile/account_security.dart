@@ -93,7 +93,7 @@ class AccountSecurity extends ConsumerWidget {
                         await otpVm.sendOtp(
                             otpType: OtpType.resetPassword,
                             key: 'email_or_phone',
-                            value: email
+                            value: 'email'
                         );
 
                         if(otpVm.state == ViewState.retrieved){
