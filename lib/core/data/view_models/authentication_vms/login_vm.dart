@@ -55,6 +55,12 @@ class LoginVm extends BaseState {
     });
   }
 
+  //clear user(user logged out)
+  clearUser(){
+    user = null;
+    notifyListeners();
+  }
+
   //logout
   // logout() async {
   //   await _authDataProvider.logout().then((response) async{

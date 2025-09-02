@@ -30,6 +30,7 @@ class ProfileVm extends BaseState{
 
 
   String get userId => _user?.uuid ?? '';
+  String get uniqueId => _user?.uniqueId ?? '';
   String get email => _user?.email ?? '';
   String get firstname => _user?.firstname ?? '';
   String get lastname => _user?.lastname ?? '';

@@ -30,6 +30,10 @@ class OtpDataProvider{
         //send otp to verify phone
         apiRoute = ApiRoutes.sendOtpVerifyPhone;
       }
+      if(otpType == OtpType.resetPassword){
+        //send otp to reset password
+        apiRoute = ApiRoutes.sendResetPasswordOtp;
+      }
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.post, apiRoute,
           useAuth: isOtpUseAuth(otpType: otpType),
@@ -54,6 +58,10 @@ class OtpDataProvider{
       if(otpType == OtpType.forgotPassword){
         //resend otp for forgot password
         apiRoute = ApiRoutes.resendForgotPasswordOtp(userId: userId);
+      }
+      if(otpType == OtpType.resetPassword){
+        //resend otp for reset password
+        apiRoute = ApiRoutes.resendResetPasswordOtp;
       }
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.get, apiRoute,
@@ -87,6 +95,10 @@ class OtpDataProvider{
       if(otpType == OtpType.verifyPhone){
         //validate otp for phone verification
         apiRoute = ApiRoutes.verifyOtpPhone;
+      }
+      if(otpType == OtpType.resetPassword){
+        //validate otp for reset password
+        apiRoute = ApiRoutes.verifyResetPasswordOtp;
       }
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.post, apiRoute,

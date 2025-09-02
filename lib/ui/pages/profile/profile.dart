@@ -89,7 +89,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           ),
                           SizedBox(height: 5.h,),
                           Text(
-                            'ID: 9940🚀 ', //todo: ask backend
+                            'ID: ${profileVm.uniqueId}🚀',
                             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w400,
                                 color: Theme.of(context).colorScheme.textTertiary

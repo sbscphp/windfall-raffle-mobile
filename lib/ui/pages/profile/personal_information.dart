@@ -130,7 +130,7 @@ class _PersonalInformationState extends ConsumerState<PersonalInformation> {
                             ),
                             SizedBox(height: 5.h),
                             Text(
-                              'ID: 0014', //todo: ask backend
+                              'ID: ${vm.uniqueId}',
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w400,
                                 color: ColorPath.redOrange,

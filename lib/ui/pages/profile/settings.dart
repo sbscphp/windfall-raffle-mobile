@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
+import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/pages/profile/account_security.dart';
@@ -13,6 +16,10 @@ import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
+
+import '../../../core/constants/secure_storage_constants.dart';
+import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
+import '../../widgets/show_flush_bar.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -65,11 +72,32 @@ class Settings extends StatelessWidget {
               imageAsset: AppAsset.logout,
               label: "Log Out",
               subInfo: "Log out of your account. ",
-              onPressed: () {
-                pushAndClearAllNavigation(
+              onPressed: () async{
+
+                //clear token
+                await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
+
+                //todo: hit backend endpoint if provided by backend first before clearing user
+                final container =
+                ProviderScope.containerOf(context);
+
+                final loginVm =
+                container.read(loginViewModel);
+                //delete user
+                loginVm.clearUser();
+
+                pushAndClearNavigation(
                   context: context,
                   widget: Login(),
                   routeName: NamedRoutes.login,
+                  clearRoute: NamedRoutes.onboarding
+                );
+
+                //show message
+                showFlushBar(
+                  context: context,
+                  success: true,
+                  message: 'Logout Successful',
                 );
               },
             ),

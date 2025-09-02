@@ -18,7 +18,7 @@ class OtpVm extends BaseState {
 
   String? userId;
 
-  DateTime get endTime => DateTime.now().add(const Duration(minutes: 1));
+  DateTime get endTime => DateTime.now().add(const Duration(minutes: 5));
 
   //send otp based on otp type
   sendOtp({
@@ -78,7 +78,7 @@ class OtpVm extends BaseState {
 
     setSecondState(ViewState.busy);
     Map<String, dynamic> details = {};
-    if(otpType == OtpType.forgotPassword){
+    if(otpType == OtpType.forgotPassword || otpType == OtpType.resetPassword){
       details = {"code": otp};
     }
     else{

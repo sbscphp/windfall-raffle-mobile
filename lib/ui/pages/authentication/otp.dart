@@ -7,6 +7,7 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/create_password.dart';
+import 'package:windfall/ui/pages/profile/change_password.dart';
 import 'package:windfall/ui/widgets/busy_overlay.dart';
 
 import '../../../core/constants/app_asset.dart';
@@ -110,8 +111,8 @@ class _OtpState extends ConsumerState<Otp> {
                                       color:colorScheme.textPrimary
                                   ),
                                 ),
-                                const TextSpan(
-                                  text: '. Enter code to continue account setup',
+                               TextSpan(
+                                  text: '. Enter code to ${widget.otpType == OtpType.resetPassword ? 'reset password':'continue account setup'}',
                                 ),
                               ],
                             ),
@@ -261,12 +262,20 @@ class _OtpState extends ConsumerState<Otp> {
                       onPressed: ()async{
 
                         await otpVm.validateOtp(
-                            otpType: OtpType.forgotPassword,
+                            otpType: widget.otpType,
                             otp: _otp.text
                         );
 
                         if(otpVm.secondState == ViewState.retrieved){
-                          replaceNavigation(context: context, widget: const CreatePassword(), routeName: NamedRoutes.createPassword);
+                          if(widget.otpType == OtpType.forgotPassword){
+                            replaceNavigation(context: context, widget: const CreatePassword(), routeName: NamedRoutes.createPassword);
+                            return;
+                          }
+
+                          if(widget.otpType == OtpType.resetPassword){
+                            replaceNavigation(context: context, widget: const ChangePassword(), routeName: NamedRoutes.changePassword);
+                            return;
+                          }
                         }
 
                         showFlushBar(

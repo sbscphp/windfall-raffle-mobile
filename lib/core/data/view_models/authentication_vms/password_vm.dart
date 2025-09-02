@@ -5,6 +5,7 @@ import 'package:windfall/core/data/states/base_state.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
 
+import '../../../utilities/secure_storage/secure_storage_utils.dart';
 import '../../data_provider/auth_data_provider/auth_data_provider.dart';
 
 class PasswordViewModel extends BaseState{
@@ -58,6 +59,33 @@ class PasswordViewModel extends BaseState{
     });
   }
 
+  //update/change password
+  updatePassword(
+      {required String oldPwd, required String confirmPwd, required String pwd}) async {
+
+    if(pwd != confirmPwd){
+      _message = "Passwords don't march";
+      setSecondState(ViewState.error);
+      return;
+    }
+
+    setSecondState(ViewState.busy);
+
+    final details = {
+      "old_password": oldPwd,
+      "password": pwd,
+      "password_confirmation": confirmPwd
+    };
+    await _authDp.updatePassword(details: details).then((response) async{
+      _message = response.message ?? defaultSuccessMessage;
+      await SecureStorageUtils.savePassword(value: pwd);
+      setSecondState(ViewState.retrieved);
+    }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setSecondState(ViewState.error);
+    });
+  }
+
 
 
 
@@ -66,9 +94,6 @@ class PasswordViewModel extends BaseState{
 
   //checks password requirement
   void checkPassWordRequirement({required String password}){
-
-    print('password::::$password>>>>');
-
     final hasMinLength = password.trim().length > 7;
     final hasUpperCase = password.contains(RegExp(r'[A-Z]'));
     final hasLowerCase = password.contains(RegExp(r'[a-z]'));
@@ -76,8 +101,6 @@ class PasswordViewModel extends BaseState{
     final hasSymbol = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
     _results = [hasMinLength, (hasUpperCase && hasLowerCase), hasNumber, hasSymbol];
-
-    print('results:::$_results');
     notifyListeners();
   }
 

@@ -2,6 +2,7 @@ import 'notification_setting.dart';
 
 class User {
   final String? uuid;
+  final String? uniqueId;
   final String? email;
   final String? phoneNumber;
   final dynamic avatar;
@@ -20,6 +21,7 @@ class User {
 
   User({
     this.uuid,
+    this.uniqueId,
     this.email,
     this.phoneNumber,
     this.avatar,
@@ -39,6 +41,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     uuid: json["uuid"],
+    uniqueId: json["uniqueID"],
     email: json["email"],
     phoneNumber: json["phone_number"],
     avatar: json["avatar"],
@@ -58,6 +61,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
     "uuid": uuid,
+    "uniqueID": uniqueId,
     "email": email,
     "phone_number": phoneNumber,
     "avatar": avatar,

@@ -8,14 +8,20 @@ class ApiRoutes {
       "${dotenv.env['AUTH']}/send-otp-phone";
   static var sendForgotPasswordOtp =
       "${dotenv.env['AUTH']}/forgot-password/send-code";
+  static var sendResetPasswordOtp =
+      "${dotenv.env['AUTH']}/reset-password/send-code";
   static resendForgotPasswordOtp({required String? userId}) =>
       "${dotenv.env['AUTH']}/forgot-password/resend-code/$userId";
+  static var resendResetPasswordOtp =
+      "${dotenv.env['AUTH']}/reset-password/resend-code";
   static var verifyOtpPhone =
       "${dotenv.env['AUTH']}/confirm-otp-phone";
   static var verifyOtpEmail =
       "${dotenv.env['AUTH']}/confirm-otp-email";
   static verifyForgotPasswordOtp({required String? userId}) =>
       "${dotenv.env['AUTH']}/forgot-password/confirm-code/$userId";
+  static var verifyResetPasswordOtp =
+      "${dotenv.env['AUTH']}/reset-password/confirm-code";
   static var register =
       "${dotenv.env['AUTH']}/signup_only";
   static createPassword({required String? userId}) =>
@@ -29,7 +35,7 @@ class ApiRoutes {
   static var updateProfile =
       "${dotenv.env['SETTINGS']}/profile/update_profile";
   static var updatePassword =
-      "${dotenv.env['SETTINGS']}/security/update/password";
+      "${dotenv.env['AUTH']}/reset-password/create-password";
   static var updateSpendLimit =
       "${dotenv.env['SETTINGS']}/spend_limit/update";
   static var updateSelfExclusion =

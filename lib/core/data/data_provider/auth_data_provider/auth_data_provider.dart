@@ -87,6 +87,23 @@ class AuthDataProvider{
     return completer.future;
   }
 
+  //update password
+  Future<ApiResponse> updatePassword({required Map<String, dynamic> details}) async {
+    var completer = Completer<ApiResponse>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.post, ApiRoutes.updatePassword,
+          useAuth: true,
+          body: jsonEncode(details)
+      );
+      var result = ApiResponse.fromJson(response, null);
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
 
 
 

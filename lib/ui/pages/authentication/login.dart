@@ -310,49 +310,49 @@ class _LoginState extends ConsumerState<Login> {
                       ),
                     ),
                   ),
-                  if(_canUseBiometrics && _biometricsEnabled)Align(
-                    alignment: Alignment.center,
-                      child: Clickable(
-                        onPressed: ()async{
-                          //check if user has saved password
-                          if(_savedPassword == null || !_userExist){
-                            //prompt user to log in with password
-                            showFlushBar(
-                                context: context,
-                                success: false,
-                                message: 'Kindly login with password first to be able to use biometrics',
-                                duration: 3
-                            );
-                            return;
-                          }
-
-                          //authenticate with biometrics
-                          final authenticate = await BiometricUtils.authenticate();
-                          if(authenticate != null && authenticate){
-                            //login
-                            Utilities.hideKeyboard(context);
-                            //attempt login
-                            await vm.login(
-                                email: _email.text.trim(),
-                                password: _savedPassword!.trim(),
-                            );
-
-                            if(vm.state == ViewState.retrieved){
-
-                              //nav user into the app
-                              pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
-                            }
-                            else{
-                              //show error message
-                              showFlushBar(
-                                  context: context,
-                                  message: vm.message,
-                                  success: false
-                              );
-                            }
-                          }
-                        },
-                          child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,)))
+                  // if(_canUseBiometrics && _biometricsEnabled)Align(
+                  //   alignment: Alignment.center,
+                  //     child: Clickable(
+                  //       onPressed: ()async{
+                  //         //check if user has saved password
+                  //         if(_savedPassword == null || !_userExist){
+                  //           //prompt user to log in with password
+                  //           showFlushBar(
+                  //               context: context,
+                  //               success: false,
+                  //               message: 'Kindly login with password first to be able to use biometrics',
+                  //               duration: 3
+                  //           );
+                  //           return;
+                  //         }
+                  //
+                  //         //authenticate with biometrics
+                  //         final authenticate = await BiometricUtils.authenticate();
+                  //         if(authenticate != null && authenticate){
+                  //           //login
+                  //           Utilities.hideKeyboard(context);
+                  //           //attempt login
+                  //           await vm.login(
+                  //               email: _email.text.trim(),
+                  //               password: _savedPassword!.trim(),
+                  //           );
+                  //
+                  //           if(vm.state == ViewState.retrieved){
+                  //
+                  //             //nav user into the app
+                  //             pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
+                  //           }
+                  //           else{
+                  //             //show error message
+                  //             showFlushBar(
+                  //                 context: context,
+                  //                 message: vm.message,
+                  //                 success: false
+                  //             );
+                  //           }
+                  //         }
+                  //       },
+                  //         child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,)))
                 ],
               ),
             ),
