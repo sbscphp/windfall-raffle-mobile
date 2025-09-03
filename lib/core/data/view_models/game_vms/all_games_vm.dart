@@ -19,6 +19,7 @@ class AllGamesVm extends BaseState{
   String _message = '';
   String get message => _message;
 
+
   //page number
   int pageNumber = 1;
 
@@ -28,6 +29,11 @@ class AllGamesVm extends BaseState{
   //all games
   List<Game> _allGames = [];
   List<Game> get allGames => _allGames;
+
+  //live games
+  List<Game> _liveGames = [];
+  List<Game> get liveGames => _liveGames;
+
 
   //selected game
   Game? selectedGame;
@@ -66,6 +72,24 @@ class AllGamesVm extends BaseState{
       }else{
         setPaginatedState(ViewState.error);
       }
+    });
+  }
+
+  //fetch live games
+  fetchLiveGames() async {
+    setSecondState(ViewState.busy);
+    await _gameDp
+        .fetchLiveGames(
+      pageNumber: 1,
+      filterParams: {'type': 'live'}
+    )
+        .then((response) {
+      //_message = response.message ?? defaultSuccessMessage;
+      _liveGames = response.data ?? [];
+      setSecondState(ViewState.retrieved);
+    }, onError: (e) {
+      //_message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setSecondState(ViewState.error);
     });
   }
 

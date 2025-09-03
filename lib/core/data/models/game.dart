@@ -5,7 +5,7 @@ class Game {
   final String? uuid;
   final String? name;
   final DateTime? drawDate;
-  final String? minimumEntry;
+  final dynamic minimumEntry;
   final int? maxTicketsPerPerson;
   final int? ticketsLeft;
   final String? cardImage;

@@ -36,6 +36,8 @@ class _HomeState extends ConsumerState<Home> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       //fetch all games
       allGamesVm.fetchAllGames();
+      //fetch live games
+      allGamesVm.fetchLiveGames();
     });
     super.initState();
   }

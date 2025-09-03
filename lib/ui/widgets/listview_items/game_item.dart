@@ -10,6 +10,7 @@ import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/data/models/game.dart';
+import '../../../core/utilities/date_utilitites.dart';
 import '../../../core/utilities/utilities.dart';
 import '../home/game_property.dart';
 import '../media_placeholder.dart';
@@ -21,6 +22,13 @@ class GameItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final image = game.cardImage ?? '';
+    final status = game.status ?? '';
+    final drawDate = game.drawDate ?? DateTime.now();
+    final name = game.name ?? 'N/A';
+    final minEntryPrice = double.tryParse(game.minimumEntry?.toString() ?? '0') ?? 0;
+    final maxPerson = double.tryParse(game.maxTicketsPerPerson?.toString() ?? '0') ?? 0;
+    final ticketsLeft = double.tryParse(game.ticketsLeft?.toString() ?? '0') ?? 0;
     return Clickable(
       onPressed: (){
         pushNavigation(context: context, widget: const GameDetails(), routeName: NamedRoutes.gameDetails);
@@ -43,7 +51,8 @@ class GameItem extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                      height: double.infinity,
+                      imageUrl: image,
                       placeholder: (context, url) => const MediaPlaceholder(),
                       errorWidget: (context, url, error) => const MediaPlaceholder(),
                     ),
@@ -54,15 +63,15 @@ class GameItem extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
                       decoration: BoxDecoration(
-                          color: Utilities.statusContainerColor(status: 'live'),
+                          color: Utilities.statusContainerColor(status: status),
                           borderRadius: BorderRadius.all(Radius.circular(16.r))
                       ),
                       child: Text(
-                        Utilities.statusText(status: 'Live Game'),
+                        Utilities.statusText(status: status),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 9.sp,
                             fontWeight: FontWeight.w500,
-                            color: Utilities.statusTextColor(status: 'live')
+                            color: Utilities.statusTextColor(status: status)
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -83,7 +92,7 @@ class GameItem extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(16.r)),
                           ),
                           child: Text(
-                            'Draw: April 11, 2025',
+                            'Draw: ${DateUtilities.monthDayYear(date: drawDate)}',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontSize: 9.sp,
                               fontWeight: FontWeight.w600,
@@ -103,7 +112,7 @@ class GameItem extends StatelessWidget {
             ),
             SizedBox(height: 12.h,),
             Text(
-              "Win One Bed Room Flat in Akoka-Yaba, Lagos State, Nigeria",
+              name,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Theme.of(context).colorScheme.textPrimary,
@@ -117,7 +126,7 @@ class GameItem extends StatelessWidget {
                 label: 'Draw Date:',
                 value: Expanded(
                   child: Text(
-                    "April 11, 2025",
+                    "${DateUtilities.monthDayYear(date: drawDate)}",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w400,
@@ -132,7 +141,7 @@ class GameItem extends StatelessWidget {
                 label: 'Minimum Entry:',
                 value: Flexible(
                   child: NairaDisplay(
-                    amount: 450000,
+                    amount: minEntryPrice,
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w400,
                     addDecimal: false,
@@ -146,7 +155,10 @@ class GameItem extends StatelessWidget {
                 label: 'Max/Person:',
                 value: Expanded(
                   child: Text(
-                    "200",
+                    '${Utilities.formatAmount(
+                      addDecimal: false,
+                      amount: maxPerson
+                    )}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w400,
@@ -161,7 +173,10 @@ class GameItem extends StatelessWidget {
                 label: 'Ticket Left:',
                 value: Expanded(
                   child: Text(
-                    "1,000 Tickets",
+                    "${Utilities.formatAmount(
+                      amount: ticketsLeft,
+                      addDecimal: false
+                    )} ${ticketsLeft > 1 ? 'Tickets':'Ticket'}",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w400,

@@ -43,8 +43,10 @@ class ApiRoutes {
       "${dotenv.env['SETTINGS']}/self_exclusion/update";
 
   //Game
-  static fetchGames({required int? pageNumber}) =>
-      "${dotenv.env['GUEST']}/games/all-games?paginate=1&limit=$paginationLimit&page=$pageNumber";
+  static fetchGames({required int? pageNumber, String? filterParams, bool enablePagination = true}) =>
+      filterParams == null ?
+      "${dotenv.env['GUEST']}/games/all-games?paginate=${enablePagination ? '1':'0'}&limit=$paginationLimit&page=$pageNumber"
+  :"${dotenv.env['GUEST']}/games/all-games?paginate=${enablePagination ? '1':'0'}&limit=$paginationLimit&page=$pageNumber&$filterParams";
   static fetchSingleGame({required String? gameId}) =>
       "${dotenv.env['GUEST']}/game/$gameId";
   static getTicketsByOrderId({required String? orderId}) =>

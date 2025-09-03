@@ -418,14 +418,16 @@ class Utilities {
 
   static String statusText({required String? status}) {
     if (status == null) return '';
-    switch (status.toLowerCase()) {
-      case 'closed':
-        return 'Completed';
-      case 'upcoming':
-        return 'Upcoming Game';
-      default:
-        return status.isEmpty ? 'N/A' : status;
-    }
+
+    return status.isEmpty ? 'N/A' : "$status Game";
+    // switch (status.toLowerCase()) {
+    //   case 'closed':
+    //     return 'Completed';
+    //   case 'upcoming':
+    //     return 'Upcoming Game';
+    //   default:
+    //     return status.isEmpty ? 'N/A' : status;
+    // }
   }
 
   static List<String> sortOptions = [
@@ -540,6 +542,26 @@ class Utilities {
         return ColorPath.vesuviusBrown;
       default:
         return ColorPath.shaftBlack;
+    }
+  }
+
+  //returns a query string
+  static String? returnQueryString({
+    required Map<String, dynamic>? params,
+    Set<String>? omitKeys,
+  }) {
+    if (params == null || params.isEmpty) return null;
+
+    try {
+      final queryString = params.entries
+          .where((e) => omitKeys == null || !omitKeys.contains(e.key))
+          .map((e) =>
+      "${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}")
+          .join("&");
+
+      return queryString.isEmpty ? null : queryString;
+    } catch (e) {
+      return null;
     }
   }
 
