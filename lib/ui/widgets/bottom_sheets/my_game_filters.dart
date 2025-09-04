@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/data/view_models/game_vms/game_filters_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_game_filters_vm.dart';
 import 'package:windfall/ui/widgets/alert_dialogs/select_date.dart';
 

@@ -42,6 +42,7 @@ class _MyGamesState extends ConsumerState<MyGames> {
 
     });
     _scrollListener();
+    _filterScrollListener();
     super.initState();
   }
 

@@ -7,7 +7,6 @@ import '../../../constants/app_constants.dart';
 import '../../../utilities/utilities.dart';
 import '../../data_provider/game_data_provider.dart';
 import '../../enum/view_state.dart';
-import '../../models/game.dart';
 import '../../states/base_state.dart';
 
 
