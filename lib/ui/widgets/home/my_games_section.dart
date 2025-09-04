@@ -1,20 +1,26 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/empty_state.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 import '../../../core/constants/app_asset.dart';
+import '../../../core/data/enum/view_state.dart';
+import '../../../core/data/view_models/bottom_nav_view_model.dart';
+import '../app_loader.dart';
+import '../error_state.dart';
 import '../screen_title.dart';
 
-class MyGamesSection extends StatelessWidget {
+class MyGamesSection extends ConsumerWidget {
   const MyGamesSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +40,15 @@ class MyGamesSection extends StatelessWidget {
                 ),
               ),
               Clickable(
-                onPressed: (){},
+                onPressed: (){
+                  final container =
+                  ProviderScope.containerOf(context);
+
+                  final bottomNavVm =
+                  container.read(bottomNavViewModel);
+
+                  bottomNavVm.updateIndex(2);
+                },
                 child: Row(
                   children: [
                     Text(
@@ -56,32 +70,73 @@ class MyGamesSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h,),
-        if(1 + 1 == 3) Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
-          child: EmptyState(
-              asset: AppAsset.gamesEmptyState,
-              title: 'No Games',
-              subtitle: "You are yet to Play any Games",
-            ctaText: 'View Games',
-          ),
-        )
-        else SizedBox(
-          height: 212.h,
-          child: ListView.separated(
-            itemCount: 3,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.only(left: 16.w, right: 16.w,),
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return MyGameItem();
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(
-                width: 16.w,
-              );
-            },
-          ),
-        )
+          Builder(
+            builder: (context) {
+
+              final vm = ref.watch(myGamesViewModel);
+
+              if(vm.state == ViewState.busy){
+                return Center(child: AppLoader(),);
+              }
+
+              if(vm.state == ViewState.retrieved){
+                if(vm.myGames.isEmpty){
+                  return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
+                      child: EmptyState(
+                          asset: AppAsset.gamesEmptyState,
+                          title: 'No Games',
+                          subtitle: "You are yet to Play any Games",
+                        ctaText: 'View Games',
+                        onPressed: (){
+                          final container =
+                          ProviderScope.containerOf(context);
+
+                          final bottomNavVm =
+                          container.read(bottomNavViewModel);
+
+                          bottomNavVm.updateIndex(1);
+                        },
+                      ),
+                    );
+                }
+                return SizedBox(
+                  height: 212.h,
+                  child: ListView.separated(
+                    itemCount: vm.myGames.length > 5 ? 5 : vm.myGames.length,
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.only(left: 16.w, right: 16.w,),
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      final myGame = vm.myGames[index];
+                      return MyGameItem(myGame: myGame,);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        width: 16.w,
+                      );
+                    },
+                  ),
+                );
+              }
+
+              if(vm.state == ViewState.error){
+                return Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: Center(
+                    child: ErrorState(
+                        message: vm.message,
+                        onPressed: ()=>vm.fetchMyGames()
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox();
+
+
+            }
+          )
 
       ],
     );

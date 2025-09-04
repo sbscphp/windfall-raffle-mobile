@@ -51,8 +51,10 @@ class ApiRoutes {
       "${dotenv.env['GUEST']}/game/$gameId";
   static getTicketsByOrderId({required String? orderId}) =>
       "${dotenv.env['GAMES']}/order/$orderId/tickets";
-  static fetchMyGames({required int? pageNumber}) =>
-      "${dotenv.env['GAMES']}/by_orders?page=$pageNumber";
+  static fetchMyGames({required int? pageNumber, String? filterParams}) =>
+  filterParams == null ?
+      "${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber"
+  :"${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
   static fetchGameTicketStatus({required String? id, required int? pageNumber}) =>
       "${dotenv.env['GAMES']}/order/$id/ticket_status?page=$pageNumber";
 

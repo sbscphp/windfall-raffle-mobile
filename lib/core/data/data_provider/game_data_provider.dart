@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:windfall/core/data/models/game.dart';
+import 'package:windfall/core/data/models/my_game.dart';
 import 'package:windfall/core/data/models/responses/api_response.dart';
 import 'package:windfall/core/data/models/responses/response_data/pagination_data.dart';
 
@@ -50,6 +51,27 @@ class GameDataProvider{
           e as Map<String, dynamic>,
         ))
             .toList(),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
+  Future<ApiResponse<PaginationData<MyGame>>> fetchMyGames({required int? pageNumber, Map<String, dynamic>? filterParams, Set<String>? omitKeys}) async {
+    var completer = Completer<ApiResponse<PaginationData<MyGame>>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchMyGames(pageNumber: pageNumber, filterParams: Utilities.returnQueryString(params: filterParams, omitKeys: omitKeys)),
+          useAuth: true
+      );
+      var result = ApiResponse<PaginationData<MyGame>>.fromJson(
+        response,
+            (data) => PaginationData<MyGame>.fromJson(
+          data as Map<String, dynamic>,
+              (gameJson) => MyGame.fromJson(gameJson),
+        ),
       );
       completer.complete(result);
     } catch (e) {

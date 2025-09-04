@@ -115,7 +115,7 @@ class _GamesState extends ConsumerState<Games> {
                   ),
                 ),
                 SizedBox(width: 20.w,),
-                if(vm.state == ViewState.retrieved)Row(
+                if(vm.state == ViewState.retrieved && vm.allGames.isNotEmpty)Row(
                   children: [
                     if(gameFiltersVm.showFilteredList)Padding(
                       padding: EdgeInsets.only(right: 10.w),
@@ -232,8 +232,8 @@ class _GamesState extends ConsumerState<Games> {
                 if(gameFiltersVm.state == ViewState.error){
                   return  Center(
                     child: ErrorState(
-                        message: vm.message,
-                        onPressed: ()=>vm.fetchAllGames()
+                        message: gameFiltersVm.message,
+                        onPressed: ()=>gameFiltersVm.fetchFilteredResults()
                     ),
                   );
                 }

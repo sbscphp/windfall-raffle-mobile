@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windfall/core/utilities/date_utilitites.dart';
 
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
@@ -37,6 +38,8 @@ class AllGamesVm extends BaseState{
 
   //selected game
   Game? selectedGame;
+
+  String get activeGameDetails => _combinedActiveGameDetails();
 
 
   //fetch all games
@@ -91,6 +94,16 @@ class AllGamesVm extends BaseState{
       //_message = Utilities.formatMessage(e.toString(), isSuccess: false);
       setSecondState(ViewState.error);
     });
+  }
+
+
+  String _combinedActiveGameDetails(){
+    if(_liveGames.isEmpty)return '';
+    final result = _liveGames
+        .map((game) => "${game.name ?? ''} - ${DateUtilities.endTime(dateTime: game.endDate ?? DateTime.now()).contains('/') ? 'ends':'ends in'} ${DateUtilities.endTime(dateTime: game.endDate ?? DateTime.now())}")
+        .join(" ");
+
+    return result;
   }
 
 

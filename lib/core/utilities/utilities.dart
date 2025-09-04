@@ -525,9 +525,9 @@ class Utilities {
         return ColorPath.scandalGreen;
       case 'upcoming':
       case 'upcoming_game':
-        return ColorPath.salomieBrown; //dawnBrown
+        return ColorPath.salomieBrown;//dawnBrown
       default:
-        return ColorPath.shaftBlack.withAlpha((255 * 0.3).toInt());
+        return Colors.white;
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/models/my_game.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 import '../../../core/constants/app_asset.dart';
 import '../empty_state.dart';
@@ -71,7 +72,7 @@ class GameResultsSection extends StatelessWidget {
             padding: EdgeInsets.only(left: 16.w, right: 16.w,),
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return MyGameItem();
+              return MyGameItem(myGame: MyGame(),);
             },
             separatorBuilder: (context, index) {
               return SizedBox(

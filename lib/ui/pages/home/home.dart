@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
+import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/home/active_games_carousel.dart';
@@ -33,11 +34,15 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     final allGamesVm = ref.read(allGamesViewModel);
+    final myGamesVm = ref.read(myGamesViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       //fetch all games
       allGamesVm.fetchAllGames();
       //fetch live games
       allGamesVm.fetchLiveGames();
+      //fetch my games
+      myGamesVm.fetchMyGames();
+
     });
     super.initState();
   }
@@ -73,9 +78,9 @@ class _HomeState extends ConsumerState<Home> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  AllGamesSection(),
                   MyGamesSection(),
                   GameResultsSection(),
-                  AllGamesSection()
                 ],
               ),
             ),

@@ -644,6 +644,21 @@ ${DateFormat.yMMMd().format(date)} ${DateFormat.jms().format(date)}''';
     }
   }
 
+  static String endTime({required DateTime dateTime}) {
+    final now = DateTime.now();
+    final difference = dateTime.difference(now);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} min${difference.inMinutes > 1 ? 's' : ''}';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hr${difference.inHours > 1 ? 's' : ''}';
+    } else if (difference.inDays <= 5) {
+      return '${difference.inDays} day${difference.inDays > 1 ? 's' : ''}';
+    } else {
+      return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+  }
+
   static String dayDateYear({required DateTime date}) {
     //Weekday abbreviation (e.g., "Tues.")
     final String weekday = DateFormat('EEE').format(date);

@@ -23,12 +23,13 @@ class GameItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final image = game.cardImage ?? '';
-    final status = game.status ?? '';
+    final status = game.mainActiveStatus ?? '';
     final drawDate = game.drawDate ?? DateTime.now();
     final name = game.name ?? 'N/A';
     final minEntryPrice = double.tryParse(game.minimumEntry?.toString() ?? '0') ?? 0;
     final maxPerson = double.tryParse(game.maxTicketsPerPerson?.toString() ?? '0') ?? 0;
     final ticketsLeft = double.tryParse(game.ticketsLeft?.toString() ?? '0') ?? 0;
+    final isInstantGame = game.instantGame?.toLowerCase() == 'true';
     return Clickable(
       onPressed: (){
         pushNavigation(context: context, widget: const GameDetails(), routeName: NamedRoutes.gameDetails);
@@ -105,6 +106,26 @@ class GameItem extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // if(isInstantGame)Positioned(
+                  //   top: 8.h,
+                  //   right: 8.w,
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                  //     decoration: BoxDecoration(
+                  //       color: ColorPath.aliceBlue,
+                  //       border: Border.all(color: Colors.white, width: 1.w),
+                  //       borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                  //     ),
+                  //     child: Text(
+                  //       'Instant Game',
+                  //       style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  //         fontSize: 9.sp,
+                  //         fontWeight: FontWeight.w600,
+                  //         color: ColorPath.allPortBlue,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
 
 
                 ],

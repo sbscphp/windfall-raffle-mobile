@@ -61,8 +61,11 @@ class ColorPath {
   static const mistGrey = Color(0xff9A999D);
   static const allPortBlue = Color(0xff026AA2);
   static const pattensBlue = Color(0xffE0F2FE);
+  static const aliceBlue = Color(0xffF0F9FF);
+  static const bambooOrange = Color(0xffDC6803);
 
-  static var textPrimary;
+
+
 
 
 

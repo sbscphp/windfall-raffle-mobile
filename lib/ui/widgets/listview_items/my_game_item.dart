@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/models/my_game.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/my_games/game_tickets.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
@@ -11,10 +13,20 @@ import '../../../core/constants/color_path.dart';
 import '../media_placeholder.dart';
 
 class MyGameItem extends StatelessWidget {
-  const MyGameItem({super.key});
+  final MyGame myGame;
+  const MyGameItem({super.key, required this.myGame});
 
   @override
   Widget build(BuildContext context) {
+    final image = myGame.game?.cardImage ?? '';
+    final name = myGame.game?.name ?? 'N/A';
+    final description = myGame.game?.description ?? 'N/A';
+    final status = myGame.game?.mainActiveStatus ?? '';
+    final isInstantGame = myGame.game?.instantGame?.toLowerCase() == 'true';
+    final isInView = status.toLowerCase() == 'upcoming';
+    final isOngoing = status.toLowerCase() == 'live';
+    final isEnded = status.toLowerCase() == 'ended';
+    final drawDate = myGame.game?.drawDate ?? DateTime.now();
     return Clickable(
       onPressed: (){
         pushNavigation(context: context, widget: const GameTickets(), routeName: NamedRoutes.gameTickets);
@@ -37,14 +49,16 @@ class MyGameItem extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                      imageUrl: image,
                       placeholder: (context, url) => const MediaPlaceholder(),
                       errorWidget: (context, url, error) => const MediaPlaceholder(),
                     ),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: 1 + 1 == 3 ? Container(
+                    child:
+                    isEnded
+                        ? Container(
                       margin: EdgeInsets.only(bottom: 8.h),
                       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                       decoration: BoxDecoration(
@@ -62,7 +76,9 @@ class MyGameItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ):Container(
+                    ):
+                    isInView
+                        ? Container(
                       margin: EdgeInsets.only(bottom: 8.h),
                       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                       decoration: BoxDecoration(
@@ -71,7 +87,7 @@ class MyGameItem extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(16.r)),
                       ),
                       child: Text(
-                        'Draw Date: 03/06/2025',
+                        'Draw Date: ${DateFormat("dd/MM/yyyy").tryParse(drawDate.toString())}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 9.sp,
                           fontWeight: FontWeight.w600,
@@ -80,29 +96,70 @@ class MyGameItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
+                    ):
+                    isOngoing
+                        ? Container(
+                      margin: EdgeInsets.only(bottom: 8.h),
+                      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                      decoration: BoxDecoration(
+                        color: ColorPath.bambooOrange,
+                        border: Border.all(color: Colors.white, width: 1.w),
+                        borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                      ),
+                      child: Text(
+                        'Game Date: Ongoing',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 9.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                    :const SizedBox(),
                   ),
+                  if(isInstantGame)Positioned(
+                    top: 8.h,
+                    right: 8.w,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                      decoration: BoxDecoration(
+                        color: ColorPath.aliceBlue,
+                        border: Border.all(color: Colors.white, width: 1.w),
+                        borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                      ),
+                      child: Text(
+                        'Instant Game',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 9.sp,
+                          fontWeight: FontWeight.w600,
+                          color: ColorPath.allPortBlue,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             SizedBox(height: 12.h,),
+            // Align(
+            //   alignment: Alignment.center,
+            //   child: Text(
+            //     "Game 1",
+            //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            //       fontSize: 10.sp,
+            //       fontWeight: FontWeight.w400,
+            //       color: Theme.of(context).colorScheme.textTertiary,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // ),
+            // SizedBox(height: 5.h,),
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Game 1",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).colorScheme.textTertiary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 5.h,),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Claim a 3-Bedroom House in Ikeja, Lagos State, Nigeria",
+                name,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   color: Theme.of(context).colorScheme.textPrimary,
@@ -114,7 +171,7 @@ class MyGameItem extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Take part for a chance to win an apartment",
+                description,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w400,
