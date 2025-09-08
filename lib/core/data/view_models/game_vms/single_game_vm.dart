@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/data/models/discount_tier.dart';
 import 'package:windfall/core/data/models/ticket_tier.dart';
