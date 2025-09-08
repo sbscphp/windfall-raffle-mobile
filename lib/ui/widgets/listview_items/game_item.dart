@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
@@ -10,6 +11,7 @@ import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/data/models/game.dart';
+import '../../../core/data/view_models/game_vms/single_game_vm.dart';
 import '../../../core/utilities/date_utilitites.dart';
 import '../../../core/utilities/utilities.dart';
 import '../home/game_property.dart';
@@ -30,9 +32,15 @@ class GameItem extends StatelessWidget {
     final maxPerson = double.tryParse(game.maxTicketsPerPerson?.toString() ?? '0') ?? 0;
     final ticketsLeft = double.tryParse(game.ticketsLeft?.toString() ?? '0') ?? 0;
     final isInstantGame = game.instantGame?.toLowerCase() == 'true';
+    final gameId = game.uuid ?? '';
     return Clickable(
       onPressed: (){
-        pushNavigation(context: context, widget: const GameDetails(), routeName: NamedRoutes.gameDetails);
+        print('game id before click::::$gameId>>>>>');
+        pushNavigation(context: context, widget: ProviderScope(
+            overrides: [
+              gameIdProvider.overrideWithValue(gameId),
+            ],
+            child: const GameDetails()), routeName: NamedRoutes.gameDetails);
       },
       child: WindfallContainer(
         width: 191.w,

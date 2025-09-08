@@ -81,20 +81,26 @@ class GameDataProvider{
   }
 
   //fetch single game
-  // Future<SingleGameResponse> fetchSingleGame({required String? gameId}) async {
-  //   var completer = Completer<SingleGameResponse>();
-  //   try {
-  //     Map<String, dynamic> response = await NetworkManager()
-  //         .networkRequestManager(RequestType.get, ApiRoutes.fetchSingleGame(gameId: gameId),
-  //         useAuth: false,
-  //     );
-  //     var result = SingleGameResponse.fromJson(response);
-  //     completer.complete(result);
-  //   } catch (e) {
-  //     completer.completeError(e);
-  //   }
-  //   return completer.future;
-  // }
+  Future<ApiResponse<Game>> fetchSingleGame({required String? gameId}) async {
+    var completer = Completer<ApiResponse<Game>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchSingleGame(gameId: gameId),
+        useAuth: false
+      );
+      var result = ApiResponse<Game>.fromJson(
+        response,
+            (data) => Game.fromJson(data as Map<String, dynamic>),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
+
+
   //
   // //fetch order tickets
   // Future<OrderTicketResponse> fetchOrderTickets({required String? orderId}) async {

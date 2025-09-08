@@ -1,12 +1,14 @@
 import 'package:windfall/core/data/models/prize.dart';
 import 'package:windfall/core/data/models/ticket_tier.dart';
 
+import 'discount.dart';
+
 class Game {
   final String? uuid;
   final String? name;
   final DateTime? drawDate;
   final dynamic minimumEntry;
-  final int? maxTicketsPerPerson;
+  final dynamic maxTicketsPerPerson;
   final int? ticketsLeft;
   final String? cardImage;
   final String? mainActiveStatus;
@@ -50,6 +52,7 @@ class Game {
   final List<Prize>? prizes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final Discount? discount;
 
   Game({
     this.uuid,
@@ -100,6 +103,7 @@ class Game {
     this.prizes,
     this.createdAt,
     this.updatedAt,
+    this.discount,
   });
 
   factory Game.fromJson(Map<String, dynamic> json) => Game(
@@ -151,6 +155,7 @@ class Game {
     prizes: json["prizes"] == null ? [] : List<Prize>.from(json["prizes"]!.map((x) => Prize.fromJson(x))),
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    discount: json["discount"] == null ? null : Discount.fromJson(json["discount"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -202,5 +207,6 @@ class Game {
     "prizes": prizes == null ? [] : List<dynamic>.from(prizes!.map((x) => x.toJson())),
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
+    "discount": discount?.toJson(),
   };
 }

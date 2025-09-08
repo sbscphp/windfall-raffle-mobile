@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:windfall/core/utilities/extensions/num_extension.dart';
 
 import '../../../locator.dart';
 import '../../constants/app_config.dart';
@@ -171,12 +172,6 @@ class NetworkManager {
     } catch (e) {
       throw ("An error occurred while processing this request");
     }
-  }
-}
-
-extension Range2 on num {
-  bool isBetween(int from, int to) {
-    return from <= this && this <= to;
   }
 }
 

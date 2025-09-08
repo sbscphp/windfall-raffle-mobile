@@ -63,6 +63,7 @@ class ColorPath {
   static const pattensBlue = Color(0xffE0F2FE);
   static const aliceBlue = Color(0xffF0F9FF);
   static const bambooOrange = Color(0xffDC6803);
+  static const toryBlue = Color(0xff0D47A1);
 
 
 
