@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
-import 'package:windfall/core/data/models/cart_product.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';

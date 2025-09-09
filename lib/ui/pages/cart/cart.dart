@@ -17,10 +17,8 @@ import 'package:windfall/ui/widgets/custom_button.dart';
 import 'package:windfall/ui/widgets/empty_state.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/cart_item.dart';
-import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
-
 import '../../../core/data/enum/checkout_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/view_models/bottom_nav_view_model.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/data/models/cart_product.dart';
 import 'package:windfall/core/data/models/cart_summary.dart';
-import 'package:windfall/core/utilities/date_utilitites.dart';
 import '../../../../locator.dart';
 import '../../constants/app_constants.dart';
 import '../../utilities/utilities.dart';
