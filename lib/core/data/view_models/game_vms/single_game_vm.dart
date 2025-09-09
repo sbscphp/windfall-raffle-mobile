@@ -65,9 +65,9 @@ class SingleGameVm extends BaseState{
   bool get isEnded => status.toLowerCase() == 'ended';
   DateTime get drawDate => game?.drawDate ?? DateTime.now();
   bool get hasDiscount => _discountUnitPrice != _unitPrice;
-  int get availableTickets => game?.availableTickets ?? 1;
-  double get minEntryPrice => double.tryParse(game?.minimumEntry?.toString() ?? '0') ?? 0;
-  double get maxPerson => double.tryParse(game?.maxTicketsPerPerson?.toString() ?? '0') ?? 0;
+  int get availableTickets => game?.maximumTicketNumberPurchase ?? 1;
+  double get minEntryPrice => double.tryParse(game?.ticketPrice?.toString() ?? '0') ?? 0;
+  double get maxPerson => double.tryParse(game?.maximumTicketNumberPurchase?.toString() ?? '0') ?? 0;
   List<Prize> get instantPrizes => game?.prizes ?? [];
 
 

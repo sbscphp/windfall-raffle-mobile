@@ -86,11 +86,34 @@ class GameDataProvider{
     try {
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.get, ApiRoutes.fetchSingleGame(gameId: gameId),
-        useAuth: false
+        useAuth: true
       );
       var result = ApiResponse<Game>.fromJson(
         response,
             (data) => Game.fromJson(data as Map<String, dynamic>),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
+  //fetch related games
+  Future<ApiResponse<List<Game>>> fetchRelatedGames({required String? gameId}) async {
+    var completer = Completer<ApiResponse<List<Game>>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchRelatedGames(gameId: gameId),
+          useAuth: true
+      );
+      var result = ApiResponse<List<Game>>.fromJson(
+        response,
+            (data) => (data as List<dynamic>)
+            .map((e) => Game.fromJson(
+          e as Map<String, dynamic>,
+        ))
+            .toList(),
       );
       completer.complete(result);
     } catch (e) {

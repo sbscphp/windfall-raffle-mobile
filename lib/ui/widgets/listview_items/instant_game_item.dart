@@ -43,6 +43,7 @@ class _InstantGameItemState extends State<InstantGameItem> {
     final total = double.tryParse(widget.prize.totalQuantity?.toString() ?? '0') ?? 0;
     final availableToWin = double.tryParse(widget.prize.availableToBeWon?.toString() ?? '0') ?? 0;
     final isEmpty = widget.prize.tickets?.isEmpty ?? true;
+    final image = widget.prize.image ?? '';
     return CustomExpansionTile(
       initiallyExpanded: false,
       primaryChild: Row(
@@ -59,7 +60,7 @@ class _InstantGameItemState extends State<InstantGameItem> {
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
                 width: double.infinity,
-                imageUrl: 'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                imageUrl: image,
                 placeholder: (context, url) => const MediaPlaceholder(),
                 errorWidget: (context, url, error) => const MediaPlaceholder(),
               ),

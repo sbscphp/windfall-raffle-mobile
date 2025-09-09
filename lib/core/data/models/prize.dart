@@ -2,6 +2,7 @@ import 'package:windfall/core/data/models/ticket.dart';
 
 class Prize {
   final String? uuid;
+  final String? image;
   final String? name;
   final String? description;
   final dynamic totalQuantity;
@@ -10,6 +11,7 @@ class Prize {
 
   Prize({
     this.uuid,
+    this.image,
     this.name,
     this.description,
     this.totalQuantity,
@@ -20,6 +22,7 @@ class Prize {
   factory Prize.fromJson(Map<String, dynamic> json) => Prize(
     uuid: json["uuid"],
     name: json["name"],
+    image: json["image"],
     description: json["description"],
     totalQuantity: json["total_quantity"],
     availableToBeWon: json["available_to_be_won"],
@@ -29,6 +32,7 @@ class Prize {
   Map<String, dynamic> toJson() => {
     "uuid": uuid,
     "name": name,
+    "image": image,
     "description": description,
     "total_quantity": totalQuantity,
     "available_to_be_won": availableToBeWon,

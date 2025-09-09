@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/view_models/game_vms/related_games_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/single_game_vm.dart';
 import 'package:windfall/core/utilities/extensions/num_extension.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
@@ -57,7 +58,8 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
       //fetch game details
       vm.fetchSingleGame(gameId: gameId).then((value) async {
         if (vm.state == ViewState.retrieved) {
-          //todo: fetch related games
+          final relatedGamesVm = ref.read(relatedGamesViewModel(gameId));
+          relatedGamesVm.fetchRelatedGames(gameId: gameId);
         }
       });
     });
@@ -199,7 +201,12 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
             return Center(
               child: ErrorState(
                 message: vm.message,
-                onPressed: () => vm.fetchSingleGame(gameId: gameId),
+                onPressed: () => vm.fetchSingleGame(gameId: gameId).then((value) async {
+                  if (vm.state == ViewState.retrieved) {
+                    final relatedGamesVm = ref.read(relatedGamesViewModel(gameId));
+                    relatedGamesVm.fetchRelatedGames(gameId: gameId);
+                  }
+                }),
               ),
             );
           }
@@ -385,7 +392,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                 ),
               ),
             ),
-            if (!vm.isEnded)
+            if (!vm.isEnded && !vm.isUpComing)
               Container(
                 margin: EdgeInsets.only(left: 8.w),
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
@@ -402,98 +409,6 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                 ),
               ),
           ],
-        ),
-      ),
-    );
-
-    if (1 + 1 == 3) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                color: Utilities.statusContainerColor(status: 'live'),
-                borderRadius: BorderRadius.all(Radius.circular(16.r)),
-              ),
-              child: Text(
-                Utilities.statusText(status: 'Live Game'),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Utilities.statusTextColor(status: 'live'),
-                ),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                color: ColorPath.solitudeBlue,
-                borderRadius: BorderRadius.all(Radius.circular(16.r)),
-              ),
-              child: Text(
-                'Draw Date: April 11',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: ColorPath.bayBlue,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    if (1 + 1 == 2) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                color: ColorPath.scandalGreen,
-                borderRadius: BorderRadius.all(Radius.circular(16.r)),
-              ),
-              child: Text(
-                'Winner Announced',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: ColorPath.hazeGreen,
-                ),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                color: ColorPath.pippinPink,
-                borderRadius: BorderRadius.all(Radius.circular(16.r)),
-              ),
-              child: Text(
-                'Draw Closed',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: ColorPath.shirazRed,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-      margin: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-      decoration: BoxDecoration(
-        color: Utilities.statusContainerColor(status: 'upcoming'),
-        borderRadius: BorderRadius.all(Radius.circular(16.r)),
-      ),
-      child: Text(
-        Utilities.statusText(status: 'upcoming'),
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.w500,
-          color: Utilities.statusTextColor(status: 'upcoming'),
         ),
       ),
     );
@@ -760,336 +675,347 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
               ),
             ],
           ),
-          SizedBox(height: 32.h),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Get Best Deal today!!!",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: ColorPath.redOrange,
+
+          if(!vm.isUpComing) Padding(
+            padding: EdgeInsets.only(top: 32.h),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Get Best Deal today!!!",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: ColorPath.redOrange,
+                ),
               ),
             ),
           ),
-          SizedBox(height: 20.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 5.h),
-                  child: FlutterSlider(
-                    values: [vm.quantity.toDouble()],
-                    min: 1,
-                    max: vm.availableTickets.toDouble(),
-                    handler: FlutterSliderHandler(
-                      decoration: BoxDecoration(), // removes default glow
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: ColorPath.redOrange,
-                            width: 2,
+          if(!vm.isUpComing) Padding(
+            padding: EdgeInsets.only(top: 20.h),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 5.h),
+                    child: FlutterSlider(
+                      values: [vm.quantity.toDouble()],
+                      min: 1,
+                      max: vm.availableTickets.toDouble(),
+                      handler: FlutterSliderHandler(
+                        decoration: BoxDecoration(), // removes default glow
+                        child: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: ColorPath.redOrange,
+                              width: 2,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    trackBar: FlutterSliderTrackBar(
-                      activeTrackBarHeight: 8,
-                      inactiveTrackBarHeight: 8,
-                      activeTrackBar: BoxDecoration(
-                        color: ColorPath.redOrange,
-                        borderRadius: BorderRadius.circular(16.r),
+                      trackBar: FlutterSliderTrackBar(
+                        activeTrackBarHeight: 8,
+                        inactiveTrackBarHeight: 8,
+                        activeTrackBar: BoxDecoration(
+                          color: ColorPath.redOrange,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        inactiveTrackBar: BoxDecoration(
+                          color: ColorPath.athensGrey7,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
                       ),
-                      inactiveTrackBar: BoxDecoration(
-                        color: ColorPath.athensGrey7,
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                    ),
-                    tooltip: FlutterSliderTooltip(
-                      alwaysShowTooltip: true,
-                      custom: (value) {
-                        return Transform.translate(
-                          offset: Offset(0, -15.h),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 6.h,
-                                      horizontal: 8.w,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: ColorPath.redOrange,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(4.r),
+                      tooltip: FlutterSliderTooltip(
+                        alwaysShowTooltip: true,
+                        custom: (value) {
+                          return Transform.translate(
+                            offset: Offset(0, -15.h),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 6.h,
+                                        horizontal: 8.w,
                                       ),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            vm.quantity.toInt().toString(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.white,
-                                                ),
-                                          ),
-                                          SizedBox(width: 4.w),
-                                          CustomSvg(
-                                            asset: AppAsset.ticketSlider,
-                                            height: 12.h,
-                                            width: 12.w,
-                                          ),
-                                        ],
+                                      decoration: BoxDecoration(
+                                        color: ColorPath.redOrange,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(4.r),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-
-                                  Positioned(
-                                    bottom: -4.h,
-                                    left: 0,
-                                    right: 0,
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Container(
-                                        height: 7.h,
-                                        width: 7.h,
-                                        decoration: BoxDecoration(
-                                          color: ColorPath.redOrange,
-                                          shape: BoxShape.circle,
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              vm.quantity.toInt().toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            CustomSvg(
+                                              asset: AppAsset.ticketSlider,
+                                              height: 12.h,
+                                              width: 12.w,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+
+                                    Positioned(
+                                      bottom: -4.h,
+                                      left: 0,
+                                      right: 0,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          height: 7.h,
+                                          width: 7.h,
+                                          decoration: BoxDecoration(
+                                            color: ColorPath.redOrange,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  height: 26.h,
+                                  width: 2.w,
+                                  color: ColorPath.redOrange,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      onDragging: (handlerIndex, lowerValue, upperValue) {
+                        // setState(() {
+                        //   quantity = lowerValue;
+                        // });
+                        vm.quantity = lowerValue;
+                        vm.calculatePrice(isUnitPriceCalculation: true);
+                      },
+                    ),
+                  ),
+                ),
+                // SizedBox(width: 12.w,),
+                // Column(
+                //   children: [
+                //     Text(
+                //       "Discount",
+                //       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                //         fontWeight: FontWeight.w400,
+                //         color: Theme.of(context).colorScheme.textSecondary,
+                //       ),
+                //     ),
+                //     SizedBox(height: 10.h,),
+                //     Container(
+                //       width: 74.w,
+                //       padding: EdgeInsets.symmetric(vertical: 8.h),
+                //       decoration: BoxDecoration(
+                //         color: Theme.of(context).colorScheme.blackText,
+                //         borderRadius: BorderRadius.all(Radius.circular(4.r))
+                //       ),
+                //       child:  Center(
+                //         child: Text(
+                //           1 + 1 == 3 ? "No Discount":"7% Off",
+                //           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                //             fontSize: 12.sp,
+                //             fontWeight: FontWeight.w600,
+                //             color: Theme.of(context).colorScheme.whiteText,
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+          if(!vm.isUpComing)Padding(
+            padding: EdgeInsets.only(top: 5.h),
+            child: Row(
+              spacing: 12.w,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(vm.discountTiers.length, (index) {
+                final tier = vm.discountTiers[index];
+                final min = tier.min ?? 1;
+                final max = tier.max ?? 1;
+                final value = tier.value ?? 0;
+                final isActive = vm.quantity.toInt().isBetween(min, max);
+
+                return Expanded(
+                  child: CustomPaint(
+                    painter: DottedBorder(
+                      color: isActive ? ColorPath.redOrange : ColorPath.altoGrey,
+                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                    ),
+                    child: Container(
+                      height: 54.h,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.h,
+                        horizontal: 8.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isActive ? ColorPath.fairPink : ColorPath.wildGrey,
+                        borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                      ),
+                      child: Center(
+                        child: FittedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "$min ${min > 1 ? 'Units':'Unit'} +",
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.textTertiary,
+                                    ),
                               ),
-                              Container(
-                                height: 26.h,
-                                width: 2.w,
-                                color: ColorPath.redOrange,
+                              SizedBox(height: 5.h),
+                              Text(
+                                "${value}% Off",
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: isActive
+                                          ? ColorPath.redOrange
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.textPrimary,
+                                    ),
                               ),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                    onDragging: (handlerIndex, lowerValue, upperValue) {
-                      // setState(() {
-                      //   quantity = lowerValue;
-                      // });
-                      vm.quantity = lowerValue;
-                      vm.calculatePrice(isUnitPriceCalculation: true);
-                    },
-                  ),
-                ),
-              ),
-              // SizedBox(width: 12.w,),
-              // Column(
-              //   children: [
-              //     Text(
-              //       "Discount",
-              //       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              //         fontWeight: FontWeight.w400,
-              //         color: Theme.of(context).colorScheme.textSecondary,
-              //       ),
-              //     ),
-              //     SizedBox(height: 10.h,),
-              //     Container(
-              //       width: 74.w,
-              //       padding: EdgeInsets.symmetric(vertical: 8.h),
-              //       decoration: BoxDecoration(
-              //         color: Theme.of(context).colorScheme.blackText,
-              //         borderRadius: BorderRadius.all(Radius.circular(4.r))
-              //       ),
-              //       child:  Center(
-              //         child: Text(
-              //           1 + 1 == 3 ? "No Discount":"7% Off",
-              //           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              //             fontSize: 12.sp,
-              //             fontWeight: FontWeight.w600,
-              //             color: Theme.of(context).colorScheme.whiteText,
-              //           ),
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // ),
-            ],
-          ),
-          SizedBox(height: 5.h),
-          Row(
-            spacing: 12.w,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(vm.discountTiers.length, (index) {
-              final tier = vm.discountTiers[index];
-              final min = tier.min ?? 1;
-              final max = tier.max ?? 1;
-              final value = tier.value ?? 0;
-              final isActive = vm.quantity.toInt().isBetween(min, max);
-
-              return Expanded(
-                child: CustomPaint(
-                  painter: DottedBorder(
-                    color: isActive ? ColorPath.redOrange : ColorPath.altoGrey,
-                    borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                  ),
-                  child: Container(
-                    height: 54.h,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.h,
-                      horizontal: 8.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isActive ? ColorPath.fairPink : ColorPath.wildGrey,
-                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                    ),
-                    child: Center(
-                      child: FittedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "$min ${min > 1 ? 'Units':'Unit'} +",
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.textTertiary,
-                                  ),
-                            ),
-                            SizedBox(height: 5.h),
-                            Text(
-                              "${value}% Off",
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: isActive
-                                        ? ColorPath.redOrange
-                                        : Theme.of(
-                                            context,
-                                          ).colorScheme.textPrimary,
-                                  ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
-          ),
-          SizedBox(height: 16.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  CustomSvg(
-                    asset: AppAsset.minEntry2,
-                    height: 16.h,
-                    width: 16.w,
-                  ),
-                  SizedBox(width: 8.w),
-                  Text(
-                    "Min Entry: ₦${Utilities.abbreviateAmount(value: vm.minEntryPrice)}K",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(width: 16.w),
-              Row(
-                children: [
-                  CustomSvg(asset: AppAsset.avatar2, height: 16.h, width: 16.w),
-                  SizedBox(width: 8.w),
-                  Text(
-                    "${Utilities.formatAmount(
-                        amount: vm.maxPerson,
-                        addDecimal: false
-                    )} ${vm.maxPerson > 1 ? 'Tickets':'Ticket'}",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 24.h),
-          DottedContainer(
-            borderRadius: 8,
-            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-            decoration: BoxDecoration(
-              color: ColorPath.fairPink,
-              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                );
+              }),
             ),
-            child: Center(
-              child: FittedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          if(!vm.isUpComing)Padding(
+            padding: EdgeInsets.only(top: 16.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
                   children: [
+                    CustomSvg(
+                      asset: AppAsset.minEntry2,
+                      height: 16.h,
+                      width: 16.w,
+                    ),
+                    SizedBox(width: 8.w),
                     Text(
-                      vm.hasDiscount ? "Discounted price " : "Total price",
+                      "Min Entry: ₦${Utilities.abbreviateAmount(value: vm.minEntryPrice)}",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.textTertiary,
+                        color: Theme.of(context).colorScheme.textSecondary,
                       ),
                     ),
-                    SizedBox(height: 5.h),
-                    vm.hasDiscount
-                        ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FittedBox(
-                          child: NairaDisplay(
-                            amount: (vm.unitPrice * vm.quantity),
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w400,
-                            addDecimal: true,
-                            color: ColorPath.lisaPink,
-                            isSlashedAmount: true,
-                          ),
+                  ],
+                ),
+                SizedBox(width: 16.w),
+                Row(
+                  children: [
+                    CustomSvg(asset: AppAsset.avatar2, height: 16.h, width: 16.w),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "${Utilities.formatAmount(
+                          amount: vm.maxPerson,
+                          addDecimal: false
+                      )} ${vm.maxPerson > 1 ? 'Tickets':'Ticket'}",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          if(!vm.isUpComing)Padding(
+            padding: EdgeInsets.only(top: 24.h),
+            child: DottedContainer(
+              borderRadius: 8,
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+              decoration: BoxDecoration(
+                color: ColorPath.fairPink,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              child: Center(
+                child: FittedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        vm.hasDiscount ? "Discounted price " : "Total price",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.textTertiary,
                         ),
-                        SizedBox(width: 10.w),
-                        FittedBox(
-                          child: NairaDisplay(
-                            amount: (vm.discountUnitPrice * vm.quantity),
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w700,
-                            addDecimal: true,
-                            color: ColorPath.redOrange,
-                          ),
-                        ),
-                      ],
-                    ):FittedBox(
+                      ),
+                      SizedBox(height: 5.h),
+                      vm.hasDiscount
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FittedBox(
                             child: NairaDisplay(
                               amount: (vm.unitPrice * vm.quantity),
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.w400,
+                              addDecimal: true,
+                              color: ColorPath.lisaPink,
+                              isSlashedAmount: true,
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          FittedBox(
+                            child: NairaDisplay(
+                              amount: (vm.discountUnitPrice * vm.quantity),
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w700,
                               addDecimal: true,
                               color: ColorPath.redOrange,
                             ),
                           ),
-                  ],
+                        ],
+                      ):FittedBox(
+                              child: NairaDisplay(
+                                amount: (vm.unitPrice * vm.quantity),
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w700,
+                                addDecimal: true,
+                                color: ColorPath.redOrange,
+                              ),
+                            ),
+                    ],
+                  ),
                 ),
               ),
             ),

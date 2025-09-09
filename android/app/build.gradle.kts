@@ -26,7 +26,7 @@ android {
         applicationId = "com.windfall.windfall"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23 // Minimum SDK version supported by the app,as required by firebase_messaging
+        minSdk = 24 // Minimum SDK version supported by the app,as required by firebase_messaging
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

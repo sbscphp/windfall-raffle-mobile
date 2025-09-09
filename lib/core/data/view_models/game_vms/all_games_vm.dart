@@ -101,7 +101,7 @@ class AllGamesVm extends BaseState{
     if(_liveGames.isEmpty)return '';
     final result = _liveGames
         .map((game) => "${game.name ?? ''} - ${DateUtilities.endTime(dateTime: game.endDate ?? DateTime.now()).contains('/') ? 'ends':'ends in'} ${DateUtilities.endTime(dateTime: game.endDate ?? DateTime.now())}")
-        .join(" ");
+        .join("                  ");
 
     return result;
   }
