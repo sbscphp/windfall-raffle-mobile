@@ -112,7 +112,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                               gameStatus(context, vm),
                               SizedBox(height: 32.h),
                               priceDetails(context, vm),
-                              if (1 + 1 == 2) instantPrizes(context),
+                              if (vm.isInstantGame && vm.instantPrizes.isNotEmpty) instantPrizes(context, vm),
                               SizedBox(height: 32.h),
                               GameDetailsSection(
                                 margin: EdgeInsets.symmetric(
@@ -209,7 +209,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
     );
   }
 
-  Widget instantPrizes(BuildContext context) {
+  Widget instantPrizes(BuildContext context, SingleGameVm vm) {
     return WindfallContainer(
       margin: EdgeInsets.only(
         top: AppDimension.paddingTop,
@@ -233,12 +233,15 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
             bottomMargin: 16.h,
           ),
           ListView.separated(
-            itemCount: 2,
+            itemCount: vm.instantPrizes.length,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return InstantGameItem();
+              final prize = vm.instantPrizes[index];
+              return InstantGameItem(
+                prize: prize,
+              );
             },
             separatorBuilder: (context, index) {
               return SizedBox(height: 16.h);

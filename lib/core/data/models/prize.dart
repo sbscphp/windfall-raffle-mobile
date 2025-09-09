@@ -4,8 +4,8 @@ class Prize {
   final String? uuid;
   final String? name;
   final String? description;
-  final int? totalQuantity;
-  final int? availableToBeWon;
+  final dynamic totalQuantity;
+  final dynamic availableToBeWon;
   final List<Ticket>? tickets;
 
   Prize({

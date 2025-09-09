@@ -7,6 +7,7 @@ import '../../../utilities/utilities.dart';
 import '../../data_provider/game_data_provider.dart';
 import '../../enum/view_state.dart';
 import '../../models/game.dart';
+import '../../models/prize.dart';
 import '../../states/base_state.dart';
 
 
@@ -67,6 +68,7 @@ class SingleGameVm extends BaseState{
   int get availableTickets => game?.availableTickets ?? 1;
   double get minEntryPrice => double.tryParse(game?.minimumEntry?.toString() ?? '0') ?? 0;
   double get maxPerson => double.tryParse(game?.maxTicketsPerPerson?.toString() ?? '0') ?? 0;
+  List<Prize> get instantPrizes => game?.prizes ?? [];
 
 
 
