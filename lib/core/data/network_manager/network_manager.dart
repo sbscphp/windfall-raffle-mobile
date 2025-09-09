@@ -44,6 +44,7 @@ class NetworkManager {
           bool useAuth = options.extra["useAuth"] ?? true;
           if (useAuth) {
             String? token = await SecureStorageUtils.retrieveToken();
+            print('token:::$token>>>');
             if (token != null && token.isNotEmpty) {
               options.headers["Authorization"] = "Bearer $token";
             }

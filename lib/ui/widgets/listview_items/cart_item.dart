@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
+import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/ui/widgets/cart/column_description_item.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
@@ -14,14 +16,21 @@ import 'package:windfall/ui/widgets/quantity_counter.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import 'package:windfall/ui/widgets/windfall_tag.dart';
+import '../../../core/data/enum/view_state.dart';
+import '../../../core/data/models/cart_product.dart';
+import '../../../core/utilities/navigator.dart';
+import '../../../core/utilities/utilities.dart';
+import '../bottom_sheets/base_bottom_sheet.dart';
+import '../bottom_sheets/custom_bottom_sheet.dart';
+
 
 class CartItem extends StatefulWidget {
   final bool isShowCounter;
-  final bool isInstantGame;
+  final CartProduct item;
   const CartItem({
     super.key,
     this.isShowCounter = true,
-    this.isInstantGame = false,
+    required this.item
   });
 
   @override
@@ -29,16 +38,27 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
-  late double quantity;
 
   @override
   void initState() {
-    quantity = 1;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final container =
+    ProviderScope.containerOf(context);
+    final vm =
+    container.read(cartViewModel);
+    final id = widget.item.gameId;
+    final isInstantGame = widget.item.instantGame?.toLowerCase() == 'true';
+    final image = widget.item.cardImage ?? '';
+    final name = widget.item.gameName ?? 'N/A';
+    final desc = widget.item.description ?? 'N/A';
+    final discountedUnitPrice = double.tryParse(widget.item.discountedUnitPrice?.toString() ?? '0') ?? 0;
+    final subtotal = double.tryParse(widget.item.totalPrice?.toString() ?? '0') ?? 0;
+    final maxQuantity = widget.item.maximumTicketNumberPurchase ?? 1;
+    final quantity = widget.item.quantity ?? 1;
     return WindfallContainer(
       padding: EdgeInsets.all(16.w),
       child: Column(
@@ -60,7 +80,7 @@ class _CartItemState extends State<CartItem> {
                     width: 50,
                     height: 50,
                     imageUrl:
-                        'https://mir-s3-cdn-cf.behance.net/user/276/888fd91082619909.61d2827bbd7a2.jpg',
+                        image,
                     placeholder: (context, url) => const MediaPlaceholder(),
                     errorWidget: (context, url, error) =>
                         const MediaPlaceholder(),
@@ -80,7 +100,7 @@ class _CartItemState extends State<CartItem> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Secure a Luxury Studio Apartment in Lagos State, Nigeria.",
+                                name,
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
                                       fontWeight: FontWeight.w700,
@@ -91,7 +111,7 @@ class _CartItemState extends State<CartItem> {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                "Enter now to grab the opportunity of a bra...",
+                                desc,
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
                                       color: Theme.of(
@@ -105,11 +125,38 @@ class _CartItemState extends State<CartItem> {
                         SizedBox(width: 16.w),
                         Clickable(
                           onPressed: () {
-                            showFlushBar(
+
+                            baseBottomSheet(
                               context: context,
-                              message: "Product removed from Cart Successfuly",
-                              success: false,
+                              content: CustomBottomSheet(
+                                title: "Delete Ticket ? ",
+                                subTitle:
+                                "Are you sure you want to delete this ticket? Kindly note that this action cannot be reversed",
+                                firstbuttonText: "Save Changes",
+                                secondButtonText: "No, Close",
+                                firstButtonOnPressed: ()async{
+
+                                  popNavigation(context: context);
+
+                                  await vm.deleteItem(gameId: id);
+                                  //todo: delete from cart
+                                  showFlushBar(
+                                    context: context,
+                                    message: vm.message,
+                                    success: vm.secondState == ViewState.retrieved,
+                                  );
+                                },
+                                secondButtonOnPressed: (){
+                                  popNavigation(context: context);
+                                },
+                                asset: Image.asset(
+                                  AppAsset.warning,
+                                  height: 100.h,
+                                  width: 100.w,
+                                ),
+                              ),
                             );
+
                           },
                           child: CustomSvg(
                             asset: AppAsset.delete,
@@ -119,7 +166,7 @@ class _CartItemState extends State<CartItem> {
                         ),
                       ],
                     ),
-                    if (widget.isInstantGame)
+                    if (isInstantGame)
                       Column(
                         children: [
                           SizedBox(height: 8.w),
@@ -139,9 +186,9 @@ class _CartItemState extends State<CartItem> {
                                 if (widget.isShowCounter)
                                   SizedBox(height: 10.h),
                                 NairaDisplay(
-                                  amount: 4000,
+                                  amount: discountedUnitPrice,
                                   fontSize: 16.sp,
-                                  addDecimal: false,
+                                  addDecimal: true,
                                 ),
                               ],
                             ),
@@ -154,19 +201,28 @@ class _CartItemState extends State<CartItem> {
                               : CrossAxisAlignment.start,
                           item: widget.isShowCounter
                               ? QuantityCounter(
-                                  value: quantity.toInt(),
+                                  value: quantity,
                                   buttonSpacing: 2.w,
                                   swapButtons: true,
                                   showBottomBorder: true,
-                                  upperLimit: 33,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      quantity = value.toDouble() ?? 1;
-                                    });
+                                  upperLimit: maxQuantity,
+                                  onChanged: (value) async{
+                                    await vm.addToCart(
+                                        gameId: id,
+                                        quantity: value.toInt()
+                                    );
+                                    showFlushBar(
+                                        context: context,
+                                        message: vm.message,
+                                      success: vm.secondState == ViewState.retrieved
+                                    );
                                   },
                                 )
                               : Text(
-                                  "20",
+                                  "${Utilities.formatAmount(
+                                    addDecimal: false,
+                                    amount: double.tryParse(quantity.toString()) ?? 1
+                                  )}",
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         fontWeight: FontWeight.w700,
@@ -193,10 +249,11 @@ class _CartItemState extends State<CartItem> {
           RowDescriptionItem(
             description: widget.isShowCounter ? "Subtotal:" : "Total Price:",
             item: NairaDisplay(
-              amount: quantity * 4000,
+              //amount: quantity * 4000,
+              amount: subtotal,
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
-              addDecimal: false,
+              addDecimal: true,
             ),
           ),
         ],

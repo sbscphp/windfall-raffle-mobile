@@ -103,4 +103,13 @@ class ApiRoutes {
   static var fetchPaymentMethods =
       "${dotenv.env['GUEST']}/payment-methods";
 
+
+  //cart
+  static var fetchCart =
+      "${dotenv.env['GUEST']}/cart";
+  static deleteItem({required String? gameId}) =>
+      "${dotenv.env['GUEST']}/cart/remove/$gameId";
+  static addToCart({required String? gameId}) =>
+      "${dotenv.env['GUEST']}/cart/add/$gameId";
+
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
+import 'package:windfall/core/data/models/cart_product.dart';
+import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/bottom_sheets/base_bottom_sheet.dart';
@@ -17,16 +20,17 @@ import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
-class Checkout extends StatefulWidget {
+class Checkout extends ConsumerStatefulWidget {
   const Checkout({super.key});
 
   @override
-  State<Checkout> createState() => _CheckoutState();
+  ConsumerState<Checkout> createState() => _CheckoutState();
 }
 
-class _CheckoutState extends State<Checkout> {
+class _CheckoutState extends ConsumerState<Checkout> {
   @override
   Widget build(BuildContext context) {
+    final vm = ref.watch(checkoutViewModel);
     return Scaffold(
       appBar: customAppBar(
         context: context,
@@ -42,7 +46,7 @@ class _CheckoutState extends State<Checkout> {
                 Expanded(
                   child: ScreenTitle(
                     title: 'Checkout',
-                    titleExtension: ' (0)',
+                    titleExtension: ' (${vm.checkoutCount})',
                     titleSize: 16,
                     subTitleSize: 14,
                     titleFontWeight: FontWeight.w600,
@@ -64,12 +68,13 @@ class _CheckoutState extends State<Checkout> {
                   ),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return CartItem(isShowCounter: false, isInstantGame: index % 2 == 0);
+                    final checkoutItem = vm.checkoutItems[index];
+                    return CartItem(isShowCounter: false, item: checkoutItem,);
                   },
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 16.h);
                   },
-                  itemCount: 5,
+                  itemCount: vm.checkoutCount,
                 ),
                 Padding(
                   padding: EdgeInsets.all(16.w),
@@ -91,7 +96,10 @@ class _CheckoutState extends State<Checkout> {
                         RowDescriptionItem(
                           description: "Total Number of Ticket:",
                           item: Text(
-                            "0 Ticket",
+                            "${Utilities.formatAmount(
+                              amount: vm.totalTicketCount.toDouble(),
+                              addDecimal: false
+                            )} ${vm.totalTicketCount > 1 ? 'Tickets':'Ticket'}",
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
@@ -103,30 +111,30 @@ class _CheckoutState extends State<Checkout> {
                             textAlign: TextAlign.end,
                           ),
                         ),
-                        SizedBox(height: 16.h),
-                        RowDescriptionItem(
-                          description: "V.A.T:",
-                          item: Text(
-                            "0",
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18.sp,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.textPrimary,
-                                ),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
+                        // SizedBox(height: 16.h),
+                        // RowDescriptionItem(
+                        //   description: "V.A.T:",
+                        //   item: Text(
+                        //     "0",
+                        //     style: Theme.of(context).textTheme.titleLarge
+                        //         ?.copyWith(
+                        //           fontWeight: FontWeight.w700,
+                        //           fontSize: 18.sp,
+                        //           color: Theme.of(
+                        //             context,
+                        //           ).colorScheme.textPrimary,
+                        //         ),
+                        //     textAlign: TextAlign.end,
+                        //   ),
+                        // ),
                         SizedBox(height: 16.h),
                         RowDescriptionItem(
                           description: "Total Prices of Ticket:",
                           item: NairaDisplay(
-                            amount: 480000,
+                            amount: vm.totalPrice,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
-                            addDecimal: false,
+                            addDecimal: true,
                           ),
                         ),
                       ],

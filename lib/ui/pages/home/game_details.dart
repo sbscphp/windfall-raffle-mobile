@@ -10,10 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/enum/checkout_type.dart';
+import 'package:windfall/core/data/view_models/cart_vm.dart';
+import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/related_games_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/single_game_vm.dart';
 import 'package:windfall/core/utilities/extensions/num_extension.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
+import 'package:windfall/ui/widgets/busy_overlay.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/dotted_container.dart';
@@ -21,11 +25,14 @@ import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/home/game_details_section.dart';
 import 'package:windfall/ui/widgets/home/related_games_section.dart';
 import 'package:windfall/ui/widgets/listview_items/instant_game_item.dart';
+import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_dimension.dart';
 import '../../../core/constants/color_path.dart';
+import '../../../core/constants/named_routes.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/date_utilitites.dart';
+import '../../../core/utilities/navigator.dart';
 import '../../../core/utilities/utilities.dart';
 import '../../widgets/cart/cart_icon.dart';
 import '../../widgets/custom_appbar.dart';
@@ -36,6 +43,7 @@ import '../../widgets/home/game_property.dart';
 import '../../widgets/media_placeholder.dart';
 import '../../widgets/naira_display.dart';
 import '../../widgets/quantity_counter.dart';
+import '../checkout/checkout.dart';
 
 class GameDetails extends ConsumerStatefulWidget {
   const GameDetails({super.key});
@@ -70,148 +78,171 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
   Widget build(BuildContext context) {
     final gameId = ref.watch(gameIdProvider);
     final vm = ref.watch(singleGameViewModel(gameId));
-    return Scaffold(
-      appBar: customAppBar(
-        context: context,
-        title: 'View Raffle',
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: AppDimension.paddingRight),
-            child: CartIcon(),
-          ),
-        ],
-      ),
-      body: Builder(
-        builder: (context) {
-          if (vm.state == ViewState.busy) {
-            return Center(child: AppLoader());
-          }
+    final cartVm = ref.watch(cartViewModel);
+    return BusyOverlay(
+      show: cartVm.secondState == ViewState.busy,
+      child: Scaffold(
+        appBar: customAppBar(
+          context: context,
+          title: 'View Raffle',
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: AppDimension.paddingRight),
+              child: CartIcon(),
+            ),
+          ],
+        ),
+        body: Builder(
+          builder: (context) {
+            if (vm.state == ViewState.busy) {
+              return Center(child: AppLoader());
+            }
 
-          if (vm.state == ViewState.retrieved) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(bottom: 20.h),
-                    child: vm.isEnded
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              imageAndName(context, vm),
-                              SizedBox(height: 8.h),
-                              gameStatus(context, vm),
-                              SizedBox(height: 32.h),
-                              winnerDetails(context),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              imageAndName(context, vm),
-                              SizedBox(height: 8.h),
-                              gameStatus(context, vm),
-                              SizedBox(height: 32.h),
-                              priceDetails(context, vm),
-                              if (vm.isInstantGame && vm.instantPrizes.isNotEmpty) instantPrizes(context, vm),
-                              SizedBox(height: 32.h),
-                              GameDetailsSection(
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: AppDimension.paddingRight,
+            if (vm.state == ViewState.retrieved) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(bottom: 20.h),
+                      child: vm.isEnded
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                imageAndName(context, vm),
+                                SizedBox(height: 8.h),
+                                gameStatus(context, vm),
+                                SizedBox(height: 32.h),
+                                winnerDetails(context),
+                              ],
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                imageAndName(context, vm),
+                                SizedBox(height: 8.h),
+                                gameStatus(context, vm),
+                                SizedBox(height: 32.h),
+                                priceDetails(context, vm),
+                                if (vm.isInstantGame && vm.instantPrizes.isNotEmpty) instantPrizes(context, vm),
+                                SizedBox(height: 32.h),
+                                GameDetailsSection(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: AppDimension.paddingRight,
+                                  ),
+                                  title: 'Competition Details',
+                                  value: vm.competitionDetails,
                                 ),
-                                title: 'Competition Details',
-                                value: vm.competitionDetails,
-                              ),
-                              SizedBox(height: 24.h),
-                              GameDetailsSection(
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: AppDimension.paddingRight,
+                                SizedBox(height: 24.h),
+                                GameDetailsSection(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: AppDimension.paddingRight,
+                                  ),
+                                  title: 'Sponsorship Details',
+                                  value: vm.sponsorShipDetails,
                                 ),
-                                title: 'Sponsorship Details',
-                                value: vm.sponsorShipDetails,
-                              ),
-                              SizedBox(height: 24.h),
-                              RelatedGamesSection(),
-                            ],
+                                SizedBox(height: 24.h),
+                                RelatedGamesSection(),
+                              ],
+                            ),
+                    ),
+                  ),
+                  if(!vm.isEnded)Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 24.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.whiteText,
+                      boxShadow: [
+                        BoxShadow(
+                          color: ColorPath.regentGrey.withAlpha(
+                            (255 * 0.14).toInt(),
                           ),
-                  ),
-                ),
-                if(!vm.isEnded)Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 24.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.whiteText,
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorPath.regentGrey.withAlpha(
-                          (255 * 0.14).toInt(),
+                          spreadRadius: 0,
+                          blurRadius: 250,
+                          offset: const Offset(0, -100),
                         ),
-                        spreadRadius: 0,
-                        blurRadius: 250,
-                        offset: const Offset(0, -100),
-                      ),
-                    ],
-                  ),
-                  child: SafeArea(
-                    child: vm.isUpComing
-                        ? CustomButton(
-                            useDottedBorder: true,
-                            disableBgColor: ColorPath.californiaOrange,
-                            buttonText: 'Upcoming Game ~ Coming Soon ',
-                            onPressed: null,
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomButton(
-                                useDottedBorder: true,
-                                buttonText: 'Add to Cart',
-                                showButtonIcon: true,
-                                buttonIcon: AppAsset.cart2,
-                                onPressed: () {
-                                  //todo: add to cart
-                                },
-                              ),
-                              SizedBox(height: 24.h),
-                              CustomButton(
-                                bgColor: Theme.of(
-                                  context,
-                                ).colorScheme.textPrimary,
-                                useDottedBorder: true,
-                                buttonText: 'Buy Now',
-                                showButtonIcon: true,
-                                buttonIcon: AppAsset.cart2,
-                                onPressed: () {
-                                  //todo: proceed to checkout
-                                },
-                              ),
-                            ],
-                          ),
-                  ),
-                ),
-              ],
-            );
-          }
+                      ],
+                    ),
+                    child: SafeArea(
+                      child: vm.isUpComing
+                          ? CustomButton(
+                              useDottedBorder: true,
+                              disableBgColor: ColorPath.californiaOrange,
+                              buttonText: 'Upcoming Game ~ Coming Soon ',
+                              onPressed: null,
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomButton(
+                                  useDottedBorder: true,
+                                  buttonText: 'Add to Cart',
+                                  showButtonIcon: true,
+                                  buttonIcon: AppAsset.cart2,
+                                  onPressed: () async{
+                                    await cartVm.addToCart(
+                                        gameId: gameId,
+                                        quantity: vm.quantity.toInt()
+                                    );
+                                    showFlushBar(
+                                        context: context,
+                                        message: cartVm.message,
+                                        success: cartVm.secondState == ViewState.retrieved
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 24.h),
+                                CustomButton(
+                                  bgColor: Theme.of(
+                                    context,
+                                  ).colorScheme.textPrimary,
+                                  useDottedBorder: true,
+                                  buttonText: 'Buy Now',
+                                  showButtonIcon: true,
+                                  buttonIcon: AppAsset.cart2,
+                                  onPressed: () {
 
-          if (vm.state == ViewState.error) {
-            return Center(
-              child: ErrorState(
-                message: vm.message,
-                onPressed: () => vm.fetchSingleGame(gameId: gameId).then((value) async {
-                  if (vm.state == ViewState.retrieved) {
-                    final relatedGamesVm = ref.read(relatedGamesViewModel(gameId));
-                    relatedGamesVm.fetchRelatedGames(gameId: gameId);
-                  }
-                }),
-              ),
-            );
-          }
-          return const SizedBox();
-        },
+                                    final checkoutVm = ref.read(checkoutViewModel);
+                                    //set checkout type
+                                    checkoutVm.checkoutType = CheckoutType.buyNow;
+                                    //generate checkout item
+                                    checkoutVm.initCheckoutItems(input: vm.generateCheckout());
+
+                                    pushNavigation(
+                                      context: context,
+                                      widget: Checkout(),
+                                      routeName: NamedRoutes.checkout,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ],
+              );
+            }
+
+            if (vm.state == ViewState.error) {
+              return Center(
+                child: ErrorState(
+                  message: vm.message,
+                  onPressed: () => vm.fetchSingleGame(gameId: gameId).then((value) async {
+                    if (vm.state == ViewState.retrieved) {
+                      final relatedGamesVm = ref.read(relatedGamesViewModel(gameId));
+                      relatedGamesVm.fetchRelatedGames(gameId: gameId);
+                    }
+                  }),
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

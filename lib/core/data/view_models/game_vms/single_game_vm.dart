@@ -6,6 +6,7 @@ import '../../../constants/app_constants.dart';
 import '../../../utilities/utilities.dart';
 import '../../data_provider/game_data_provider.dart';
 import '../../enum/view_state.dart';
+import '../../models/cart_product.dart';
 import '../../models/game.dart';
 import '../../models/prize.dart';
 import '../../states/base_state.dart';
@@ -153,6 +154,22 @@ class SingleGameVm extends BaseState{
   //checks when a user crosses the purchase amount threshold for a game
   bool purchaseAmountLimitExceed({required double amount}){
     return amount > maxPurchaseAmount;
+  }
+
+
+  //returns an instance of a cart item for checkout
+  CartProduct generateCheckout(){
+    return CartProduct(
+      gameId: gameId,
+      cardImage: game?.cardImage,
+      gameName: name,
+      description: description,
+      discountedUnitPrice: _discountUnitPrice.toString(),
+      unitPrice: _unitPrice.toString(),
+      quantity: _quantity.toInt(),
+      totalPrice: (_discountUnitPrice * _quantity).toString(),
+      instantGame: game?.instantGame,
+    );
   }
 
   //Checks if main draw has ended
