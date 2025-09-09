@@ -4,16 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/data/models/game.dart';
 import 'package:windfall/core/data/view_models/game_vms/related_games_vm.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
-import 'package:windfall/ui/widgets/clickable.dart';
-import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
-import '../../../core/constants/app_asset.dart';
 import '../../../core/data/enum/view_state.dart';
-import '../../../core/data/view_models/bottom_nav_view_model.dart';
 import '../../../core/data/view_models/game_vms/single_game_vm.dart';
 import '../screen_title.dart';
 

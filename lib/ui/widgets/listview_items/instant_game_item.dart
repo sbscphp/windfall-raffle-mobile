@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/data/models/ticket.dart';
-
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
 import '../../../core/data/models/prize.dart';
@@ -14,7 +13,7 @@ import '../custom_svg.dart';
 import '../custom_text_field.dart';
 import '../dotted_container.dart';
 import '../media_placeholder.dart';
-import '../naira_display.dart';
+
 
 class InstantGameItem extends StatefulWidget {
   final Prize prize;
