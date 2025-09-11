@@ -5,7 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
+import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
+import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/ui/widgets/cart/column_description_item.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
@@ -27,10 +29,12 @@ import '../bottom_sheets/custom_bottom_sheet.dart';
 class CartItem extends StatefulWidget {
   final bool isShowCounter;
   final CartProduct item;
+  final int? index;
   const CartItem({
     super.key,
     this.isShowCounter = true,
-    required this.item
+    required this.item,
+    this.index
   });
 
   @override
@@ -50,6 +54,7 @@ class _CartItemState extends State<CartItem> {
     ProviderScope.containerOf(context);
     final vm =
     container.read(cartViewModel);
+    final checkoutVm = container.read(checkoutViewModel);
     final id = widget.item.gameId;
     final isInstantGame = widget.item.instantGame?.toLowerCase() == 'true';
     final image = widget.item.cardImage ?? '';
@@ -138,13 +143,21 @@ class _CartItemState extends State<CartItem> {
 
                                   popNavigation(context: context);
 
-                                  await vm.deleteItem(gameId: id);
-                                  //todo: delete from cart
-                                  showFlushBar(
-                                    context: context,
-                                    message: vm.message,
-                                    success: vm.secondState == ViewState.retrieved,
-                                  );
+                                  if (widget.isShowCounter || checkoutVm.checkoutType == CheckoutType.cart) {
+                                    await vm.deleteItem(gameId: id);
+                                    showFlushBar(
+                                      context: context,
+                                      message: vm.message,
+                                      success: vm.secondState == ViewState.retrieved,
+                                    );
+                                  }
+
+                                  if (!widget.isShowCounter) {
+                                    checkoutVm.removeItem(index: widget.index ?? 0);
+                                  }
+
+
+
                                 },
                                 secondButtonOnPressed: (){
                                   popNavigation(context: context);

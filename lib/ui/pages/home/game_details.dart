@@ -43,6 +43,7 @@ import '../../widgets/home/game_property.dart';
 import '../../widgets/media_placeholder.dart';
 import '../../widgets/naira_display.dart';
 import '../../widgets/quantity_counter.dart';
+import '../../widgets/with_scope.dart';
 import '../checkout/checkout.dart';
 
 class GameDetails extends ConsumerStatefulWidget {
@@ -75,7 +76,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext parentContext) {
     final gameId = ref.watch(gameIdProvider);
     final vm = ref.watch(singleGameViewModel(gameId));
     final cartVm = ref.watch(cartViewModel);
@@ -212,9 +213,19 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                                     //generate checkout item
                                     checkoutVm.initCheckoutItems(input: vm.generateCheckout());
 
+                                    // pushNavigation(
+                                    //   context: context,
+                                    //   widget: Checkout(),
+                                    //   routeName: NamedRoutes.checkout,
+                                    // );
                                     pushNavigation(
                                       context: context,
-                                      widget: Checkout(),
+                                      widget: WithScope(
+                                        overrides: [
+                                          gameIdProvider.overrideWithValue(gameId),
+                                        ],
+                                        child: const Checkout(),
+                                      ),
                                       routeName: NamedRoutes.checkout,
                                     );
                                   },

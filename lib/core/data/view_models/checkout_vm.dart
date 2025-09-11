@@ -60,6 +60,11 @@ class CheckoutVm extends BaseState{
     return result;
   }
 
+  removeItem({required int index}){
+    _checkoutItems.removeAt(index);
+    notifyListeners();
+  }
+
 
 }
 

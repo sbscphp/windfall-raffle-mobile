@@ -17,6 +17,7 @@ import '../../../core/utilities/utilities.dart';
 import '../home/game_property.dart';
 import '../media_placeholder.dart';
 import '../naira_display.dart';
+import '../with_scope.dart';
 
 class GameItem extends StatelessWidget {
   final Game game;
@@ -36,11 +37,21 @@ class GameItem extends StatelessWidget {
     return Clickable(
       onPressed: (){
         print('game id before click::::$gameId>>>>>');
-        pushNavigation(context: context, widget: ProviderScope(
+        // pushNavigation(context: context, widget: ProviderScope(
+        //     overrides: [
+        //       gameIdProvider.overrideWithValue(gameId),
+        //     ],
+        //     child: const GameDetails()), routeName: NamedRoutes.gameDetails);
+        pushNavigation(
+          context: context,
+          widget: WithScope(
             overrides: [
               gameIdProvider.overrideWithValue(gameId),
             ],
-            child: const GameDetails()), routeName: NamedRoutes.gameDetails);
+            child: const GameDetails(),
+          ),
+          routeName: NamedRoutes.gameDetails,
+        );
       },
       child: WindfallContainer(
         width: 191.w,
