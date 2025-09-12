@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
+import 'package:windfall/core/data/view_models/referral_vm.dart';
 
 import '../../core/constants/color_path.dart';
 import '../../core/data/view_models/authentication_vms/login_vm.dart';
@@ -29,6 +30,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       ref.read(profileViewModel).user = loginVm.user;
       ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
+      ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
       ref.read(cartViewModel).fetchCart();
       // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
       // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;

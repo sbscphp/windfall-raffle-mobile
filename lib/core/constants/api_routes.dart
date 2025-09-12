@@ -70,8 +70,8 @@ class ApiRoutes {
 
 
   //referral
-  static fetchReferralHistory({required int? pageNumber}) =>
-      "${dotenv.env['REFERRAL']}/users?page=$pageNumber";
+  static fetchReferralHistory({required int? pageNumber, required String? filterOption}) =>
+      "${dotenv.env['REFERRAL']}/transactions?paginate=1&limit=$paginationLimit&filter_by=$filterOption";
 
   //notification
   static var updateNotificationSettings =

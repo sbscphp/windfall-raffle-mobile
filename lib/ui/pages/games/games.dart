@@ -33,7 +33,6 @@ class _GamesState extends ConsumerState<Games> {
 
   @override
   void initState() {
-    //todo: fetch cart here
     _scrollController = ScrollController();
     _filterScrollController = ScrollController();
     _scrollListener();

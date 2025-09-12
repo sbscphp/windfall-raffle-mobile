@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:windfall/core/data/data_provider/referral_data_provider.dart';
 
 import 'core/data/data_provider/auth_data_provider/auth_data_provider.dart';
 import 'core/data/data_provider/auth_data_provider/otp_data_provider.dart';
@@ -23,6 +24,7 @@ void setupLocator() {
   locator.registerLazySingleton<NotificationDataProvider>(() => NotificationDataProvider());
   locator.registerLazySingleton<GameDataProvider>(() => GameDataProvider());
   locator.registerLazySingleton<CartDataProvider>(() => CartDataProvider());
+  locator.registerLazySingleton<ReferralDataProvider>(() => ReferralDataProvider());
 
 
 
