@@ -27,11 +27,14 @@ class _BottomNavState extends ConsumerState<BottomNav> {
   void initState() {
 
     final loginVm = ref.read(loginViewModel);
+    final vm = ref.read(referralViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       ref.read(profileViewModel).user = loginVm.user;
       ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
       ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
       ref.read(cartViewModel).fetchCart();
+      vm.fetchEarnedHistory();
+      vm.fetchUsedHistory();
       // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
       // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;
     });

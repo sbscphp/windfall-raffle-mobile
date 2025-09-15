@@ -7,6 +7,7 @@ import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
+import 'package:windfall/core/data/view_models/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
@@ -21,6 +22,7 @@ import 'package:windfall/ui/widgets/custom_text_field.dart';
 import 'package:windfall/ui/widgets/listview_items/cart_item.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
+import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/constants/app_asset.dart';
@@ -69,8 +71,9 @@ class _CheckoutState extends ConsumerState<Checkout> {
   Widget build(BuildContext context) {
     final vm = ref.watch(checkoutViewModel);
     final cartVm = ref.watch(cartViewModel);
+    final paymentVm = ref.watch(paymentViewModel);
     return BusyOverlay(
-      show: cartVm.secondState == ViewState.busy,
+      show: cartVm.secondState == ViewState.busy || paymentVm.state == ViewState.busy,
       child: Scaffold(
         appBar: customAppBar(
           context: context,
@@ -290,11 +293,26 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       horizontal: AppDimension.paddingLeft,
                     ),
                     child: CustomButton(
-                      onPressed: () {
-                         baseBottomSheet(
-                          context: context,
-                          content: CheckoutSummaryBottomsheet()
-                      );
+                      onPressed: () async{
+                        await paymentVm.fetchPaymentBreakdown(
+                            checkoutType: vm.checkoutType,
+                          checkoutItems: vm.checkoutItems,
+                          promoCode: _promoCode.text,
+                          refBonus: Utilities.formatToDouble(value: _referralAmount.text)
+                        );
+                        if(paymentVm.state == ViewState.retrieved){
+                          baseBottomSheet(
+                              context: context,
+                              content: CheckoutSummaryBottomsheet()
+                          );
+                        }else{
+                          showFlushBar(
+                              context: context,
+                              message: paymentVm.message,
+                            success: false
+                          );
+                        }
+
                       },
                       useDottedBorder: true,
                     ),

@@ -31,10 +31,10 @@ class _RewardsState extends ConsumerState<Rewards> with SingleTickerProviderStat
     _usedController = ScrollController();
     _earnedController = ScrollController();
     final vm = ref.read(referralViewModel);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      vm.fetchEarnedHistory();
-      vm.fetchUsedHistory();
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   vm.fetchEarnedHistory();
+    //   vm.fetchUsedHistory();
+    // });
     _earnedScrollListener(vm);
     _usedScrollListener(vm);
     super.initState();

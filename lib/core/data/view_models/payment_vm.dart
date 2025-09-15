@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/constants/app_constants.dart';
 import 'package:windfall/core/data/data_provider/payment_data_provider.dart';
+import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/enum/view_state.dart';
 import 'package:windfall/core/data/models/checkout_credentials.dart';
 import 'package:windfall/core/data/models/payment_breakdown.dart';
@@ -9,6 +10,9 @@ import 'package:windfall/core/data/services/geolocator_service.dart';
 import 'package:windfall/core/data/states/base_state.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
+import 'package:windfall/ui/pages/checkout/checkout.dart';
+
+import '../models/cart_product.dart';
 
 class PaymentVm extends BaseState {
   //payment data provider
@@ -99,30 +103,32 @@ class PaymentVm extends BaseState {
 
   //fetch payment breakdown
   fetchPaymentBreakdown(
-      {required String gameId,
-      required int quantity,
-      required double amount,
-      required double refBonus,
-      required String promoCode,
-      required bool useReferral,
-        required bool referralApplied,
-      required bool usePromoCode}) async {
+      {
+      List<CartProduct>? checkoutItems,
+      double? refBonus,
+      String? promoCode,
+      required CheckoutType? checkoutType
+      }) async {
 
     setState(ViewState.busy);
 
-    final details = {
-      "game_id": gameId,
-      "quantity": quantity,
-      "amount": amount,
+    final Map<String, dynamic> details = {
+      "type": checkoutType == CheckoutType.buyNow ? "buy_now":"cart"
     };
 
-    if(useReferral && refBonus != 0 && referralApplied){
+    if(checkoutType == CheckoutType.buyNow){
+      details["game_id"] = checkoutItems?[0].gameId ?? '';
+      details["quantity"] = checkoutItems?[0].quantity ?? 1;
+    }
+
+    if(refBonus != null && refBonus > 0){
       details["referral_balance_amount"] = refBonus;
     }
 
-    if(usePromoCode && promoCode.isNotEmpty){
+    if(promoCode != null && promoCode.isNotEmpty){
       details["promo_code"] = promoCode;
     }
+
 
     await _paymentDp.fetchPaymentBreakdown(details: details).then(
         (response) async {
@@ -142,7 +148,6 @@ class PaymentVm extends BaseState {
       else{
         promoCodeApplied = null;
       }
-
 
       setState(ViewState.retrieved);
     }, onError: (e) {
