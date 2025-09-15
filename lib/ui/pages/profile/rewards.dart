@@ -10,8 +10,6 @@ import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/reward_item.dart';
 import 'package:windfall/ui/widgets/profile/reward_card.dart';
-import 'package:windfall/ui/widgets/screen_title.dart';
-
 import '../../../core/constants/app_asset.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../widgets/empty_state.dart';
