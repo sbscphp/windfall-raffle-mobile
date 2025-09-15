@@ -75,12 +75,14 @@ class PaymentVm extends BaseState {
 
 
   //payment breakdown values
-  //int get quantity => paymentBreakdown?.quantity ?? 1;
   double get totalAmount => double.tryParse(paymentBreakdown?.totalAmount?.toString() ?? '0') ?? 0;
-  //double get gameTicketDiscount => double.tryParse(paymentBreakdown?.gameTicketDiscount?.toString() ?? '0') ?? 0;
   double get promoAmount => double.tryParse(paymentBreakdown?.promoAmount?.toString() ?? '0') ?? 0;
   double get referralAmount => double.tryParse(paymentBreakdown?.referralAmountUsed?.toString() ?? '0') ?? 0;
   double get amountToPay => double.tryParse(paymentBreakdown?.amountToPay?.toString() ?? '0') ?? 0;
+  int get totalTicketCount => paymentBreakdown?.totalTicketCount ?? 1;
+  String? get promoCode => paymentBreakdown?.promoCode;
+  double get discountAmount => double.tryParse(paymentBreakdown?.discountAmount?.toString() ?? '0') ?? 0;
+
 
 
   //fetch payment methods

@@ -303,7 +303,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                         if(paymentVm.state == ViewState.retrieved){
                           baseBottomSheet(
                               context: context,
-                              content: CheckoutSummaryBottomsheet()
+                              content: CheckoutSummaryBottomSheet()
                           );
                         }else{
                           showFlushBar(
