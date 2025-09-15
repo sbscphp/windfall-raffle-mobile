@@ -1,16 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/models/cart_product.dart';
-import '../../../../locator.dart';
-import '../data_provider/cart_data_provider.dart';
 import '../states/base_state.dart';
 
 
 
 class CheckoutVm extends BaseState{
-
-  //game data provider
-  final CartDataProvider _cartDp = locator<CartDataProvider>();
 
   //message
   String _message = '';

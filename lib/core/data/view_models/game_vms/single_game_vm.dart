@@ -87,7 +87,7 @@ class SingleGameVm extends BaseState{
       _quantity = 1;
       calculatePrice(isUnitPriceCalculation: true);
       print('price:::$_unitPrice .... discount:$_discountUnitPrice>>>>');
-      setState(ViewState.error);
+      setState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
       setSecondState(ViewState.error);

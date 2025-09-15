@@ -7,6 +7,7 @@ import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
+import 'package:windfall/core/data/view_models/referral_vm.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/bottom_sheets/base_bottom_sheet.dart';
@@ -25,6 +26,8 @@ import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/view_models/game_vms/single_game_vm.dart';
+import '../../../core/utilities/input_formatters/money_input_formatter.dart';
+import '../../../core/utilities/validator.dart';
 import '../../widgets/empty_state.dart';
 
 class Checkout extends ConsumerStatefulWidget {
@@ -39,20 +42,22 @@ class _CheckoutState extends ConsumerState<Checkout> {
   late bool showPromoCodeField;
   late bool showReferralBalField;
 
+  final _promoCode = TextEditingController();
+  final _referralAmount = TextEditingController();
+
 
   @override
   void initState() {
     final vm = ref.read(checkoutViewModel);
     if(vm.checkoutType == CheckoutType.buyNow){
       final gameId = ref.read(gameIdProvider);
-      print('game id at checkout screnn::::$gameId>>>');
       final singleGameVm = ref.read(singleGameViewModel(gameId));
       showPromoCodeField = singleGameVm.usePromoCode;
       showReferralBalField = singleGameVm.useReferralBonus;
     }else{
       //todo: check with config Vm when implemented
-      showPromoCodeField = false;
-      showReferralBalField = false;
+      showPromoCodeField = true;
+      showReferralBalField = true;
     }
     super.initState();
   }
@@ -129,7 +134,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                           ),
                           SizedBox(height: 16.h),
                           RowDescriptionItem(
-                            description: "Total Number of Ticket:",
+                            description: "Total Number of Tickets:",
                             item: Text(
                               "${Utilities.formatAmount(
                                 amount: vm.totalTicketCount.toDouble(),
@@ -176,7 +181,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       ),
                     ),
                   ),
-                  Padding(
+                  if(showPromoCodeField || showReferralBalField)Padding(
                     padding: EdgeInsets.all(16.w),
                     child: WindfallContainer(
                       padding: EdgeInsets.all(16.w),
@@ -213,6 +218,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                                 child: CustomTextField(
                                   hintText: "Enter Promo Code",
                                   isCompulsory: false,
+                                  controller: _promoCode,
                                   bottomHintText:
                                       "Enter promo-code for discount.",
                                   bottomHintColor: 1 + 1 == 2
@@ -222,46 +228,57 @@ class _CheckoutState extends ConsumerState<Checkout> {
                               ),
                             ],
                           ),
-                          if(showReferralBalField) Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.3,
-                                child: ColumnDescriptionItem(
-                                  description: "Referral Balance",
-                                  item: NairaDisplay(
-                                    amount: 20000,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    // addDecimal: false,
+                          if(showReferralBalField) Consumer(
+                            builder: (context, ref, child){
+                              final referralVm = ref.watch(referralViewModel);
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    child: ColumnDescriptionItem(
+                                      description: "Referral Balance",
+                                      item: NairaDisplay(
+                                        amount: referralVm.referralBalance,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        // addDecimal: false,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: 18.w),
-                              Expanded(
-                                child: CustomTextField(
-                                  hintText: "0",
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.only(left: 12.w),
-                                    child: Text(
-                                      Utilities.nairaSign,
-                                      style: Theme.of(context).textTheme.bodyMedium
-                                          ?.copyWith(
+                                  SizedBox(width: 18.w),
+                                  Expanded(
+                                    child: CustomTextField(
+                                      hintText: "0",
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(left: 12.w),
+                                        child: Text(
+                                          Utilities.nairaSign,
+                                          style: Theme.of(context).textTheme.bodyMedium
+                                              ?.copyWith(
                                             color: Theme.of(
                                               context,
                                             ).colorScheme.textPrimary,
                                           ),
+                                        ),
+                                      ),
+                                      isCompulsory: false,
+                                      bottomHintText: "Enter value to pay with. ",
+                                      bottomHintColor: 1 + 1 == 2
+                                          ? null
+                                          : ColorPath.hazeGreen,
+                                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                      controller: _referralAmount,
+                                      validator: (value) => AmountValidator.validateAmount(value, maxAmount: referralVm.referralBalance),
+                                      inputFormatters: [
+                                        MoneyInputFormatter(useCurrency: false)
+                                      ],
                                     ),
                                   ),
-                                  isCompulsory: false,
-                                  bottomHintText: "Enter value to pay with. ",
-                                  bottomHintColor: 1 + 1 == 2
-                                      ? null
-                                      : ColorPath.hazeGreen,
-                                ),
-                              ),
-                            ],
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),

@@ -113,10 +113,10 @@ class PasscodeFieldValidator {
 }
 
 class AmountValidator {
-  static String? validateAmount(String? value, {required double maxAmount}) {
+  static String? validateAmount(String? value, {required double maxAmount, bool isEmptyFieldAllowed = true}) {
     if (value != null) {
       if (value.isEmpty) {
-        return emptyTextField;
+        return isEmptyFieldAllowed ? null : emptyTextField;
       }
 
       final amount = Utilities.formatToDouble(value: value);

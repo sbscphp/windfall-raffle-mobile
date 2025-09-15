@@ -27,6 +27,7 @@ class RewardItem extends StatelessWidget {
     final date = DateUtilities.monthDayYear(date: referral.date ?? DateTime.now());
     final status = referral.status ?? 'N/A';
     final isSuccessTag = status.toLowerCase() == 'awarded';
+    final reason = referral.reason ?? 'N/A';
 
 
     return WindfallContainer(
@@ -63,7 +64,7 @@ class RewardItem extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               Text(
-                '$firstName $lastName',
+                '$reason',
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
