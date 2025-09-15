@@ -4,7 +4,7 @@ import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 
-enum TagType { instantGame, success, drawGame, completed }
+import '../../core/data/enum/tag_type.dart';
 
 class WindfallTag extends StatelessWidget {
   final TagType tag;
@@ -39,11 +39,12 @@ class WindfallTag extends StatelessWidget {
       case TagType.success:
       case TagType.drawGame:
       case TagType.completed:
+      case TagType.pending:
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
           margin: EdgeInsets.only(top: 4.h),
           decoration: BoxDecoration(
-            color: ColorPath.foamGreen,
+            color: tag == TagType.pending ? ColorPath.salomieBrown:ColorPath.foamGreen,
             borderRadius: BorderRadius.all(Radius.circular(16.r)),
           ),
           child: Row(
@@ -60,7 +61,7 @@ class WindfallTag extends StatelessWidget {
                 child: Text(
                   _getTagText(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: ColorPath.meadowGreen,
+                    color: tag == TagType.pending ? ColorPath.vesuviusBrown:ColorPath.meadowGreen,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -81,6 +82,8 @@ class WindfallTag extends StatelessWidget {
         return "Draw Game";
       case TagType.completed:
         return "Completed";
+      case TagType.pending:
+        return "Pending";
     }
   }
 }

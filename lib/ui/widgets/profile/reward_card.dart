@@ -11,6 +11,8 @@ import 'package:windfall/ui/widgets/dotted_container.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
 
+import '../../../core/data/enum/view_state.dart';
+
 class RewardCard extends StatelessWidget {
   final ReferralVm vm;
   const RewardCard({super.key, required this.vm});
@@ -37,7 +39,15 @@ class RewardCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.h),
-              NairaDisplay(
+              if(vm.state == ViewState.busy)
+                SizedBox(
+                  height: 15.h,
+                  width: 15.w,
+                  child: CircularProgressIndicator(
+                    color: ColorPath.redOrange,
+                  ),
+                )
+                else NairaDisplay(
                 amount: vm.referralBalance,
                 color: ColorPath.redOrange,
                 fontWeight: FontWeight.w600,

@@ -1,53 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/models/referral.dart';
 import 'package:windfall/core/utilities/date_utilitites.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import 'package:windfall/ui/widgets/windfall_tag.dart';
 
+import '../../../core/data/enum/tag_type.dart';
+
 class RewardItem extends StatelessWidget {
-  final String? rewardData;
-  final DateTime? date;
-  final double? amount;
-  final int? point;
+  final Referral referral;
+  final bool isEarned;
   const RewardItem({
     super.key,
-    this.amount,
-    this.date,
-    this.point,
-    this.rewardData,
+    required this.referral,
+    this.isEarned = true
   });
 
   @override
   Widget build(BuildContext context) {
+    final firstName = referral.referredUser?.firstname ?? 'N/A';
+    final lastName = referral.referredUser?.lastname ?? 'N/A';
+    final id = referral.order?.uniqueId ?? 'N/A';
+    final amount = double.tryParse(referral.amount?.toString() ?? '0') ?? 0;
+    final date = DateUtilities.monthDayYear(date: referral.date ?? DateTime.now());
+    final status = referral.status ?? 'N/A';
+    final isSuccessTag = status.toLowerCase() == 'awarded';
+
+
     return WindfallContainer(
       padding: EdgeInsets.all(16.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
+          isEarned ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                rewardData ?? 'N/A',
+                '$firstName $lastName',
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 8.h),
               Text.rich(
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.textSecondary,
                 ),
                 TextSpan(
-                  text: "Draw Date: ",
+                  text: "Date: ",
                   children: [
                     TextSpan(
-                      text: DateUtilities.monthDayYear(
-                        date: date ?? DateTime.now(),
+                      text: date,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.textTertiary,
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                '$firstName $lastName',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+              ),
+            ],
+          )
+              :Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Transaction ID',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.text7
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                id,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.textPrimary
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text.rich(
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.textSecondary,
+                ),
+                TextSpan(
+                  text: "Date: ",
+                  children: [
+                    TextSpan(
+                      text: date,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.textTertiary,
                       ),
@@ -58,26 +112,20 @@ class RewardItem extends StatelessWidget {
             ],
           ),
           SizedBox(width: 18.w),
-          if (amount != null && point == null)
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                WindfallTag(tag: TagType.success),
-                SizedBox(height: 8.h),
+                if(isEarned)Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: WindfallTag(tag: isSuccessTag ? TagType.success:TagType.pending),
+                ),
                 NairaDisplay(
-                  amount: 2000,
+                  amount: amount,
                   addDecimal: false,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ],
-            ),
-          if (point != null && amount == null)
-            Text(
-              "${point}pts",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
         ],
       ),

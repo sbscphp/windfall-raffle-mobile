@@ -1,0 +1,1 @@
+enum TagType { instantGame, success, drawGame, completed, pending }

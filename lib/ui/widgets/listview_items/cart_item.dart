@@ -18,6 +18,7 @@ import 'package:windfall/ui/widgets/quantity_counter.dart';
 import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import 'package:windfall/ui/widgets/windfall_tag.dart';
+import '../../../core/data/enum/tag_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/models/cart_product.dart';
 import '../../../core/utilities/navigator.dart';

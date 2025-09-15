@@ -10,6 +10,8 @@ import 'package:windfall/ui/widgets/naira_display.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import 'package:windfall/ui/widgets/windfall_tag.dart';
 
+import '../../../core/data/enum/tag_type.dart';
+
 class OrderHistoryItem extends StatelessWidget {
   const OrderHistoryItem({super.key});
 

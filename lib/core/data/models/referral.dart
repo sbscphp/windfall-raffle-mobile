@@ -2,14 +2,16 @@ import 'package:windfall/core/data/models/user.dart';
 import 'order.dart';
 
 class Referral {
-  final String? type;
-  final String? amount;
+  final String? status;
+  final String? reason;
+  final dynamic amount;
   final DateTime? date;
   final Order? order;
   final User? referredUser;
 
   Referral({
-    this.type,
+    this.status,
+    this.reason,
     this.amount,
     this.date,
     this.order,
@@ -17,7 +19,8 @@ class Referral {
   });
 
   factory Referral.fromJson(Map<String, dynamic> json) => Referral(
-    type: json["type"],
+    status: json["status"],
+    reason: json["reason"],
     amount: json["amount"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
     order: json["order"] == null ? null : Order.fromJson(json["order"]),
@@ -25,7 +28,8 @@ class Referral {
   );
 
   Map<String, dynamic> toJson() => {
-    "type": type,
+    "status": status,
+    "reason": reason,
     "amount": amount,
     "date": date?.toIso8601String(),
     "order": order?.toJson(),

@@ -171,10 +171,11 @@ class _RewardsState extends ConsumerState<Rewards> with SingleTickerProviderStat
               padding: EdgeInsets.only(top: 24.h, bottom: 32.h),
               // physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return RewardItem(rewardData: "Kunle Jadesola", amount: 2000);
+                final referral = vm.usedHistory[index];
+                return RewardItem(referral: referral, isEarned: false,);
               },
               separatorBuilder: (context, index) => SizedBox(height: 16.h),
-              itemCount: 20,
+              itemCount: vm.usedHistory.length,
             ),
           ),
           if(vm.secondPaginatedState == ViewState.busy)
@@ -243,10 +244,11 @@ class _RewardsState extends ConsumerState<Rewards> with SingleTickerProviderStat
               padding: EdgeInsets.only(top: 24.h, bottom: 32.h),
               // physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return RewardItem(rewardData: "Kunle Jadesola", amount: 2000);
+                final referral = vm.earnedHistory[index];
+                return RewardItem(referral: referral);
               },
               separatorBuilder: (context, index) => SizedBox(height: 16.h),
-              itemCount: 20,
+              itemCount: vm.earnedHistory.length,
             ),
           ),
           if(vm.paginatedState == ViewState.busy)
