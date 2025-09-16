@@ -40,6 +40,10 @@ class ReferralVm extends BaseState{
 
   double _referralBalance = 0;
   double get referralBalance => _referralBalance;
+  set referralBalance(dynamic value){
+    _referralBalance = double.tryParse(value?.toString() ?? '0') ?? 0;
+    notifyListeners();
+  }
 
   String _referralCode = '';
   String get referralCode => _referralCode;

@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
-import 'package:windfall/core/data/view_models/payment_vm.dart';
+import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/receipt/payment_receipt.dart';
+import 'package:windfall/ui/pages/select_payment_method.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/custom_button.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';
@@ -137,11 +138,10 @@ class CheckoutSummaryBottomSheet extends ConsumerWidget {
           SizedBox(height: 24.h),
           CustomButton(
             onPressed: () {
-              popNavigation(context: context);
               pushNavigation(
                 context: context,
-                widget: PaymentReceipt(),
-                routeName: NamedRoutes.paymentReceipt,
+                widget: SelectPaymentMethod(),
+                routeName: NamedRoutes.selectPaymentMethod,
               );
             },
             buttonText: "Go to Payment (₦${Utilities.formatAmount(

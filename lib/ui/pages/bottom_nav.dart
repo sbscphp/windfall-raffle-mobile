@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
+import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
 
 import '../../core/constants/color_path.dart';
@@ -35,6 +36,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
       ref.read(cartViewModel).fetchCart();
       vm.fetchEarnedHistory();
       vm.fetchUsedHistory();
+      ref.read(paymentViewModel).fetchPaymentMethods();
       // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
       // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;
     });

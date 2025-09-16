@@ -4,6 +4,7 @@ import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/models/order_detail.dart';
 import 'package:windfall/core/utilities/date_utilitites.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/my_games/game_tickets.dart';
@@ -11,11 +12,23 @@ import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
+import '../../../core/data/enum/tag_type.dart';
+import '../../../core/utilities/utilities.dart';
+import '../windfall_tag.dart';
+
 class PaymentReceiptItem extends StatelessWidget {
-  const PaymentReceiptItem({super.key});
+  final OrderDetail orderDetail;
+  const PaymentReceiptItem({super.key, required this.orderDetail});
 
   @override
   Widget build(BuildContext context) {
+    final name = orderDetail.game?.name ?? 'N/A';
+    final description = orderDetail.game?.description ?? 'N/A';
+    final ticketCount = orderDetail.quantity ?? 1;
+    final isInstantGame = orderDetail.game?.instantGame?.toLowerCase() == 'true';
+    final unitPrice = double.tryParse(orderDetail.unitAmount?.toString() ?? '0') ?? 0;
+    final totalPrice = double.tryParse(orderDetail.paidAmount?.toString() ?? '0') ?? 0;
+    final discountAmount = double.tryParse(orderDetail.discountAmount?.toString() ?? '0') ?? 0;
     return Clickable(
       onPressed: () {
         pushNavigation(
@@ -27,6 +40,7 @@ class PaymentReceiptItem extends StatelessWidget {
       child: WindfallContainer(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomAssetViewer(
               asset: AppAsset.walletImg,
@@ -38,13 +52,15 @@ class PaymentReceiptItem extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "1 Bed Room Flat at Banana Island, Lagos State",
+                              name,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w700,
@@ -55,7 +71,7 @@ class PaymentReceiptItem extends StatelessWidget {
                             ),
                             SizedBox(height: 4.h),
                             Text(
-                              "Win 1 bed room flat at the high prestige location",
+                             description,
                               style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
                                     fontSize: 10.sp,
@@ -67,30 +83,62 @@ class PaymentReceiptItem extends StatelessWidget {
                           ],
                         ),
                       ),
+                      if(isInstantGame)Padding(
+                        padding: EdgeInsets.only(left: 5.w),
+                        child: WindfallTag(tag: TagType.instantGame),
+                      )
                     ],
                   ),
                   SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PaymentItemLabel(
-                        asset: AppAsset.ticket2,
-                        label: "Tickets",
-                        data: "23",
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PaymentItemLabel(
+                              asset: AppAsset.ticket2,
+                              label: "${ticketCount > 1 ? 'Tickets':'Ticket'}",
+                              data: "$ticketCount",
+                            ),
+                            SizedBox(height: 8.h,),
+                            PaymentItemLabel(
+                              asset: AppAsset.discount,
+                              label: "Discount",
+                              data: "₦${Utilities.formatAmount(
+                                  addDecimal: true,
+                                  amount: discountAmount
+                              )}",
+                            )
+                          ],
+                        ),
                       ),
                       SizedBox(width: 4.w),
-                      Container(
-                        height: 16.h,
-                        width: 1.w,
-                        color: ColorPath.mischkaGrey,
-                      ),
-                      SizedBox(width: 4.w),
-                      PaymentItemLabel(
-                        asset: AppAsset.calendar2,
-                        label: "Draw Date",
-                        data: DateUtilities.dM(DateTime.now()),
-                      ),
-                      SizedBox(width: 8.h),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PaymentItemLabel(
+                              asset: AppAsset.unitPrice,
+                              label: "Unit Price",
+                              data: "₦${Utilities.formatAmount(
+                                  addDecimal: true,
+                                  amount: unitPrice
+                              )}",
+                            ),
+                            SizedBox(height: 8.h,),
+                            PaymentItemLabel(
+                              asset: AppAsset.subTotal,
+                              label: "Sub-total",
+                              data: "₦${Utilities.formatAmount(
+                                  addDecimal: true,
+                                  amount: totalPrice
+                              )}",
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -120,23 +168,25 @@ class PaymentItemLabel extends StatelessWidget {
       children: [
         CustomAssetViewer(asset: asset, height: 12.w, width: 12.w),
         SizedBox(width: 6.w),
-        Text.rich(
-          TextSpan(
-            text: "$label: ",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontSize: 10.sp,
-              color: Theme.of(context).colorScheme.textSecondary,
-            ),
-            children: [
+        Flexible(
+          child: FittedBox(
+            child: Text.rich(
               TextSpan(
-                text: data,
+                text: "$label: ",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.textPrimary,
+                  color: Theme.of(context).colorScheme.textSecondary,
                 ),
+                children: [
+                  TextSpan(
+                    text: data,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.textPrimary,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ],

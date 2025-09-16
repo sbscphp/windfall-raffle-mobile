@@ -21,6 +21,12 @@ class CheckoutVm extends BaseState{
     _checkoutType = val;
   }
 
+  //game id(for buy now checkout)
+  String? gameId;
+
+  //quantity(for buy now checkout)
+  int? quantity;
+
   int get checkoutCount => _checkoutItems.length;
   int get totalTicketCount => _totalTicketNumber();
   double get totalPrice => _totalPrice();

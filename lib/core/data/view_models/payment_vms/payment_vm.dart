@@ -12,7 +12,8 @@ import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
 import 'package:windfall/ui/pages/checkout/checkout.dart';
 
-import '../models/cart_product.dart';
+import '../../models/cart_product.dart';
+import '../checkout_vm.dart';
 
 class PaymentVm extends BaseState {
   //payment data provider
@@ -86,21 +87,21 @@ class PaymentVm extends BaseState {
 
 
   //fetch payment methods
-  // fetchPaymentMethods() async {
-  //
-  //   setThirdState(ViewState.busy);
-  //
-  //   await _paymentDp.fetchPaymentMethods().then(
-  //           (response) async {
-  //         _paymentMethodMessage = response.message ?? defaultSuccessMessage;
-  //         _paymentMethods = response.data ?? [];
-  //         reset();
-  //         setThirdState(ViewState.retrieved);
-  //       }, onError: (e) {
-  //     _message = Utilities.formatMessage(e.toString(), isSuccess: false);
-  //     setThirdState(ViewState.error);
-  //   });
-  // }
+  fetchPaymentMethods() async {
+
+    setThirdState(ViewState.busy);
+
+    await _paymentDp.fetchPaymentMethods().then(
+            (response) async {
+          _paymentMethodMessage = response.message ?? defaultSuccessMessage;
+          _paymentMethods = response.data ?? [];
+          reset();
+          setThirdState(ViewState.retrieved);
+        }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setThirdState(ViewState.error);
+    });
+  }
 
 
   //fetch payment breakdown
@@ -159,48 +160,51 @@ class PaymentVm extends BaseState {
   }
 
   //initiate checkout
-  // initiateCheckout(
-  //     {required String gameId}) async {
-  //
-  //   setSecondState(ViewState.busy);
-  //
-  //   final pos = await locator<GeoLocatorService>().getCurrentLocation();
-  //
-  //   final details = {
-  //     "game_id": gameId,
-  //     "platform": "mobile",
-  //     "payment_method": selectedPaymentMethod?.slug?.toLowerCase(), //flutterwave, paystack
-  //     "payment_channel": selectedPaymentType?.toLowerCase(), //ussd, card, bank transfer
-  //     "quantity": quantity,
-  //     "amount": amountToPay,
-  //   };
-  //
-  //   if(promoCodeApplied != null){
-  //     details['promo_code'] = promoCodeApplied;
-  //   }
-  //
-  //   if(refAmountUsed != null){
-  //     details['referral_balance_amount'] = refAmountUsed;
-  //   }
-  //
-  //   if(pos != null){
-  //     details['geolocation'] = {
-  //       "lat": pos.latitude,
-  //       "lng": pos.longitude
-  //     };
-  //   }
-  //
-  //
-  //   await _paymentDp.initiateCheckout(details: details).then(
-  //           (response) async {
-  //         _message = response.message ?? defaultSuccessMessage;
-  //         checkoutData = response.data;
-  //         setSecondState(ViewState.retrieved);
-  //       }, onError: (e) {
-  //     _message = Utilities.formatMessage(e.toString(), isSuccess: false);
-  //     setSecondState(ViewState.error);
-  //   });
-  // }
+  initiateCheckout(
+      {required CheckoutVm checkoutVm}) async {
+
+    setSecondState(ViewState.busy);
+
+    final pos = await locator<GeoLocatorService>().getCurrentLocation();
+
+    final Map<String, dynamic>details = {
+      "platform": "mobile",
+      "payment_method": selectedPaymentMethod?.slug?.toLowerCase(), //flutterwave, paystack
+      "payment_channel": selectedPaymentType?.toLowerCase() //ussd, card, bank transfer
+      //"amount": amountToPay,
+    };
+
+    if(checkoutVm.checkoutType == CheckoutType.buyNow){
+      details["game_id"] = checkoutVm.gameId ?? '';
+      details["quantity"] = checkoutVm.quantity ?? 1;
+      details["type"] = "buy_now";
+    }
+
+    if(promoCodeApplied != null){
+      details['promo_code'] = promoCodeApplied;
+    }
+
+    if(refAmountUsed != null){
+      details['referral_balance_amount'] = refAmountUsed;
+    }
+
+    if(pos != null){
+      details['geolocation'] = {
+        "lat": pos.latitude,
+        "lng": pos.longitude
+      };
+    }
+
+    await _paymentDp.initiateCheckout(details: details).then(
+            (response) async {
+          _message = response.message ?? defaultSuccessMessage;
+          checkoutData = response.data;
+          setSecondState(ViewState.retrieved);
+        }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setSecondState(ViewState.error);
+    });
+  }
 
 
   resetPaymentVariables(){

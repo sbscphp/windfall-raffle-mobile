@@ -7,7 +7,7 @@ import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
-import 'package:windfall/core/data/view_models/payment_vm.dart';
+import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
@@ -54,6 +54,9 @@ class _CheckoutState extends ConsumerState<Checkout> {
     if(vm.checkoutType == CheckoutType.buyNow){
       final gameId = ref.read(gameIdProvider);
       final singleGameVm = ref.read(singleGameViewModel(gameId));
+      vm.gameId = gameId;
+      vm.quantity = singleGameVm.quantity.toInt();
+      print('id set:::${vm.gameId} .... qty set:${vm.quantity}>>>');
       showPromoCodeField = singleGameVm.usePromoCode;
       showReferralBalField = singleGameVm.useReferralBonus;
     }else{

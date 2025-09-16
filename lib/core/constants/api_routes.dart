@@ -65,6 +65,8 @@ class ApiRoutes {
       "${dotenv.env['GAMES']}/checkout/summary";
   static var initiateCheckout =
       "${dotenv.env['GAMES']}/checkout";
+  static fetchOrderDetails({required String? orderId}) =>
+      "${dotenv.env['GAMES']}/order/$orderId/games";
 
 
 
@@ -101,7 +103,7 @@ class ApiRoutes {
   static var fetchConfig =
       "${dotenv.env['GUEST']}/get-all-configurations";
   static var fetchPaymentMethods =
-      "${dotenv.env['GUEST']}/payment-methods";
+      "${dotenv.env['GUEST']}/dropdown/payment-methods";
 
 
   //cart

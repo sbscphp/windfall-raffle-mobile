@@ -41,6 +41,9 @@ class NamedRoutes {
 
 
   //payment
+  static const selectPaymentMethod = '/selectPaymentMethod';
+  static const orderConfirmation = '/orderConfirmation';
+  static const paymentCheckout = '/paymentCheckout';
 
 
   //prizes
