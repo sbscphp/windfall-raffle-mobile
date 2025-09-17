@@ -33,6 +33,7 @@ class PaymentReceiptItem extends StatelessWidget {
           context: context,
           widget: GameTickets(
             id: orderDetail.game?.uuid,
+            appbarTitle: 'Ticket Details',
           ),
           routeName: NamedRoutes.gameTickets,
         );

@@ -66,6 +66,7 @@ class _OrderConfirmationState extends ConsumerState<OrderConfirmation> {
     return Scaffold(
       appBar: customAppBar(
           context: context,
+          showLeadingIcon: widget.paymentSuccessful ? false : true
           //title: '',
           // actions: [
           //   const HomeIcon()
