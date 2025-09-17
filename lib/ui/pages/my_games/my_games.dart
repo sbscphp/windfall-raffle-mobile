@@ -35,12 +35,6 @@ class _MyGamesState extends ConsumerState<MyGames> {
   void initState() {
     _scrollController = ScrollController();
     _filterScrollController = ScrollController();
-    final myGamesVm = ref.read(myGamesViewModel);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      //fetch my games
-      myGamesVm.fetchMyGames();
-
-    });
     _scrollListener();
     _filterScrollListener();
     super.initState();

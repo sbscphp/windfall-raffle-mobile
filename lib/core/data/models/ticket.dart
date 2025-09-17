@@ -5,6 +5,7 @@ class Ticket {
   final String? ticketNumber;
   final dynamic issuedAt;
   final String? flag;
+  final String? status;
   final Prize? prize;
   final bool? ownedByUser;
 
@@ -15,10 +16,12 @@ class Ticket {
     this.flag,
     this.prize,
     this.ownedByUser,
+    this.status
   });
 
   factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
     uuid: json["uuid"],
+    status: json["status"],
     ticketNumber: json["ticket_number"],
     issuedAt: json["issued_at"],
     flag: json["flag"],
@@ -28,6 +31,7 @@ class Ticket {
 
   Map<String, dynamic> toJson() => {
     "uuid": uuid,
+    "status": status,
     "ticket_number": ticketNumber,
     "issued_at": issuedAt,
     "flag": flag,

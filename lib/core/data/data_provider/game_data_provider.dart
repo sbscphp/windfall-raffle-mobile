@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:windfall/core/data/models/game.dart';
 import 'package:windfall/core/data/models/my_game.dart';
 import 'package:windfall/core/data/models/responses/api_response.dart';
+import 'package:windfall/core/data/models/responses/response_data/game_tickets_data.dart';
 import 'package:windfall/core/data/models/responses/response_data/pagination_data.dart';
 
 import '../../constants/api_routes.dart';
@@ -114,6 +115,25 @@ class GameDataProvider{
           e as Map<String, dynamic>,
         ))
             .toList(),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
+  //fetch game tickets
+  Future<ApiResponse<GameTicketsData>> fetchGameTickets({required String? id, required int? pageNumber}) async {
+    var completer = Completer<ApiResponse<GameTicketsData>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchGameTickets(id: id, pageNumber: pageNumber),
+          useAuth: true
+      );
+      var result = ApiResponse<GameTicketsData>.fromJson(
+        response,
+            (data) => GameTicketsData.fromJson(data as Map<String, dynamic>),
       );
       completer.complete(result);
     } catch (e) {

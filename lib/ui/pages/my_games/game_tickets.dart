@@ -1,21 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/view_models/game_vms/game_tickets_vm.dart';
+import 'package:windfall/ui/widgets/app_loader.dart';
+import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
+import '../../../core/data/enum/view_state.dart';
+import '../../../core/utilities/utilities.dart';
 import '../../widgets/body_header.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/screen_title.dart';
 
-class GameTickets extends StatefulWidget {
+class GameTickets extends ConsumerStatefulWidget {
   final String? appbarTitle;
-  const GameTickets({super.key, this.appbarTitle});
+  final String? id;
+  const GameTickets({super.key, this.appbarTitle, required this.id});
 
   @override
-  State<GameTickets> createState() => _GameTicketsState();
+  ConsumerState<GameTickets> createState() => _GameTicketsState();
 }
 
-class _GameTicketsState extends State<GameTickets> {
+class _GameTicketsState extends ConsumerState<GameTickets> {
+
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    final vm = ref.read(gameTicketsViewModel);
+    _scrollController = ScrollController();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      vm.fetchGameTickets(id: widget.id);
+    });
+    _scrollListener(vm);
+    super.initState();
+  }
+
+  _scrollListener(GameTicketsVm vm) {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        //check paginated state
+        if(vm.paginatedState != ViewState.error){
+          //check if data is not being currently fetched and also check total records
+          if (vm.paginatedState != ViewState.busy && vm.tickets.length < vm.totalRecords) {
+            //fetch more tickets
+            vm.fetchGameTickets(
+                firstCall: false,
+              id: widget.id
+            );
+          }
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,71 +65,127 @@ class _GameTicketsState extends State<GameTickets> {
           title: widget.appbarTitle ?? 'Results',
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BodyHeader(
-              child: Row(
+        child: Builder(
+          builder: (context) {
+            final vm = ref.watch(gameTicketsViewModel);
+
+            if(vm.state == ViewState.busy){
+              return Center(
+                child: AppLoader(),
+              );
+            }
+
+            if(vm.state == ViewState.retrieved){
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: ScreenTitle(
-                        title: 'Game Name',
-                        titleSize: 12,
-                        subTitleSize: 16,
-                        titleFontWeight: FontWeight.w400,
-                        titleColor: Theme.of(context).colorScheme.text5,
-                        subTitleColor: Theme.of(context).colorScheme.textPrimary,
-                        subTitleFontWeight: FontWeight.w600,
-                        subTitle: '1 Bed Room Flat at Banana Island'
+                  BodyHeader(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ScreenTitle(
+                              title: 'Game Name',
+                              titleSize: 12,
+                              subTitleSize: 16,
+                              titleFontWeight: FontWeight.w400,
+                              titleColor: Theme.of(context).colorScheme.text5,
+                              subTitleColor: Theme.of(context).colorScheme.textPrimary,
+                              subTitleFontWeight: FontWeight.w600,
+                              subTitle: vm.name
+                          ),
+                        ),
+                        SizedBox(width: 10.w,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Number of Tickets",
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.text5,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            SizedBox(height: 5.h,),
+                            Text(
+                              "${Utilities.formatAmount(
+                                amount: vm.totalRecords.toDouble(),
+                                addDecimal: false
+                              )} ${vm.totalRecords > 1 ? 'Tickets':'Ticket'}",
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.textPrimary,
+                                  fontWeight: FontWeight.w600
+                              ),
+                            ),
+
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                  SizedBox(width: 10.w,),
+                  SizedBox(height: 24.h,),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Number of Tickets",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.text5,
-                          fontWeight: FontWeight.w400
+                      Expanded(
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          itemCount: vm.tickets.length,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+
+                            final ticket = vm.tickets[index];
+
+                            return TicketItem(
+                              isWon: index == 2,
+                              showResultTag: index == 2,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 16.h,);
+                          },
                         ),
                       ),
-                      SizedBox(height: 5.h,),
-                      Text(
-                        "32 Tickets",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.textPrimary,
-                            fontWeight: FontWeight.w600
+                      if(vm.paginatedState == ViewState.busy)
+                        Padding(
+                          padding: EdgeInsets.only(top: 5.h),
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: AppLoader(
+                              size: 16,
+                            ),
+                          ),
                         ),
-                      ),
-        
+                      if(vm.paginatedState == ViewState.error)
+                        ErrorState(
+                            message: vm.message,
+                            isPaginationType: true,
+                            onPressed: ()=>vm.fetchGameTickets(
+                                firstCall: false,
+                              id: widget.id
+                            ))
                     ],
                   )
                 ],
-              ),
-            ),
-            SizedBox(height: 24.h,),
-            Expanded(
-              child: ListView.separated(
-                itemCount: 15,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-        
-                  return TicketItem(
-                    isWon: index == 2,
-                    showResultTag: index == 2,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 16.h,);
-                },
-              ),
-            )
-          ],
+              );
+            }
+
+            if(vm.state == ViewState.error){
+              return Center(
+                child: ErrorState(
+                  message: vm.message,
+                    onPressed: ()=>vm.fetchGameTickets(
+                        id: widget.id,
+                    )
+                ),
+              );
+            }
+
+            return const SizedBox();
+          }
         ),
       ),
     );

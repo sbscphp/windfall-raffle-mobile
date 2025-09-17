@@ -51,14 +51,14 @@ class ApiRoutes {
       "${dotenv.env['GUEST']}/games/$gameId";
   static fetchRelatedGames({required String? gameId}) =>
       "${dotenv.env['GUEST']}/games/related/$gameId";
-  static getTicketsByOrderId({required String? orderId}) =>
-      "${dotenv.env['GAMES']}/order/$orderId/tickets";
+  // static getTicketsByOrderId({required String? orderId}) =>
+  //     "${dotenv.env['GAMES']}/order/$orderId/tickets";
   static fetchMyGames({required int? pageNumber, String? filterParams}) =>
   filterParams == null ?
-      "${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber"
-  :"${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
-  static fetchGameTicketStatus({required String? id, required int? pageNumber}) =>
-      "${dotenv.env['GAMES']}/order/$id/ticket_status?page=$pageNumber";
+      "${dotenv.env['GAMES']}/order-games?paginate=1&limit=$paginationLimit&page=$pageNumber"
+  :"${dotenv.env['GAMES']}/order-games?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
+  static fetchGameTickets({required String? id, required int? pageNumber}) =>
+      "${dotenv.env['GAMES']}/order/details/$id/tickets?page=$pageNumber";
 
   //payment
   static var fetchPaymentBreakdown =

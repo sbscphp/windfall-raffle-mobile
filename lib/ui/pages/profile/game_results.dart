@@ -126,7 +126,7 @@ class _GameResultsState extends State<GameResults> {
 
                   return Clickable(
                     onPressed: (){
-                      pushNavigation(context: context, widget: const GameTickets(), routeName: NamedRoutes.gameTickets);
+                      pushNavigation(context: context, widget: const GameTickets(id: '',), routeName: NamedRoutes.gameTickets);
                     },
                     child: WindfallContainer(
                       padding: EdgeInsets.symmetric(

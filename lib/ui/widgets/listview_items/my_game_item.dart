@@ -29,7 +29,7 @@ class MyGameItem extends StatelessWidget {
     final drawDate = myGame.game?.drawDate ?? DateTime.now();
     return Clickable(
       onPressed: (){
-        pushNavigation(context: context, widget: const GameTickets(), routeName: NamedRoutes.gameTickets);
+        pushNavigation(context: context, widget: GameTickets(id: myGame.game?.uuid,), routeName: NamedRoutes.gameTickets);
       },
       child: WindfallContainer(
         width: 191.w,
@@ -49,6 +49,7 @@ class MyGameItem extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       width: double.infinity,
+                      height: double.infinity,
                       imageUrl: image,
                       placeholder: (context, url) => const MediaPlaceholder(),
                       errorWidget: (context, url, error) => const MediaPlaceholder(),

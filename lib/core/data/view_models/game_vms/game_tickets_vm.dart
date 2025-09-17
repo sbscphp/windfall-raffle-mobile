@@ -1,16 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windfall/core/data/models/ticket.dart';
+import 'package:windfall/core/utilities/date_utilitites.dart';
 
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
 import '../../../utilities/utilities.dart';
 import '../../data_provider/game_data_provider.dart';
 import '../../enum/view_state.dart';
-import '../../models/my_game.dart';
+import '../../models/game.dart';
 import '../../states/base_state.dart';
 
 
 
-class MyGamesVm extends BaseState{
+class GameTicketsVm extends BaseState{
 
   //game data provider
   final GameDataProvider _gameDp = locator<GameDataProvider>();
@@ -19,25 +21,29 @@ class MyGamesVm extends BaseState{
   String _message = '';
   String get message => _message;
 
+
   //page number
   int pageNumber = 1;
-
 
   //total records
   int totalRecords = 0;
 
-
-  //my games
-  List<MyGame> _myGames = [];
-  List<MyGame> get myGames => _myGames;
-
+  //all tickets(for a single game)
+  List<Ticket> _tickets = [];
+  List<Ticket> get tickets => _tickets;
 
 
+  //selected game
+  Game? game;
+
+  String get name => game?.name ?? 'N/A';
+ // int get ticketCount => game?.
+  bool get isInstantGame => game?.instantGame?.toLowerCase() == 'true';
 
 
 
-  //fetch active games
-  fetchMyGames({bool firstCall = true, bool refreshUi = true}) async {
+  //fetch game tickets
+  fetchGameTickets({bool firstCall = true, bool refreshUi = true, required String? id}) async {
     if(firstCall){
       pageNumber = 1;
       if(refreshUi)setState(ViewState.busy);
@@ -46,21 +52,21 @@ class MyGamesVm extends BaseState{
       setPaginatedState(ViewState.busy);
     }
 
-    await _gameDp.fetchMyGames(
+    await _gameDp.fetchGameTickets(
       pageNumber: pageNumber,
-      filterParams: {},
+      id: id
     ).then((response) async{
       _message = response.message ?? defaultSuccessMessage;
-      totalRecords = response.data?.total ?? 0;
+      totalRecords = response.data?.tickets?.total ?? 0;
+      game = response.data?.game;
       if(firstCall){
         //populate list
-        _myGames = response.data?.data ?? [];
-        print('my games length::::${_myGames.length}>>>>');
+        _tickets = response.data?.tickets?.data ?? [];
         setState(ViewState.retrieved);
       }
       else{
         //add to list
-        _myGames.addAll(response.data?.data ?? []);
+        _tickets.addAll(response.data?.tickets?.data ?? []);
         setPaginatedState(ViewState.retrieved);
       }
       pageNumber++;
@@ -75,11 +81,8 @@ class MyGamesVm extends BaseState{
   }
 
 
-
-
-
 }
 
-final myGamesViewModel = ChangeNotifierProvider<MyGamesVm>((ref){
-  return MyGamesVm();
+final gameTicketsViewModel = ChangeNotifierProvider.autoDispose<GameTicketsVm>((ref){
+  return GameTicketsVm();
 });

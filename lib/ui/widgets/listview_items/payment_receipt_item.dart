@@ -33,7 +33,9 @@ class PaymentReceiptItem extends StatelessWidget {
       onPressed: () {
         pushNavigation(
           context: context,
-          widget: GameTickets(),
+          widget: GameTickets(
+            id: orderDetail.game?.uuid,
+          ),
           routeName: NamedRoutes.gameTickets,
         );
       },
@@ -114,7 +116,7 @@ class PaymentReceiptItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: 4.w),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
