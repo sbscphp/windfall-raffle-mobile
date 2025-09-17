@@ -9,6 +9,7 @@ import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
+import 'package:windfall/core/data/view_models/utility_view_models/config_view_model.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/bottom_sheets/base_bottom_sheet.dart';
@@ -56,13 +57,12 @@ class _CheckoutState extends ConsumerState<Checkout> {
       final singleGameVm = ref.read(singleGameViewModel(gameId));
       vm.gameId = gameId;
       vm.quantity = singleGameVm.quantity.toInt();
-      print('id set:::${vm.gameId} .... qty set:${vm.quantity}>>>');
       showPromoCodeField = singleGameVm.usePromoCode;
       showReferralBalField = singleGameVm.useReferralBonus;
     }else{
-      //todo: check with config Vm when implemented
-      showPromoCodeField = true;
-      showReferralBalField = true;
+      final configVm = ref.read(configViewModel);
+      showPromoCodeField = configVm.usePromoCode;
+      showReferralBalField = configVm.useReferralBonus;
     }
     super.initState();
   }
@@ -75,6 +75,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
     final vm = ref.watch(checkoutViewModel);
     final cartVm = ref.watch(cartViewModel);
     final paymentVm = ref.watch(paymentViewModel);
+    final configVm = ref.watch(configViewModel);
     return BusyOverlay(
       show: cartVm.secondState == ViewState.busy || paymentVm.state == ViewState.busy,
       child: Scaffold(
@@ -187,7 +188,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       ),
                     ),
                   ),
-                  if(showPromoCodeField || showReferralBalField)Padding(
+                  if((showPromoCodeField && configVm.usePromoCode) || (showReferralBalField && configVm.useReferralBonus))Padding(
                     padding: EdgeInsets.all(16.w),
                     child: WindfallContainer(
                       padding: EdgeInsets.all(16.w),
@@ -203,7 +204,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                                   color: Theme.of(context).colorScheme.brandColor,
                                 ),
                           ),
-                          if(showPromoCodeField)Row(
+                          if(showPromoCodeField && configVm.usePromoCode)Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -234,7 +235,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                               ),
                             ],
                           ),
-                          if(showReferralBalField) Consumer(
+                          if(showReferralBalField && configVm.useReferralBonus) Consumer(
                             builder: (context, ref, child){
                               final referralVm = ref.watch(referralViewModel);
                               return Row(

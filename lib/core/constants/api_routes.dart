@@ -103,7 +103,7 @@ class ApiRoutes {
   static var fetchHearAboutUs =
       "${dotenv.env['GUEST']}/hear_about_us";
   static var fetchConfig =
-      "${dotenv.env['GUEST']}/get-all-configurations";
+      "${dotenv.env['GUEST']}/dropdown/get-all-configurations";
   static var fetchPaymentMethods =
       "${dotenv.env['GUEST']}/dropdown/payment-methods";
 

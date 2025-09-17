@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:windfall/core/data/models/lga_details.dart';
+import 'package:windfall/core/data/models/responses/response_data/config_data.dart';
 import '../../../constants/api_routes.dart';
 import '../../enum/request_type.dart';
 import '../../models/responses/api_response.dart';
@@ -32,7 +33,7 @@ class UtilityDataProvider{
     return completer.future;
   }
 
-  // //fetch 'hear about us' options
+  //fetch 'hear about us' options
   // Future<HearAboutUsResponse> fetchHearAboutUs() async {
   //   var completer = Completer<HearAboutUsResponse>();
   //   try {
@@ -47,22 +48,25 @@ class UtilityDataProvider{
   //   }
   //   return completer.future;
   // }
-  //
-  // //fetch configs
-  // Future<ConfigResponse> fetchConfigs() async {
-  //   var completer = Completer<ConfigResponse>();
-  //   try {
-  //     Map<String, dynamic> response = await NetworkManager()
-  //         .networkRequestManager(RequestType.get, ApiRoutes.fetchConfig,
-  //       useAuth: false,
-  //     );
-  //     var result = ConfigResponse.fromJson(response);
-  //     completer.complete(result);
-  //   } catch (e) {
-  //     completer.completeError(e);
-  //   }
-  //   return completer.future;
-  // }
+
+  //fetch configs
+  Future<ApiResponse<ConfigData>> fetchConfigs() async {
+    var completer = Completer<ApiResponse<ConfigData>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchConfig,
+        useAuth: false,
+      );
+      var result = ApiResponse<ConfigData>.fromJson(
+        response,
+            (data) => ConfigData.fromJson(data as Map<String, dynamic>),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
 
 
 }
