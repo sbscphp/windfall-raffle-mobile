@@ -7,14 +7,15 @@ import '../../core/constants/color_path.dart';
 
 class BodyHeader extends StatelessWidget {
   final Widget child;
-  const BodyHeader({super.key, required this.child});
+  final double? verticalPadding;
+  const BodyHeader({super.key, required this.child, this.verticalPadding});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-          vertical: 24.h,
+          vertical: verticalPadding?.h ?? 24.h,
           horizontal: AppDimension.paddingRight
       ),
       decoration: BoxDecoration(

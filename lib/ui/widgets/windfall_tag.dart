@@ -15,7 +15,7 @@ class WindfallTag extends StatelessWidget {
     switch (tag) {
       case TagType.instantGame:
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+          padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 8.w),
           decoration: BoxDecoration(
             color: ColorPath.pattensBlue,
             borderRadius: BorderRadius.all(Radius.circular(16.r)),

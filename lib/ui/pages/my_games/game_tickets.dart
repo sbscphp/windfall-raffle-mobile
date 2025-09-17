@@ -8,11 +8,13 @@ import 'package:windfall/core/data/view_models/game_vms/game_tickets_vm.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
+import '../../../core/data/enum/tag_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/utilities.dart';
 import '../../widgets/body_header.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/screen_title.dart';
+import '../../widgets/windfall_tag.dart';
 
 class GameTickets extends ConsumerStatefulWidget {
   final String? appbarTitle;
@@ -80,20 +82,30 @@ class _GameTicketsState extends ConsumerState<GameTickets> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   BodyHeader(
+                    verticalPadding: 8,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: ScreenTitle(
-                              title: 'Game Name',
-                              titleSize: 12,
-                              subTitleSize: 16,
-                              titleFontWeight: FontWeight.w400,
-                              titleColor: Theme.of(context).colorScheme.text5,
-                              subTitleColor: Theme.of(context).colorScheme.textPrimary,
-                              subTitleFontWeight: FontWeight.w600,
-                              subTitle: vm.name
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ScreenTitle(
+                                  title: 'Game Name',
+                                  titleSize: 12,
+                                  subTitleSize: 16,
+                                  titleFontWeight: FontWeight.w400,
+                                  titleColor: Theme.of(context).colorScheme.text5,
+                                  subTitleColor: Theme.of(context).colorScheme.textPrimary,
+                                  subTitleFontWeight: FontWeight.w600,
+                                  subTitle: vm.name
+                              ),
+                              if(vm.isInstantGame)Padding(
+                                padding: EdgeInsets.only(top: 8.h),
+                                child: WindfallTag(tag: TagType.instantGame),
+                              )
+                            ],
                           ),
                         ),
                         SizedBox(width: 10.w,),
@@ -125,49 +137,49 @@ class _GameTicketsState extends ConsumerState<GameTickets> {
                     ),
                   ),
                   SizedBox(height: 24.h,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          controller: _scrollController,
-                          itemCount: vm.tickets.length,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-
-                            final ticket = vm.tickets[index];
-
-                            return TicketItem(
-                              isWon: index == 2,
-                              showResultTag: index == 2,
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(height: 16.h,);
-                          },
-                        ),
-                      ),
-                      if(vm.paginatedState == ViewState.busy)
-                        Padding(
-                          padding: EdgeInsets.only(top: 5.h),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: AppLoader(
-                              size: 16,
-                            ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ListView.separated(
+                            controller: _scrollController,
+                            itemCount: vm.tickets.length,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              final ticket = vm.tickets[index];
+                              return TicketItem(
+                                ticket: ticket,
+                                isInstantGame: vm.isInstantGame,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 16.h,);
+                            },
                           ),
                         ),
-                      if(vm.paginatedState == ViewState.error)
-                        ErrorState(
-                            message: vm.message,
-                            isPaginationType: true,
-                            onPressed: ()=>vm.fetchGameTickets(
-                                firstCall: false,
-                              id: widget.id
-                            ))
-                    ],
+                        if(vm.paginatedState == ViewState.busy)
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.h),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: AppLoader(
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        if(vm.paginatedState == ViewState.error)
+                          ErrorState(
+                              message: vm.message,
+                              isPaginationType: true,
+                              onPressed: ()=>vm.fetchGameTickets(
+                                  firstCall: false,
+                                id: widget.id
+                              ))
+                      ],
+                    ),
                   )
                 ],
               );

@@ -14,9 +14,9 @@ class GameTicketsData {
 
   factory GameTicketsData.fromJson(Map<String, dynamic> json) => GameTicketsData(
     game: json["game"] == null ? null : Game.fromJson(json["game"]),
-    tickets: json['transactions'] != null
+    tickets: json['tickets'] != null
         ? PaginationData<Ticket>.fromJson(
-      json['transactions'],
+      json['tickets'],
           (e) => Ticket.fromJson(e),
     )
         : null,

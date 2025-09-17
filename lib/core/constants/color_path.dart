@@ -67,6 +67,7 @@ class ColorPath {
   static const toryBlue = Color(0xff0D47A1);
   static const oxfordBlue = Color(0xff344054);
   static const magnoliaPurple = Color(0xffF9F5FF);
+  static const brinPink = Color(0xffFD6F8E);
 
 
 

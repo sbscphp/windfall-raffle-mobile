@@ -29,7 +29,7 @@ class MyGameItem extends StatelessWidget {
     final drawDate = myGame.game?.drawDate ?? DateTime.now();
     return Clickable(
       onPressed: (){
-        pushNavigation(context: context, widget: GameTickets(id: myGame.game?.uuid,), routeName: NamedRoutes.gameTickets);
+        pushNavigation(context: context, widget: GameTickets(id: myGame.uuid,), routeName: NamedRoutes.gameTickets);
       },
       child: WindfallContainer(
         width: 191.w,

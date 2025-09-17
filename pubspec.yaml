@@ -72,6 +72,7 @@ dependencies:
   geolocator_android: ^5.0.2
   marquee: ^2.3.0
   another_xlider: ^3.0.2
+  image_gallery_saver_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:
