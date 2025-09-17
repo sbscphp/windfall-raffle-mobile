@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/constants/named_routes.dart';
-import 'package:windfall/core/utilities/navigator.dart';
-import 'package:windfall/ui/pages/my_games/claim_prize.dart';
-
 import '../../../core/constants/color_path.dart';
-import '../../../core/data/models/game.dart';
 import '../../../core/data/models/ticket.dart';
 import '../bottom_sheets/base_bottom_sheet.dart';
 import '../bottom_sheets/ticket_actions.dart';

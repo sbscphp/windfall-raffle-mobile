@@ -4,14 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
-import 'package:windfall/core/data/models/game.dart';
 import 'package:windfall/core/data/models/ticket.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
-
 import '../../../core/constants/color_path.dart';
 import '../../../core/utilities/receipt_utils.dart';
 import '../custom_button.dart';
