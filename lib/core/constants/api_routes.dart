@@ -59,6 +59,8 @@ class ApiRoutes {
   :"${dotenv.env['GAMES']}/order-games?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
   static fetchGameTickets({required String? id, required int? pageNumber}) =>
       "${dotenv.env['GAMES']}/order/details/$id/tickets?page=$pageNumber";
+  static fetchMyGameResults({required int? pageNumber}) =>
+      "${dotenv.env['GAMES']}/game-details-results?paginate=1&limit=$paginationLimit&page=$pageNumber";
 
   //payment
   static var fetchPaymentBreakdown =

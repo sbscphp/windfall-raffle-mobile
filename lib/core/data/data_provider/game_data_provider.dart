@@ -142,6 +142,28 @@ class GameDataProvider{
     return completer.future;
   }
 
+  //fetch my game results
+  Future<ApiResponse<PaginationData<MyGame>>> fetchMyGameResults({required int? pageNumber}) async {
+    var completer = Completer<ApiResponse<PaginationData<MyGame>>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchMyGameResults(pageNumber: pageNumber),
+          useAuth: true
+      );
+      var result = ApiResponse<PaginationData<MyGame>>.fromJson(
+        response,
+            (data) => PaginationData<MyGame>.fromJson(
+          data as Map<String, dynamic>,
+              (gameJson) => MyGame.fromJson(gameJson),
+        ),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
 
 
   //

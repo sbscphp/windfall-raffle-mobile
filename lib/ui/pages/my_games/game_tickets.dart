@@ -8,11 +8,13 @@ import 'package:windfall/core/data/view_models/game_vms/game_tickets_vm.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
+import '../../../core/constants/app_asset.dart';
 import '../../../core/data/enum/tag_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/utilities.dart';
 import '../../widgets/body_header.dart';
 import '../../widgets/custom_appbar.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/screen_title.dart';
 import '../../widgets/windfall_tag.dart';
 
@@ -137,7 +139,23 @@ class _GameTicketsState extends ConsumerState<GameTickets> {
                     ),
                   ),
                   SizedBox(height: 24.h,),
-                  Expanded(
+                  if(vm.tickets.isEmpty)
+                    Expanded(
+                      child: Center(
+                        child: EmptyState(
+                          asset: AppAsset.emptyCart,
+                          useBgCard: false,
+                          assetHeight: 128.h,
+                          assetWidth: 128.w,
+                          showCtaButton: false,
+                          title: "No Tickets",
+                          //ctaText: "Explore All Games",
+                          subtitle:
+                          "",
+                        ),
+                      ),
+                    )
+                    else Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

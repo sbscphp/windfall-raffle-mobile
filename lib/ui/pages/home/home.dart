@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
+import 'package:windfall/core/data/view_models/game_vms/my_game_results_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
@@ -35,6 +36,7 @@ class _HomeState extends ConsumerState<Home> {
   void initState() {
     final allGamesVm = ref.read(allGamesViewModel);
     final myGamesVm = ref.read(myGamesViewModel);
+    final myGameResultsVm = ref.read(myGameResultsViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       //fetch all games
       allGamesVm.fetchAllGames();
@@ -42,6 +44,8 @@ class _HomeState extends ConsumerState<Home> {
       allGamesVm.fetchLiveGames();
       //fetch my games
       myGamesVm.fetchMyGames();
+      //fetch my game results
+      myGameResultsVm.fetchMyGameResults();
 
     });
     super.initState();
