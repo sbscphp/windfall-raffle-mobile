@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/data/models/ticket.dart';
-import 'package:windfall/core/utilities/date_utilitites.dart';
-
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
 import '../../../utilities/utilities.dart';

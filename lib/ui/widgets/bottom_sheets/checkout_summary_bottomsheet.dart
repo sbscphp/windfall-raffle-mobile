@@ -6,7 +6,6 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
-import 'package:windfall/ui/pages/receipt/payment_receipt.dart';
 import 'package:windfall/ui/pages/select_payment_method.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/custom_button.dart';

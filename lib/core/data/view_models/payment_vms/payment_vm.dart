@@ -10,8 +10,6 @@ import 'package:windfall/core/data/services/geolocator_service.dart';
 import 'package:windfall/core/data/states/base_state.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
-import 'package:windfall/ui/pages/checkout/checkout.dart';
-
 import '../../models/cart_product.dart';
 import '../checkout_vm.dart';
 
