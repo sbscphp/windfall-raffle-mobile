@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
-import 'package:windfall/core/data/models/my_game.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_game_results_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
