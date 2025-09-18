@@ -40,11 +40,13 @@ class WindfallTag extends StatelessWidget {
       case TagType.drawGame:
       case TagType.completed:
       case TagType.pending:
+      case TagType.failed:
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
           margin: EdgeInsets.only(top: 4.h),
           decoration: BoxDecoration(
-            color: tag == TagType.pending ? ColorPath.salomieBrown:ColorPath.foamGreen,
+            color: tag == TagType.pending ? ColorPath.salomieBrown:
+            tag == TagType.failed ? ColorPath.provincialPink:ColorPath.foamGreen,
             borderRadius: BorderRadius.all(Radius.circular(16.r)),
           ),
           child: Row(
@@ -61,7 +63,8 @@ class WindfallTag extends StatelessWidget {
                 child: Text(
                   _getTagText(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: tag == TagType.pending ? ColorPath.vesuviusBrown:ColorPath.meadowGreen,
+                    color: tag == TagType.pending ? ColorPath.vesuviusBrown:
+                    tag == TagType.failed ? ColorPath.thunderbirdRed:ColorPath.meadowGreen,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -84,6 +87,8 @@ class WindfallTag extends StatelessWidget {
         return "Completed";
       case TagType.pending:
         return "Pending";
+      case TagType.failed:
+        return "Failed";
     }
   }
 }

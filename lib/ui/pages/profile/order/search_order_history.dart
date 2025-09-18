@@ -124,22 +124,18 @@ class _SearchOrderHistoryState extends ConsumerState<SearchOrderHistory> {
       }
       return Column(
         children: [
-          Expanded(child: GridView.builder(
-              controller: _scrollController,
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: vm.searchResults.length,
-              gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 32.h,
-                crossAxisSpacing: 16.w,
-                mainAxisExtent: 248.h,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                final orderHistory = vm.searchResults[index];
-                return OrderHistoryItem(order: orderHistory,);
-              })),
+          Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final orderHistory = vm.searchResults[index];
+                  return OrderHistoryItem(order: orderHistory,);
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 16.h);
+                },
+                itemCount: vm.searchResults.length,
+              )),
           if(vm.paginatedState == ViewState.busy)
             Padding(
               padding: EdgeInsets.only(top: 5.h),

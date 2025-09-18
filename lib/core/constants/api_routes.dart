@@ -121,6 +121,8 @@ class ApiRoutes {
       filterParams == null ?
       "${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber"
           :"${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
+  static fetchOrderHistoryDetails({required String? id}) =>
+      "${dotenv.env['GAMES']}/order/$id/games?paginate=1&limit=$paginationLimit";
 
 
 }

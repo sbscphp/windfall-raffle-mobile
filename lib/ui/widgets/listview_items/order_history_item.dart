@@ -25,11 +25,17 @@ class OrderHistoryItem extends StatelessWidget {
     final totalTicketCount = double.tryParse(order.ticketsCount?.toString() ?? "0") ?? 0;
     final totalAmount = double.tryParse(order.totalAmount?.toString() ?? '0') ?? 0;
     final gameCount = double.tryParse(order.gamesCount?.toString() ?? '0') ?? 0;
+    final status = order.paymentStatus ?? 'N/A';
+    final isSuccessful = status.toLowerCase() == 'successful';
+    final isFailed = status.toLowerCase() == 'failed';
     return Clickable(
       onPressed: () {
         pushNavigation(
           context: context,
-          widget: OrderDetails(),
+          widget: OrderDetails(
+            id: order.uuid,
+            orderId: orderId,
+          ),
           routeName: NamedRoutes.orderDetails,
         );
       },
@@ -39,76 +45,79 @@ class OrderHistoryItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.textPrimary,
-                  ),
-                  TextSpan(
-                    text: "Order ID: ",
-                    children: [
-                      TextSpan(
-                        text: orderId,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.brandColor,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text.rich(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.textPrimary,
+                    ),
+                    TextSpan(
+                      text: "Order ID: ",
+                      children: [
+                        TextSpan(
+                          text: orderId,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.brandColor,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 8.h),
-                Text.rich(
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.textTertiary,
-                  ),
-                  TextSpan(
-                    text: "Date Ordered: ",
-                    children: [
-                      TextSpan(
-                        text: orderDate,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.textPrimary,
+                  SizedBox(height: 8.h),
+                  Text.rich(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.textTertiary,
+                    ),
+                    TextSpan(
+                      text: "Date Ordered: ",
+                      children: [
+                        TextSpan(
+                          text: orderDate,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.textPrimary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 16.h),
-                Text.rich(
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.textTertiary,
-                  ),
-                  TextSpan(
-                    text: "Qty: ",
-                    children: [
-                      TextSpan(
-                        text: '${Utilities.formatAmount(
-                          amount: gameCount,
-                          addDecimal: false
-                        )} ${gameCount > 1 ? 'Games':'Game'} . ${Utilities.formatAmount(
-                            amount: totalTicketCount,
+                  SizedBox(height: 16.h),
+                  Text.rich(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.textTertiary,
+                    ),
+                    TextSpan(
+                      text: "Qty: ",
+                      children: [
+                        TextSpan(
+                          text: '${Utilities.formatAmount(
+                            amount: gameCount,
                             addDecimal: false
-                        )} ${totalTicketCount > 1 ? 'Tickets':'Ticket'}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.textPrimary,
+                          )} ${gameCount > 1 ? 'Games':'Game'} . ${Utilities.formatAmount(
+                              amount: totalTicketCount,
+                              addDecimal: false
+                          )} ${totalTicketCount > 1 ? 'Tickets':'Ticket'}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.textPrimary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(width: 12.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                WindfallTag(tag: TagType.success),
+                WindfallTag(tag: isSuccessful ? TagType.success
+                : isFailed ? TagType.failed : TagType.pending),
                 SizedBox(height: 8.h),
                 NairaDisplay(
                   amount: totalAmount,
