@@ -164,13 +164,15 @@ class GameItem extends StatelessWidget {
             GameProperty(
                 imageAsset: AppAsset.drawDate,
                 label: 'Draw Date:',
-                value: Expanded(
-                  child: Text(
-                    "${DateUtilities.monthDayYear(date: drawDate)}",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.textSecondary,
+                value: Flexible(
+                  child: FittedBox(
+                    child: Text(
+                      "${DateUtilities.monthDayYear(date: drawDate)}",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.textSecondary,
+                      ),
                     ),
                   ),
                 )
@@ -184,7 +186,7 @@ class GameItem extends StatelessWidget {
                     amount: minEntryPrice,
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w400,
-                    addDecimal: false,
+                    addDecimal: true,
                     color: Theme.of(context).colorScheme.textSecondary,
                   ),
                 )

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1019029161202",
+    "project_id": "windfall-raffle",
+    "storage_bucket": "windfall-raffle.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019029161202:android:7185114880147e93dabc6b",
+        "android_client_info": {
+          "package_name": "com.windfall.windfall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV-vpK8VPlkNf8TPXkdO5xHZZ_hAvYmkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

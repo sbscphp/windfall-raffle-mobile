@@ -12,6 +12,7 @@ import '../../core/data/view_models/authentication_vms/login_vm.dart';
 import '../../core/data/view_models/bottom_nav_view_model.dart';
 import '../../core/data/view_models/profile_vms/notification_vms/notification_settings_vm.dart';
 import '../../core/data/view_models/profile_vms/profile_vm.dart';
+import '../../core/utilities/firebase_messaging_utils.dart';
 import '../widgets/bottom_nav_items.dart';
 
 
@@ -40,6 +41,10 @@ class _BottomNavState extends ConsumerState<BottomNav> {
       // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
       // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;
     });
+
+    //init push notification listeners
+    FirebaseMessagingUtils.pushNotificationListenerInit(context: context, ref: ref);
+
     super.initState();
   }
 

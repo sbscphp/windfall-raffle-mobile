@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,13 +14,22 @@ import 'core/data/services/geolocator_service.dart';
 import 'core/data/services/navigation_service.dart';
 import 'core/data/view_models/theme_selection_view_model.dart';
 import 'core/data/view_models/utility_view_models/lga_details_view_model.dart';
+import 'core/utilities/firebase_messaging_utils.dart';
 import 'core/utilities/secure_storage/secure_storage_init.dart';
 import 'locator.dart';
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (message.notification != null) {
+
+  }
+}
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
- // await Firebase.initializeApp();
+ await Firebase.initializeApp();
   await dotenv.load(fileName: ".env");
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // if(Platform.isAndroid){
@@ -33,7 +44,7 @@ void main() async{
   // }else{
   //   await Firebase.initializeApp();
   // }
-  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   AppConfig.setEnvironment(Environment.staging);
   SecureStorageInit.initSecureStorage();
   setupLocator();
@@ -59,7 +70,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
 
     //push notification initial set up
-   // FirebaseMessagingUtils.requestPushNotificationPermission();
+   FirebaseMessagingUtils.requestPushNotificationPermission();
 
     //location permission
     final locationService = locator<GeoLocatorService>();

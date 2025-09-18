@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../locator.dart';
@@ -32,13 +33,14 @@ class LoginVm extends BaseState {
     //     ? await SecureStorageUtils.retrievePassword()
     //     : password;
 
-    //final token = await FirebaseMessaging.instance.getToken();
+    final token = await FirebaseMessaging.instance.getToken();
 
 
     final details = {
       "username": email,
       "remember_me": true,
-      "password": password
+      "password": password,
+      "fcm_token": token,
 
     };
     await _authDataProvider.login(details: details).then((response) async{
