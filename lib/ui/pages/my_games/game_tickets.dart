@@ -9,6 +9,7 @@ import 'package:windfall/ui/widgets/app_loader.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/ticket_item.dart';
 import '../../../core/constants/app_asset.dart';
+import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/tag_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/utilities.dart';
@@ -160,22 +161,27 @@ class _GameTicketsState extends ConsumerState<GameTickets> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: ListView.separated(
-                            controller: _scrollController,
-                            itemCount: vm.tickets.length,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              final ticket = vm.tickets[index];
-                              return TicketItem(
-                                ticket: ticket,
-                                isInstantGame: vm.isInstantGame,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 16.h,);
-                            },
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(),
+                            backgroundColor: Theme.of(context).colorScheme.whiteText,
+                            color: ColorPath.redOrange,
+                            child: ListView.separated(
+                              controller: _scrollController,
+                              itemCount: vm.tickets.length,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                final ticket = vm.tickets[index];
+                                return TicketItem(
+                                  ticket: ticket,
+                                  isInstantGame: vm.isInstantGame,
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(height: 16.h,);
+                              },
+                            ),
                           ),
                         ),
                         if(vm.paginatedState == ViewState.busy)
@@ -219,5 +225,11 @@ class _GameTicketsState extends ConsumerState<GameTickets> {
         ),
       ),
     );
+  }
+
+  Future<void> _refresh() async {
+    final vm = ref.read(gameTicketsViewModel);
+    //fetch my game results
+    vm.fetchGameTickets(id: widget.id, refreshUi: false);
   }
 }

@@ -79,8 +79,8 @@ class AllGamesVm extends BaseState{
   }
 
   //fetch live games
-  fetchLiveGames() async {
-    setSecondState(ViewState.busy);
+  fetchLiveGames({bool refreshUi = true}) async {
+    if(refreshUi)setSecondState(ViewState.busy);
     await _gameDp
         .fetchLiveGames(
       pageNumber: 1,

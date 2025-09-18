@@ -11,6 +11,7 @@ import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/app_dimension.dart';
+import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../widgets/app_loader.dart' show AppLoader;
 import '../../widgets/bottom_sheets/base_bottom_sheet.dart';
@@ -190,23 +191,29 @@ class _GamesState extends ConsumerState<Games> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: GridView.builder(
-                              controller: _filterScrollController,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: gameFiltersVm.filteredResults.length,
-                              padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16.h,
-                                crossAxisSpacing: 16.w,
-                                mainAxisExtent: 246.h,
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                final game = gameFiltersVm.filteredResults[index];
-                                return GameItem(game: game,);
-                              }),
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(gameFiltersVm),
+                            backgroundColor: Colors.white,
+                            color: ColorPath.redOrange,
+                            child: GridView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _filterScrollController,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: gameFiltersVm.filteredResults.length,
+                                padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                  mainAxisExtent: 246.h,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final game = gameFiltersVm.filteredResults[index];
+                                  return GameItem(game: game,);
+                                }),
+                          ),
                         ),
                         if(gameFiltersVm.paginatedState == ViewState.busy)
                           Padding(
@@ -276,23 +283,29 @@ class _GamesState extends ConsumerState<Games> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: GridView.builder(
-                              controller: _scrollController,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: vm.allGames.length,
-                              padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16.h,
-                                crossAxisSpacing: 16.w,
-                                mainAxisExtent: 246.h,
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                final game = vm.allGames[index];
-                                return GameItem(game: game,);
-                              }),
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(gameFiltersVm),
+                            backgroundColor: Theme.of(context).colorScheme.whiteText,
+                            color: ColorPath.redOrange,
+                            child: GridView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: vm.allGames.length,
+                                padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                  mainAxisExtent: 246.h,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final game = vm.allGames[index];
+                                  return GameItem(game: game,);
+                                }),
+                          ),
                         ),
                         if(vm.paginatedState == ViewState.busy)
                           Padding(
@@ -331,5 +344,17 @@ class _GamesState extends ConsumerState<Games> {
         ],
       ),
     );
+  }
+
+  //refreshes my games screen
+  Future<void> _refresh(GameFiltersVm filtersVm) async {
+    final allGamesVm = ref.read(allGamesViewModel);
+    if(filtersVm.showFilteredList){
+      filtersVm.fetchFilteredResults(refreshUi: false);
+    }else{
+      //fetch all games
+      allGamesVm.fetchAllGames(refreshUi: false);
+    }
+
   }
 }

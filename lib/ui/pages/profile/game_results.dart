@@ -177,83 +177,88 @@ class _GameResultsState extends ConsumerState<GameResults> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: ListView.separated(
-                            controller: _scrollController,
-                            itemCount: vm.myGameResults.length,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              final result = vm.myGameResults[index];
-                              final name = result.game?.name ?? 'N/A';
-                              final description = result.game?.description ?? 'N/A';
-                              final drawDate = DateUtilities.monthDayYear(date: result.game?.endDate ?? DateTime.now());
-                              return Clickable(
-                                onPressed: (){
-                                  pushNavigation(context: context, widget: GameTickets(id: result.uuid,), routeName: NamedRoutes.gameTickets);
-                                },
-                                child: WindfallContainer(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: AppDimension.paddingLeft,
-                                        vertical: 16.h
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          name,
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                              color: Theme.of(context).colorScheme.textPrimary,
-                                              fontWeight: FontWeight.w600
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(),
+                            backgroundColor: Theme.of(context).colorScheme.whiteText,
+                            color: ColorPath.redOrange,
+                            child: ListView.separated(
+                              controller: _scrollController,
+                              itemCount: vm.myGameResults.length,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                final result = vm.myGameResults[index];
+                                final name = result.game?.name ?? 'N/A';
+                                final description = result.game?.description ?? 'N/A';
+                                final drawDate = DateUtilities.monthDayYear(date: result.game?.endDate ?? DateTime.now());
+                                return Clickable(
+                                  onPressed: (){
+                                    pushNavigation(context: context, widget: GameTickets(id: result.uuid,), routeName: NamedRoutes.gameTickets);
+                                  },
+                                  child: WindfallContainer(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: AppDimension.paddingLeft,
+                                          vertical: 16.h
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            name,
+                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                color: Theme.of(context).colorScheme.textPrimary,
+                                                fontWeight: FontWeight.w600
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        SizedBox(height: 5.h,),
-                                        Text(
-                                          description,
-                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              color: Theme.of(context).colorScheme.textSecondary,
-                                              fontWeight: FontWeight.w400
+                                          SizedBox(height: 5.h,),
+                                          Text(
+                                            description,
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                color: Theme.of(context).colorScheme.textSecondary,
+                                                fontWeight: FontWeight.w400
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 8.h,),
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            CustomSvg(asset: AppAsset.drawDate, height: 16.h, width: 16.w,),
-                                            SizedBox(width: 8.w,),
-                                            Text(
-                                              drawDate,
-                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                  color: Theme.of(context).colorScheme.textSecondary,
-                                                  fontWeight: FontWeight.w400
+                                          SizedBox(height: 8.h,),
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              CustomSvg(asset: AppAsset.drawDate, height: 16.h, width: 16.w,),
+                                              SizedBox(width: 8.w,),
+                                              Text(
+                                                drawDate,
+                                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                    color: Theme.of(context).colorScheme.textSecondary,
+                                                    fontWeight: FontWeight.w400
+                                                ),
                                               ),
-                                            ),
-                                            Container(
-                                              height: 18.h,
-                                              width: 1.5.w,
-                                              margin: EdgeInsets.symmetric(horizontal: 16.w),
-                                              color: ColorPath.athensGrey5,
-                                            ),
-                                            Text(
-                                              "View Result",
-                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                  color: ColorPath.redOrange,
-                                                  fontWeight: FontWeight.w600
+                                              Container(
+                                                height: 18.h,
+                                                width: 1.5.w,
+                                                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                                                color: ColorPath.athensGrey5,
                                               ),
-                                            ),
+                                              Text(
+                                                "View Result",
+                                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                    color: ColorPath.redOrange,
+                                                    fontWeight: FontWeight.w600
+                                                ),
+                                              ),
 
-                                          ],
-                                        )
+                                            ],
+                                          )
 
-                                      ],
-                                    )
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 16.h,);
-                            },
+                                        ],
+                                      )
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(height: 16.h,);
+                              },
+                            ),
                           ),
                         ),
                         if(vm.paginatedState == ViewState.busy)
@@ -293,5 +298,11 @@ class _GameResultsState extends ConsumerState<GameResults> {
         ),
       ),
     );
+  }
+
+  Future<void> _refresh() async {
+    final myGameResultsVm = ref.read(myGameResultsViewModel);
+    //fetch my game results
+    myGameResultsVm.fetchMyGameResults(refreshUi: false);
   }
 }

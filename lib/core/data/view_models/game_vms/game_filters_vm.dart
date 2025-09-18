@@ -85,12 +85,8 @@ class GameFiltersVm extends BaseState{
 
   setFilterOptions({String? selectedCategory, String? startDate, String? endDate, String? selectedDrawDate}){
 
-    print('selected category:::$selectedCategory>>>');
-
     if(selectedCategory != null){
-      print('should enter here>>>');
       filterOptions["type"] = selectedCategory.toLowerCase();
-      print('should enter here 2>>>${filterOptions["type"]}');
     }
 
     if(selectedDrawDate != null){

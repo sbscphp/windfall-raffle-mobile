@@ -83,15 +83,14 @@ class MyGameFiltersVm extends BaseState{
 
   setFilterOptions({String? selectedCategory, String? startDate, String? endDate}){
 
-    print('selected category:::$selectedCategory>>>');
-
     if(selectedCategory != null){
       filterOptions["filter_by_real"] = selectedCategory;
       if(selectedCategory.toLowerCase() == 'show all'){
         filterOptions.remove('filter_by');
-        return;
+      }else{
+        filterOptions["filter_by"] = selectedCategory.toLowerCase() == 'draw in view' ? 'upcoming':'ended';
       }
-      filterOptions["filter_by"] = selectedCategory.toLowerCase() == 'draw in view' ? 'upcoming':'ended';
+
     }
 
     if(startDate != null){
