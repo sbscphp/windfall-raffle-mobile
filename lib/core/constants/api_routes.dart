@@ -116,4 +116,11 @@ class ApiRoutes {
   static addToCart({required String? gameId}) =>
       "${dotenv.env['GUEST']}/cart/add/$gameId";
 
+  //order history
+  static fetchOrderHistory({required int? pageNumber, String? filterParams}) =>
+      filterParams == null ?
+      "${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber"
+          :"${dotenv.env['GAMES']}/orders?paginate=1&limit=$paginationLimit&page=$pageNumber&$filterParams";
+
+
 }

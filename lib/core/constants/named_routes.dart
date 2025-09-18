@@ -36,6 +36,7 @@ class NamedRoutes {
   static const claimPrize = '/claimPrize';
   static const rewards = '/rewards';
   static const orderHistory = '/orderHistory';
+  static const searchOrderHistory = '/searchOrderHistory';
   static const orderDetails = '/orderDetails';
 
 

@@ -163,7 +163,7 @@ class _ProfileState extends ConsumerState<Profile> {
                             ),
                             ProfileAction(
                                 imageAsset: AppAsset.transactions,
-                                label: "Transactions",
+                                label: "Order History",
                                 onPressed: (){
                                   pushNavigation(context: context, widget: const OrderHistory(), routeName: NamedRoutes.orderHistory);
                                 }

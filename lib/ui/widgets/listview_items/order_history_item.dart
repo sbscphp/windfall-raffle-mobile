@@ -11,12 +11,20 @@ import 'package:windfall/ui/widgets/windfall_container.dart';
 import 'package:windfall/ui/widgets/windfall_tag.dart';
 
 import '../../../core/data/enum/tag_type.dart';
+import '../../../core/data/models/order.dart';
+import '../../../core/utilities/utilities.dart';
 
 class OrderHistoryItem extends StatelessWidget {
-  const OrderHistoryItem({super.key});
+  final Order order;
+  const OrderHistoryItem({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
+    final orderId = order.uniqueId ?? 'N/A';
+    final orderDate = DateUtilities.monthDayYear(date: order.createdAt ?? DateTime.now());
+    final totalTicketCount = double.tryParse(order.ticketsCount?.toString() ?? "0") ?? 0;
+    final totalAmount = double.tryParse(order.totalAmount?.toString() ?? '0') ?? 0;
+    final gameCount = double.tryParse(order.gamesCount?.toString() ?? '0') ?? 0;
     return Clickable(
       onPressed: () {
         pushNavigation(
@@ -43,7 +51,7 @@ class OrderHistoryItem extends StatelessWidget {
                     text: "Order ID: ",
                     children: [
                       TextSpan(
-                        text: '#ORD-099618',
+                        text: orderId,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.brandColor,
@@ -61,7 +69,7 @@ class OrderHistoryItem extends StatelessWidget {
                     text: "Date Ordered: ",
                     children: [
                       TextSpan(
-                        text: DateUtilities.monthDayYear(date: DateTime.now()),
+                        text: orderDate,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.textPrimary,
@@ -79,7 +87,13 @@ class OrderHistoryItem extends StatelessWidget {
                     text: "Qty: ",
                     children: [
                       TextSpan(
-                        text: '4 Games . 100 Tickets',
+                        text: '${Utilities.formatAmount(
+                          amount: gameCount,
+                          addDecimal: false
+                        )} ${gameCount > 1 ? 'Games':'Game'} . ${Utilities.formatAmount(
+                            amount: totalTicketCount,
+                            addDecimal: false
+                        )} ${totalTicketCount > 1 ? 'Tickets':'Ticket'}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.textPrimary,
@@ -97,8 +111,8 @@ class OrderHistoryItem extends StatelessWidget {
                 WindfallTag(tag: TagType.success),
                 SizedBox(height: 8.h),
                 NairaDisplay(
-                  amount: 200000,
-                  addDecimal: false,
+                  amount: totalAmount,
+                  addDecimal: true,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),

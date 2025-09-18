@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:windfall/core/data/data_provider/order_history_data_provider.dart';
 import 'package:windfall/core/data/data_provider/payment_data_provider.dart';
 import 'package:windfall/core/data/data_provider/referral_data_provider.dart';
 
@@ -27,6 +28,7 @@ void setupLocator() {
   locator.registerLazySingleton<CartDataProvider>(() => CartDataProvider());
   locator.registerLazySingleton<ReferralDataProvider>(() => ReferralDataProvider());
   locator.registerLazySingleton<PaymentDataProvider>(() => PaymentDataProvider());
+  locator.registerLazySingleton<OrderHistoryDataProvider>(() => OrderHistoryDataProvider());
 
 
 

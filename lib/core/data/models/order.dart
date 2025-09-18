@@ -10,11 +10,12 @@ class Order {
   final dynamic promoCodeId;
   final String? reference;
   final int? quantity;
-  final String? totalAmount;
-  final String? paidAmount;
-  final String? promoAmount;
-  final String? discountAmount;
-  final String? referralBalanceAmount;
+  final int? gamesCount;
+  final dynamic totalAmount;
+  final dynamic paidAmount;
+  final dynamic promoAmount;
+  final dynamic discountAmount;
+  final dynamic referralBalanceAmount;
   final dynamic promoCode;
   final dynamic referralCode;
   final String? status;
@@ -24,6 +25,8 @@ class Order {
   final String? region;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? ticketsCount;
+
 
   Order({
     this.uuid,
@@ -51,12 +54,16 @@ class Order {
     this.region,
     this.createdAt,
     this.updatedAt,
+    this.ticketsCount,
+    this.gamesCount
+
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     uuid: json["uuid"],
     uniqueId: json["uniqueID"],
     amount: json["amount"],
+    gamesCount: json["games_count"],
     customerId: json["customer_id"],
     platform: json["platform"],
     paymentMethod: json["payment_method"],
@@ -77,6 +84,7 @@ class Order {
     ipAddress: json["ip_address"],
     city: json["city"],
     region: json["region"],
+    ticketsCount: json["tickets_count"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
   );
@@ -85,6 +93,7 @@ class Order {
     "uuid": uuid,
     "uniqueID": uniqueId,
     "amount": amount,
+    "games_count": gamesCount,
     "customer_id": customerId,
     "platform": platform,
     "payment_method": paymentMethod,
@@ -107,5 +116,6 @@ class Order {
     "region": region,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
+    "tickets_count": ticketsCount,
   };
 }
