@@ -6,7 +6,6 @@ import 'package:windfall/core/constants/app_asset.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
-import 'package:windfall/core/data/models/grouped_order_history.dart';
 import 'package:windfall/core/data/view_models/order_history_vms/order_history_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/order/search_order_history.dart';

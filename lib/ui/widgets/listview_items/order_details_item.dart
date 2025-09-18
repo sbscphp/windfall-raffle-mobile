@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/color_path.dart';
 import 'package:windfall/core/data/models/order_detail.dart';
-import 'package:windfall/core/data/view_models/order_history_vms/order_history_details_vm.dart';
 import 'package:windfall/core/utilities/date_utilitites.dart';
 import 'package:windfall/ui/widgets/cart/row_description_item.dart';
 import 'package:windfall/ui/widgets/naira_display.dart';

@@ -40,7 +40,6 @@ class _SearchOrderHistoryState extends ConsumerState<SearchOrderHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final vm = ref.watch(searchOrderHistoryViewModel);
     return Scaffold(
       appBar: customAppBar(context: context, title: 'Search'),

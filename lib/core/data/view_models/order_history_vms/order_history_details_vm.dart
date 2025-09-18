@@ -1,20 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/constants/app_constants.dart';
-import 'package:windfall/core/data/data_provider/payment_data_provider.dart';
-import 'package:windfall/core/data/enum/checkout_type.dart';
 import 'package:windfall/core/data/enum/view_state.dart';
-import 'package:windfall/core/data/models/checkout_credentials.dart';
 import 'package:windfall/core/data/models/order_detail.dart';
-import 'package:windfall/core/data/models/payment_breakdown.dart';
-import 'package:windfall/core/data/models/payment_method.dart';
-import 'package:windfall/core/data/services/geolocator_service.dart';
 import 'package:windfall/core/data/states/base_state.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/locator.dart';
 import '../../data_provider/order_history_data_provider.dart';
-import '../../models/cart_product.dart';
 import '../../models/order.dart';
-import '../checkout_vm.dart';
+
 
 class OrderHistoryDetailsVm extends BaseState {
 
