@@ -5,7 +5,6 @@ import '../../../../utilities/utilities.dart';
 import '../../../data_provider/profile_data_provider/notification_data_provider.dart';
 import '../../../enum/view_state.dart';
 import '../../../models/app_notification.dart';
-import '../../../models/grouped_list.dart';
 import '../../../states/base_state.dart';
 
 

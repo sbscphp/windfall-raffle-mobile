@@ -10,9 +10,7 @@ import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/payment_receipt_item.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
-
 import '../../../core/data/enum/view_state.dart';
-import '../../../core/utilities/navigator.dart';
 
 class PaymentReceipt extends ConsumerStatefulWidget {
   final String? orderId;
