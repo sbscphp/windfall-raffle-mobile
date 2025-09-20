@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windfall/core/utilities/firebase_messaging_utils.dart';
 
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
@@ -33,7 +34,7 @@ class LoginVm extends BaseState {
     //     ? await SecureStorageUtils.retrievePassword()
     //     : password;
 
-    final token = await FirebaseMessaging.instance.getToken();
+    final token = await FirebaseMessagingUtils.getFirebaseToken();
 
 
     final details = {

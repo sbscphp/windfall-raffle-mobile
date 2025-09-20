@@ -14,7 +14,8 @@ import 'package:windfall/ui/widgets/screen_title.dart';
 import '../../../core/data/enum/view_state.dart';
 
 class PaymentReceipt extends ConsumerStatefulWidget {
-  const PaymentReceipt({super.key});
+  final String? orderId;
+  const PaymentReceipt({super.key, this.orderId});
 
   @override
   ConsumerState<PaymentReceipt> createState() => _PaymentReceiptState();
@@ -26,7 +27,7 @@ class _PaymentReceiptState extends ConsumerState<PaymentReceipt> {
   void initState() {
     final vm = ref.read(orderDetailsViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      vm.fetchOrderDetails(orderId: ref.read(paymentViewModel).orderId);
+      vm.fetchOrderDetails(orderId: widget.orderId ?? ref.read(paymentViewModel).orderId);
     });
     super.initState();
   }

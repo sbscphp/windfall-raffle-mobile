@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/view_models/profile_vms/notification_vms/notification_vm.dart';
+
 
 class FirebaseMessagingUtils {
   static final _firebaseMessaging = FirebaseMessaging.instance;
@@ -72,7 +74,8 @@ class FirebaseMessagingUtils {
           ),
           payload: jsonEncode(message.toMap()));
 
-
+      //fetch in-app notifications
+      ref.read(notificationViewModel).fetchNotifications(refreshUi: false);
     });
 
 

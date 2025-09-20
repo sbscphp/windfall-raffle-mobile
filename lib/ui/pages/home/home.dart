@@ -4,9 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_game_results_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
+import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/profile/notifications.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/home/active_games_carousel.dart';
@@ -71,7 +74,9 @@ class _HomeState extends ConsumerState<Home> {
             Padding(
               padding: EdgeInsets.only(right: AppDimension.paddingRight),
               child: Clickable(
-                onPressed: (){},
+                onPressed: (){
+                  pushNavigation(context: context, widget: const Notifications(), routeName: NamedRoutes.notifications);
+                },
                   child: CustomSvg(asset: AppAsset.notification, height: 32.h, width: 32.w,)),
             )
           ]

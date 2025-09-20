@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:windfall/core/data/models/notification_setting.dart';
 import '../../../constants/api_routes.dart';
 import '../../enum/request_type.dart';
+import '../../models/app_notification.dart';
 import '../../models/responses/api_response.dart';
+import '../../models/responses/response_data/pagination_data.dart';
 import '../../network_manager/network_manager.dart';
 
 
@@ -32,46 +34,43 @@ class NotificationDataProvider{
   }
 
   //fetch notifications
-  // Future<NotificationsResponse> fetchNotifications({required int? pageNumber}) async {
-  //   var completer = Completer<NotificationsResponse>();
-  //   try {
-  //     Map<String, dynamic> response = await NetworkManager()
-  //         .networkRequestManager(RequestType.post, ApiRoutes.fetchNotifications(pageNumber: pageNumber),
-  //         useAuth: true,
-  //         body: jsonEncode({
-  //           "module": "", //
-  //           "category": "",
-  //           "status": "", //read, unread
-  //           "start_date": "",
-  //           "end_date": "",
-  //           "paginate": "true",
-  //           "limit": "10"
-  //         })
-  //     );
-  //     var result = NotificationsResponse.fromJson(response);
-  //     completer.complete(result);
-  //   } catch (e) {
-  //     completer.completeError(e);
-  //   }
-  //   return completer.future;
-  // }
+  Future<ApiResponse<PaginationData<AppNotification>>> fetchNotifications({required int? pageNumber}) async {
+    var completer = Completer<ApiResponse<PaginationData<AppNotification>>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.fetchNotifications(pageNumber: pageNumber),
+          useAuth: true
+      );
+      var result = ApiResponse<PaginationData<AppNotification>>.fromJson(
+        response,
+            (data) => PaginationData<AppNotification>.fromJson(
+          data as Map<String, dynamic>,
+              (gameJson) => AppNotification.fromJson(gameJson),
+        ),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
 
   //mark notification as read
-  // Future<DefaultResponse> markNotificationAsRead({required String? id}) async {
-  //   var completer = Completer<DefaultResponse>();
-  //   try {
-  //     Map<String, dynamic> response = await NetworkManager()
-  //         .networkRequestManager(RequestType.post, ApiRoutes.markNotificationAsRead(id: id),
-  //         useAuth: true,
-  //     );
-  //     var result = DefaultResponse.fromJson(response);
-  //     completer.complete(result);
-  //   } catch (e) {
-  //     completer.completeError(e);
-  //   }
-  //   return completer.future;
-  // }
-
-
+  Future<ApiResponse> markNotificationAsRead({required String? id}) async {
+    var completer = Completer<ApiResponse>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.markNotificationAsRead(id: id),
+          useAuth: true,
+      );
+      var result = ApiResponse.fromJson(
+          response,
+          null);
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
 
 }
