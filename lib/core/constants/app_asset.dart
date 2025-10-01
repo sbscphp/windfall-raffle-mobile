@@ -66,6 +66,7 @@ class AppAsset {
   static const String unitPrice = 'assets/icons/unit_price.svg';
   static const String discount = 'assets/icons/discount.svg';
   static const String subTotal = 'assets/icons/subtotal.svg';
+  static const String appIcon = 'assets/icons/app_icon.svg';
 
 
 

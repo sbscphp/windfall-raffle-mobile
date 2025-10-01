@@ -87,7 +87,7 @@ class GameItem extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(16.r))
                       ),
                       child: Text(
-                        Utilities.statusText(status: status),
+                       Utilities.capitalizeWord( Utilities.statusText(status: status)),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 9.sp,
                             fontWeight: FontWeight.w500,

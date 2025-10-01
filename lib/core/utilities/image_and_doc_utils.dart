@@ -62,7 +62,7 @@ class ImageAndDocUtils{
           sourcePath: image.path,
           uiSettings: [
             AndroidUiSettings(
-              toolbarTitle: 'Cropper',
+              toolbarTitle: 'Crop Image',
               toolbarColor: Colors.black, //todo: set background color
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
@@ -76,7 +76,7 @@ class ImageAndDocUtils{
               ],
             ),
             IOSUiSettings(
-              title: 'Cropper',
+              title: 'Crop Image',
               aspectRatioPresets: [
                 CropAspectRatioPreset.square,
                 CropAspectRatioPreset.ratio3x2,

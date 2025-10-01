@@ -85,64 +85,62 @@ class _GameResultsState extends ConsumerState<GameResults> {
 
             if(vm.state == ViewState.retrieved){
               if(vm.myGameResults.isEmpty){
-                return Expanded(
-                  child: Center(
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(
-                          left: 32.w,
-                          right: 32.w,
-                          bottom: 32.h
-                      ),
-                      decoration: BoxDecoration(
-                          color: ColorPath.roseWhite,
-                          border: Border.all(color: ColorPath.athensGrey4, width: 1.w),
-                          borderRadius: BorderRadius.all(Radius.circular(16.r))
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomSvg(asset: AppAsset.gameResultsEmptyState, height: 60.h, width: 60.w,),
-                          SizedBox(height: 34.h,),
-                          Text(
-                            'No Result Yet',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.textPrimary,
-                              fontWeight: FontWeight.w700,
-                            ),
+                return Center(
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                        left: 32.w,
+                        right: 32.w,
+                        bottom: 32.h
+                    ),
+                    decoration: BoxDecoration(
+                        color: ColorPath.roseWhite,
+                        border: Border.all(color: ColorPath.athensGrey4, width: 1.w),
+                        borderRadius: BorderRadius.all(Radius.circular(16.r))
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomSvg(asset: AppAsset.gameResultsEmptyState, height: 60.h, width: 60.w,),
+                        SizedBox(height: 34.h,),
+                        Text(
+                          'No Result Yet',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.textPrimary,
+                            fontWeight: FontWeight.w700,
                           ),
-                          SizedBox(height: 5.h,),
-                          Text(
-                            'You currently do not have any results for any of your games/Raffle Draw yet',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.textSecondary,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 5.h,),
+                        Text(
+                          'You currently do not have any results for any of your games/Raffle Draw yet',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.textSecondary,
+                            fontWeight: FontWeight.w400,
                           ),
-                          SizedBox(height: 32.h,),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 65.5.w),
-                            child: CustomButton(
-                                useDottedBorder: true,
-                                buttonText:'Explore All Games',
-                                onPressed: (){
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 32.h,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 65.5.w),
+                          child: CustomButton(
+                              useDottedBorder: true,
+                              buttonText:'Explore All Games',
+                              onPressed: (){
 
-                                  final bottomNavVm =
-                                  ref.read(bottomNavViewModel);
+                                final bottomNavVm =
+                                ref.read(bottomNavViewModel);
 
-                                  bottomNavVm.updateIndex(1);
+                                bottomNavVm.updateIndex(1);
 
-                                  popUntilNavigation(context: context, route: NamedRoutes.bottomNav);
-                                }
-                            ),
+                                popUntilNavigation(context: context, route: NamedRoutes.bottomNav);
+                              }
                           ),
+                        ),
 
 
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 );

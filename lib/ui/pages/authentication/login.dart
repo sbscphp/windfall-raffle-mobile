@@ -8,6 +8,7 @@ import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/forgot_password.dart';
+import 'package:windfall/ui/pages/authentication/sign_up.dart';
 import 'package:windfall/ui/pages/bottom_nav.dart';
 import 'package:windfall/ui/widgets/busy_overlay.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
@@ -253,9 +254,7 @@ class _LoginState extends ConsumerState<Login> {
 
                                 final validate = _formKey.currentState!.validate();
 
-                                print('validation:$validate');
-
-                                if(validate == true){
+                                if(validate){
 
                                   //attempt login
                                   await vm.login(
@@ -292,13 +291,18 @@ class _LoginState extends ConsumerState<Login> {
                                     color: Theme.of(context).colorScheme.textTertiary
                                 ),
                               ),
-                              Text(
-                                "Sign Up",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    color: ColorPath.redOrange,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorPath.redOrange
+                              Clickable(
+                                onPressed: (){
+                                  pushNavigation(context: context, widget: const SignUp(), routeName: NamedRoutes.signUp);
+                                },
+                                child: Text(
+                                  "Sign Up",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      color: ColorPath.redOrange,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: ColorPath.redOrange
+                                  ),
                                 ),
                               ),
                             ],

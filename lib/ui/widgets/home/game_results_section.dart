@@ -13,6 +13,7 @@ import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/data/enum/view_state.dart';
+import '../../../core/data/view_models/bottom_nav_view_model.dart';
 import '../clickable.dart';
 import '../custom_svg.dart';
 import '../empty_state.dart';
@@ -86,6 +87,15 @@ class GameResultsSection extends ConsumerWidget {
                     title: 'No Result',
                     subtitle: "You have no games result yet.",
                     ctaText: 'Start Playing',
+                    onPressed: (){
+                      final container =
+                      ProviderScope.containerOf(context);
+
+                      final bottomNavVm =
+                      container.read(bottomNavViewModel);
+
+                      bottomNavVm.updateIndex(1);
+                    },
                   ),
                 );
               }

@@ -13,11 +13,11 @@ class AppLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SpinKitSpinningCircle(
-        size: size ?? 80, //200
+        size: size ?? 50, //200
         itemBuilder: (BuildContext context, int index) {
 
           return CustomSvg(
-            asset: AppAsset.wallet, //todo: update app loader
+            asset: AppAsset.appIcon,
             height: size?.h,
             width: size?.w,
           );

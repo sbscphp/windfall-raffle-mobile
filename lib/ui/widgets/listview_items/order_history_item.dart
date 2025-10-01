@@ -23,7 +23,7 @@ class OrderHistoryItem extends StatelessWidget {
     final orderId = order.uniqueId ?? 'N/A';
     final orderDate = DateUtilities.monthDayYear(date: order.createdAt ?? DateTime.now());
     final totalTicketCount = double.tryParse(order.ticketsCount?.toString() ?? "0") ?? 0;
-    final totalAmount = double.tryParse(order.totalAmount?.toString() ?? '0') ?? 0;
+    final paidAmount = double.tryParse(order.paidAmount?.toString() ?? '0') ?? 0;
     final gameCount = double.tryParse(order.gamesCount?.toString() ?? '0') ?? 0;
     final status = order.paymentStatus ?? 'N/A';
     final isSuccessful = status.toLowerCase() == 'successful';
@@ -120,7 +120,7 @@ class OrderHistoryItem extends StatelessWidget {
                 : isFailed ? TagType.failed : TagType.pending),
                 SizedBox(height: 8.h),
                 NairaDisplay(
-                  amount: totalAmount,
+                  amount: paidAmount,
                   addDecimal: true,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,

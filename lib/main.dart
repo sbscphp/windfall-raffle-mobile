@@ -13,6 +13,7 @@ import 'core/data/enum/environment.dart';
 import 'core/data/services/geolocator_service.dart';
 import 'core/data/services/navigation_service.dart';
 import 'core/data/view_models/theme_selection_view_model.dart';
+import 'core/data/view_models/utility_view_models/config_view_model.dart';
 import 'core/data/view_models/utility_view_models/lga_details_view_model.dart';
 import 'core/utilities/firebase_messaging_utils.dart';
 import 'core/utilities/secure_storage/secure_storage_init.dart';
@@ -64,7 +65,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //ref.read(configViewModel).fetchConfig();
+      ref.read(configViewModel).fetchConfig();
       ref.read(lgaDetailsViewModel).fetchLgaDetails();
       //ref.read(hearAboutUsViewModel).fetchHearAboutUs();
     });

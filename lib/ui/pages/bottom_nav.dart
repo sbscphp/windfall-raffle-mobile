@@ -6,6 +6,7 @@ import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
+import 'package:windfall/core/data/view_models/utility_view_models/config_view_model.dart';
 
 import '../../core/constants/color_path.dart';
 import '../../core/data/view_models/authentication_vms/login_vm.dart';
