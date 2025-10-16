@@ -41,8 +41,6 @@ class _NotificationSettingsState extends ConsumerState<NotificationSettings> {
   @override
   void initState() {
     final notificationSettingsVm = ref.read(notificationSettingsViewModel);
-    print('push:::::${notificationSettingsVm.push}>>>>');
-    print('payment:::::${notificationSettingsVm.paymentTransaction}>>>>');
     _push = notificationSettingsVm.push;
     _email = notificationSettingsVm.email;
     _gameDraw = notificationSettingsVm.gameDraw;
@@ -222,8 +220,12 @@ class _NotificationSettingsItemState extends State<NotificationSettingsItem> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.textPrimary,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
+                SizedBox(height: 5.h,),
                 Text(
                   widget.subTitle,
                   // maxLines: 1,
