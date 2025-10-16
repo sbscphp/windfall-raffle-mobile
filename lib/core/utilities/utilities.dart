@@ -419,6 +419,8 @@ class Utilities {
   static String statusText({required String? status}) {
     if (status == null) return '';
 
+    if(status == 'ended') return 'Game Closed';
+
     return status.isEmpty ? 'N/A' : "$status Game";
     // switch (status.toLowerCase()) {
     //   case 'closed':
@@ -526,6 +528,8 @@ class Utilities {
       case 'upcoming':
       case 'upcoming_game':
         return ColorPath.salomieBrown;//dawnBrown
+      case 'ended':
+        return ColorPath.pippinPink;
       default:
         return Colors.white;
     }
@@ -540,6 +544,8 @@ class Utilities {
       case 'upcoming':
       case 'upcoming_game':
         return ColorPath.vesuviusBrown;
+      case 'ended':
+        return ColorPath.redOrange;
       default:
         return ColorPath.shaftBlack;
     }

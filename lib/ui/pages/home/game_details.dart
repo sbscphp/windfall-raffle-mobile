@@ -107,25 +107,14 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                   Expanded(
                     child: SingleChildScrollView(
                       padding: EdgeInsets.only(bottom: 20.h),
-                      child: vm.isEnded
-                          ? Column(
+                      child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 imageAndName(context, vm),
                                 SizedBox(height: 8.h),
                                 gameStatus(context, vm),
-                                SizedBox(height: 32.h),
-                                winnerDetails(context),
-                              ],
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                imageAndName(context, vm),
-                                SizedBox(height: 8.h),
-                                gameStatus(context, vm),
-                                SizedBox(height: 32.h),
-                                priceDetails(context, vm),
+                                if(!vm.isEnded)SizedBox(height: 32.h),
+                                if(!vm.isEnded)priceDetails(context, vm),
                                 if (vm.isInstantGame && vm.instantPrizes.isNotEmpty) instantPrizes(context, vm),
                                 SizedBox(height: 32.h),
                                 GameDetailsSection(
@@ -371,7 +360,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                 ),
               ),
             ),
-          SizedBox(height: 24.h),
+          if (vm.images.isNotEmpty)SizedBox(height: 24.h),
           Text(
             vm.name,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(

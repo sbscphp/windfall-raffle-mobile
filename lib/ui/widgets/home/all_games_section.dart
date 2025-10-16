@@ -2,16 +2,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
-import 'package:windfall/ui/widgets/app_loader.dart';
+import 'package:windfall/core/utilities/extensions/color_extensions.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/game_item.dart';
 import '../../../core/constants/app_asset.dart';
+import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../screen_title.dart';
 
@@ -23,7 +25,30 @@ class AllGamesSection extends ConsumerWidget {
     final vm = ref.watch(allGamesViewModel);
 
     if(vm.state == ViewState.busy){
-      return Center(child: AppLoader(),);
+      return SizedBox(
+        height: 246.h,
+        child: ListView.separated(
+          itemCount:6,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft,),
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return Shimmer.fromColors(
+              baseColor: ColorPath.silverGrey.withCustomOpacity(0.1),
+              highlightColor: ColorPath.athensGrey2,
+              child: Container(
+                width: 191.w,
+                color: ColorPath.grayGrey,
+              ),
+            );
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              width: 16.w,
+            );
+          },
+        ),
+      );
     }
 
     if(vm.state == ViewState.retrieved){

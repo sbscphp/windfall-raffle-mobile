@@ -121,7 +121,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                     separatorBuilder: (context, index) {
                       return SizedBox(height: 16.h);
                     },
-                    itemCount: vm.checkoutCount,
+                    itemCount: vm.checkoutItems.length,
                   ),
                   Padding(
                     padding: EdgeInsets.all(16.w),

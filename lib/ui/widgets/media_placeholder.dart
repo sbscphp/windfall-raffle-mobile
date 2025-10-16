@@ -21,7 +21,7 @@ class MediaPlaceholder extends StatelessWidget {
       child: Center(
         child: FittedBox(
           fit: BoxFit.contain,
-            //child: CustomSvg(asset: AppAsset.logo, height: size, width: size,)
+            child: CustomSvg(asset: AppAsset.appIcon, height: size, width: size,)
         ),
       ),
     );

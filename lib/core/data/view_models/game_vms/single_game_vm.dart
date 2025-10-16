@@ -90,7 +90,7 @@ class SingleGameVm extends BaseState{
       setState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
-      setSecondState(ViewState.error);
+      setState(ViewState.error);
     });
   }
 

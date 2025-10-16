@@ -21,6 +21,8 @@ class LoginVm extends BaseState {
   //user
   User? user;
 
+  bool get isLoggedIn => user != null;
+
 
 
   //login

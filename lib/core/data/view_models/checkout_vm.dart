@@ -27,7 +27,7 @@ class CheckoutVm extends BaseState{
   //quantity(for buy now checkout)
   int? quantity;
 
-  int get checkoutCount => _checkoutItems.length;
+  int get checkoutCount => _checkoutItems.fold(0, (sum, item) => sum + (item.quantity ?? 1));
   int get totalTicketCount => _totalTicketNumber();
   double get totalPrice => _totalPrice();
 

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marquee/marquee.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
+import 'package:windfall/core/utilities/extensions/color_extensions.dart';
 import 'package:windfall/ui/widgets/app_loader.dart';
 
 import '../../../core/constants/color_path.dart';
@@ -16,7 +18,15 @@ class ActiveGamesCarousel extends ConsumerWidget {
     final vm = ref.watch(allGamesViewModel);
 
     if(vm.secondState == ViewState.busy){
-      return Center(child: AppLoader(),);
+      return Shimmer.fromColors(
+        baseColor: ColorPath.silverGrey.withCustomOpacity(0.1),
+        highlightColor: ColorPath.athensGrey2,
+        child: Container(
+          height: 32.h,
+          width: double.infinity,
+          color: ColorPath.grayGrey,
+        ),
+      );
     }
 
     if(vm.secondState == ViewState.retrieved){

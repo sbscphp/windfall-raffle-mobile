@@ -38,7 +38,7 @@ class PasswordViewModel extends BaseState{
       {required String pwd, required String confirmPwd, required String? userId}) async {
 
     if(pwd != confirmPwd){
-      _message = "Passwords don't march";
+      _message = "Passwords don't match";
       setState(ViewState.error);
       return;
     }

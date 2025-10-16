@@ -109,16 +109,19 @@ class _SearchOrderHistoryState extends ConsumerState<SearchOrderHistory> {
     }
     if(vm.state == ViewState.retrieved){
       if(vm.searchResults.isEmpty){
-        return EmptyState(
-          asset: AppAsset.emptyCart,
-          useBgCard: false,
-          assetHeight: 128.h,
-          assetWidth: 128.w,
-          title: "No Results",
-          ctaText: "",
-          subtitle:
-          "",
-          showCtaButton: false,
+        return Align(
+          alignment: Alignment.center,
+          child: EmptyState(
+            asset: AppAsset.emptyCart,
+            useBgCard: false,
+            assetHeight: 128.h,
+            assetWidth: 128.w,
+            title: "No Results",
+            ctaText: "",
+            subtitle:
+            "",
+            showCtaButton: false,
+          ),
         );
       }
       return Column(

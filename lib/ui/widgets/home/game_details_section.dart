@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
@@ -92,18 +93,35 @@ class _GameDetailsSectionState extends State<GameDetailsSection> {
             verticalSpace: 8,
             bottomMargin: 16,
           ),
-          Text(
-            widget.value,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.textTertiary),
-            maxLines: _showMore ? null : 2,
-            overflow: _showMore ? TextOverflow.visible : TextOverflow.ellipsis,
-            //overflow: TextOverflow.ellipsis,
-          ),
+          Container(
+            constraints: _showMore
+                ? const BoxConstraints() // full height
+                : const BoxConstraints(maxHeight: 50),
+            child: Html(
+              data: widget.value,
+              style: {
+                "*": Style(
+                  fontSize: FontSize(12.sp),
+                  color: Theme.of(context).colorScheme.textTertiary,
+                  lineHeight: LineHeight.number(1.2.h),
+                  margin: Margins.zero,
+                  padding: HtmlPaddings.zero,
+                ),
+              },
+            ),
+          )
+          // Text(
+          //   widget.value,
+          //   style: Theme.of(context)
+          //       .textTheme
+          //       .bodySmall
+          //       ?.copyWith(
+          //       fontWeight: FontWeight.w400,
+          //       color: Theme.of(context).colorScheme.textTertiary),
+          //   maxLines: _showMore ? null : 2,
+          //   overflow: _showMore ? TextOverflow.visible : TextOverflow.ellipsis,
+          //   //overflow: TextOverflow.ellipsis,
+          // ),
 
         ],
       ),

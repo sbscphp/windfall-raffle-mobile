@@ -81,7 +81,7 @@ class ApiRoutes {
   static var updateNotificationSettings =
       "${dotenv.env['NOTIFICATION']}/update";
   static fetchNotifications({required int? pageNumber}) =>
-      "${dotenv.env['CUSTOMER']}/notifications?page=$pageNumber&limit=$paginationLimit";
+      "${dotenv.env['CUSTOMER']}/notifications?page=$pageNumber&limit=$paginationLimit&paginate=1";
   static markNotificationAsRead({required String? id}) =>
       "${dotenv.env['CUSTOMER']}/notifications/$id/read";
 
