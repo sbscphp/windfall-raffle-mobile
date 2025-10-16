@@ -5,8 +5,6 @@ import 'package:marquee/marquee.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
 import 'package:windfall/core/utilities/extensions/color_extensions.dart';
-import 'package:windfall/ui/widgets/app_loader.dart';
-
 import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
 

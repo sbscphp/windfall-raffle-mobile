@@ -15,7 +15,6 @@ import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/view_models/bottom_nav_view_model.dart';
-import '../app_loader.dart';
 import '../error_state.dart';
 import '../screen_title.dart';
 

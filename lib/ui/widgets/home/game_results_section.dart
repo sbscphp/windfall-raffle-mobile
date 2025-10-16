@@ -10,7 +10,6 @@ import 'package:windfall/core/data/view_models/game_vms/my_game_results_vm.dart'
 import 'package:windfall/core/utilities/extensions/color_extensions.dart';
 import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
-import 'package:windfall/ui/widgets/app_loader.dart';
 import 'package:windfall/ui/widgets/error_state.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
 import '../../../core/constants/app_asset.dart';
