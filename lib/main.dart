@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/router.dart' as router;
 import 'package:windfall/ui/pages/bottom_nav.dart';
-import 'package:windfall/ui/pages/landing.dart';
 import 'core/constants/app_config.dart';
 import 'core/constants/app_theme/app_theme.dart';
 import 'core/constants/named_routes.dart';

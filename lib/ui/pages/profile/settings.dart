@@ -16,10 +16,7 @@ import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
-
-import '../../../core/constants/secure_storage_constants.dart';
 import '../../../core/data/enum/view_state.dart';
-import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
 import '../../widgets/show_flush_bar.dart';
 
 class Settings extends ConsumerWidget {
