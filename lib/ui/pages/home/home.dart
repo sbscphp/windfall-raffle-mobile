@@ -5,10 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
+import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/all_games_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_game_results_vm.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
 import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/pages/profile/notifications.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
@@ -38,46 +40,49 @@ class _HomeState extends ConsumerState<Home> {
   ];
 
   @override
-  void initState() {
-    final allGamesVm = ref.read(allGamesViewModel);
-    final myGamesVm = ref.read(myGamesViewModel);
-    final myGameResultsVm = ref.read(myGameResultsViewModel);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      //fetch all games
-      allGamesVm.fetchAllGames();
-      //fetch live games
-      allGamesVm.fetchLiveGames();
-      //fetch my games
-      myGamesVm.fetchMyGames();
-      //fetch my game results
-      myGameResultsVm.fetchMyGameResults();
-
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final loginVm = ref.watch(loginViewModel);
     return Scaffold(
       appBar: customAppBar(
           context: context,
           title: 'Home',
-          leading: Align(
+          leading: loginVm.isLoggedIn ? Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: EdgeInsets.only(left: AppDimension.paddingLeft),
               child: const InAppDisplayImage(tag: "home",),
             ),
-          ),
-          appbarBottomPadding: 16,
+          ):SizedBox.shrink(),
+          appbarBottomPadding: loginVm.isLoggedIn ? 16 : 0,
           actions: [
-            Padding(
+           if(loginVm.isLoggedIn)Padding(
               padding: EdgeInsets.only(right: AppDimension.paddingRight),
               child: Clickable(
                 onPressed: (){
                   pushNavigation(context: context, widget: const Notifications(), routeName: NamedRoutes.notifications);
                 },
                   child: CustomSvg(asset: AppAsset.notification, height: 32.h, width: 32.w,)),
+            )
+            else Padding(
+              padding: EdgeInsets.only(right: AppDimension.paddingRight),
+              child: Clickable(
+                onPressed: (){
+                  pushNavigation(
+                      context: context,
+                      widget: Login(
+                        visitingRoute: NamedRoutes.bottomNav,
+                      ),
+                    routeName: NamedRoutes.login
+                  );
+                },
+                child: Text(
+                 'Login',
+                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                   fontWeight: FontWeight.w600,
+                   color: ColorPath.redOrange,
+                 ),
+                           ),
+              ),
             )
           ]
       ),
@@ -95,8 +100,8 @@ class _HomeState extends ConsumerState<Home> {
                 child: Column(
                   children: [
                     AllGamesSection(),
-                    MyGamesSection(),
-                    GameResultsSection(),
+                    if(loginVm.isLoggedIn)MyGamesSection(),
+                    if(loginVm.isLoggedIn)GameResultsSection(),
                   ],
                 ),
               ),
@@ -113,13 +118,17 @@ class _HomeState extends ConsumerState<Home> {
     final allGamesVm = ref.read(allGamesViewModel);
     final myGamesVm = ref.read(myGamesViewModel);
     final myGameResultsVm = ref.read(myGameResultsViewModel);
+    final loginVm = ref.read(loginViewModel);
     //fetch all games
     allGamesVm.fetchAllGames(refreshUi: false);
     //fetch live games
     allGamesVm.fetchLiveGames(refreshUi: false);
-    //fetch my games
-    myGamesVm.fetchMyGames(refreshUi: false);
-    //fetch my game results
-    myGameResultsVm.fetchMyGameResults(refreshUi: false);
+
+    if(loginVm.isLoggedIn){
+      //fetch my games
+      myGamesVm.fetchMyGames(refreshUi: false);
+      //fetch my game results
+      myGameResultsVm.fetchMyGameResults(refreshUi: false);
+    }
   }
 }

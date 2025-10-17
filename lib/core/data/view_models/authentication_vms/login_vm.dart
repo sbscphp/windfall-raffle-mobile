@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windfall/core/utilities/firebase_messaging_utils.dart';
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
+import '../../../constants/secure_storage_constants.dart';
 import '../../../utilities/secure_storage/secure_storage_utils.dart';
 import '../../../utilities/utilities.dart';
 import '../../data_provider/auth_data_provider/auth_data_provider.dart';
@@ -58,21 +59,31 @@ class LoginVm extends BaseState {
     });
   }
 
-  //clear user(user logged out)
-  clearUser(){
-    user = null;
-    notifyListeners();
+  initUserFromStorage({bool refreshUi = true})async{
+    user = await SecureStorageUtils.retrieveUser();
+    if(refreshUi)notifyListeners();
   }
 
-  //logout
-  // logout() async {
-  //   await _authDataProvider.logout().then((response) async{
-  //     await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
-  //     Utilities.unauthorizedFlag = false;
-  //     setState(ViewState.retrieved);
-  //   }, onError: (e) {
-  //   });
-  // }
+  //clear user(user logged out)
+  clearUser({bool refreshUi = true}){
+    user = null;
+    if(refreshUi)notifyListeners();
+  }
+
+  logOut() async {
+    setSecondState(ViewState.busy);
+    await _authDataProvider
+        .logout().then((response) async{
+      _message = response.message ?? defaultSuccessMessage;
+      await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
+      await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.user);
+      clearUser(refreshUi: false);
+      setSecondState(ViewState.retrieved);
+    }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setSecondState(ViewState.error);
+    });
+  }
 }
 
 final loginViewModel =

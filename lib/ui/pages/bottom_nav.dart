@@ -11,6 +11,9 @@ import 'package:windfall/core/data/view_models/utility_view_models/config_view_m
 import '../../core/constants/color_path.dart';
 import '../../core/data/view_models/authentication_vms/login_vm.dart';
 import '../../core/data/view_models/bottom_nav_view_model.dart';
+import '../../core/data/view_models/game_vms/all_games_vm.dart';
+import '../../core/data/view_models/game_vms/my_game_results_vm.dart';
+import '../../core/data/view_models/game_vms/my_games_vm.dart';
 import '../../core/data/view_models/profile_vms/notification_vms/notification_settings_vm.dart';
 import '../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../../core/utilities/firebase_messaging_utils.dart';
@@ -31,16 +34,39 @@ class _BottomNavState extends ConsumerState<BottomNav> {
 
     final loginVm = ref.read(loginViewModel);
     final vm = ref.read(referralViewModel);
+    final cartVm = ref.read(cartViewModel);
+    final allGamesVm = ref.read(allGamesViewModel);
+    final myGamesVm = ref.read(myGamesViewModel);
+    final myGameResultsVm = ref.read(myGameResultsViewModel);
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileViewModel).user = loginVm.user;
-      ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
-      ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
-      ref.read(cartViewModel).fetchCart();
-      vm.fetchEarnedHistory();
-      vm.fetchUsedHistory();
+
+      //fetch all games
+      allGamesVm.fetchAllGames();
+      //fetch live games
+      allGamesVm.fetchLiveGames();
+
+      //fetch payment methods
       ref.read(paymentViewModel).fetchPaymentMethods();
-      // ref.read(spendLimitViewModel).spendLimit = loginVm.user?.spendLimitStatus;
-      // ref.read(referralViewModel).referralBalance = loginVm.user?.referralBalance;
+
+      //init user from storage
+      loginVm.initUserFromStorage().then((value){
+        if(loginVm.isLoggedIn){
+          //fetch my games
+          myGamesVm.fetchMyGames();
+          //fetch my game results
+          myGameResultsVm.fetchMyGameResults();
+
+          ref.read(profileViewModel).user = loginVm.user;
+          ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
+          ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
+          vm.fetchEarnedHistory();
+          vm.fetchUsedHistory();
+          //cartVm.fetchCart(); //delete guest token
+        }else{
+          cartVm.fetchCart();
+        }
+
+      });
     });
 
     //init push notification listeners

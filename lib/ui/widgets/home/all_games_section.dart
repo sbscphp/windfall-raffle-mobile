@@ -30,7 +30,7 @@ class AllGamesSection extends ConsumerWidget {
         child: ListView.separated(
           itemCount:6,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft,),
+          padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             return Shimmer.fromColors(

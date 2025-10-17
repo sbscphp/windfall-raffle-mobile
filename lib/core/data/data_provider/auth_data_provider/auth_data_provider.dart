@@ -104,6 +104,24 @@ class AuthDataProvider{
     return completer.future;
   }
 
+  //log out
+  Future<ApiResponse> logout() async {
+    var completer = Completer<ApiResponse>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.get, ApiRoutes.logout,
+        useAuth: true,
+      );
+      var result = ApiResponse.fromJson(
+          response,
+          null);
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
 
 
 

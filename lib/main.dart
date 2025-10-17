@@ -6,9 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/router.dart' as router;
+import 'package:windfall/ui/pages/bottom_nav.dart';
 import 'package:windfall/ui/pages/landing.dart';
 import 'core/constants/app_config.dart';
 import 'core/constants/app_theme/app_theme.dart';
+import 'core/constants/named_routes.dart';
 import 'core/data/enum/environment.dart';
 import 'core/data/services/geolocator_service.dart';
 import 'core/data/services/navigation_service.dart';
@@ -107,7 +109,11 @@ class _MyAppState extends ConsumerState<MyApp> {
                   themeMode: themeMode,
                   navigatorKey: locator<NavigationService>().navigationKey,
                   onGenerateRoute: router.generateRoute,
-                  home: const Landing(),
+                  //home: const Landing(),
+                  home: const BottomNav(),
+                  routes: {
+                    NamedRoutes.bottomNav: (context) => const BottomNav(),
+                  },
                   builder: (context, child) {
                     final mq = MediaQuery.of(context);
                     return MediaQuery(

@@ -23,6 +23,6 @@ class SecureStorageInit {
 
   // ///fetch user auth data
   static void initAuthData() async {
-    SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
+
   }
 }

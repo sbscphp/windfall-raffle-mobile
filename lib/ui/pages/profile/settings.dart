@@ -10,6 +10,7 @@ import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/pages/profile/account_security.dart';
 import 'package:windfall/ui/pages/profile/notification_settings.dart';
+import 'package:windfall/ui/widgets/busy_overlay.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_appbar.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
@@ -17,91 +18,87 @@ import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/constants/secure_storage_constants.dart';
+import '../../../core/data/enum/view_state.dart';
 import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
 import '../../widgets/show_flush_bar.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends ConsumerWidget {
   const Settings({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(context: context, title: 'Settings'),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppDimension.paddingLeft,
-          vertical: AppDimension.paddingTop,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ScreenTitle(
-              title: "Settings ",
-              subTitle: "Manage your account settings all in one place.   ",
-              subTitleSize: 12.sp,
-            ),
-            SizedBox(height: 32.h),
-            SettingsItem(
-              imageAsset: AppAsset.settingsNotification,
-              label: "Notification Setting",
-              subInfo: "Edit your Personal Information like name etc.",
-              onPressed: () {
-                pushNavigation(
-                  context: context,
-                  widget: NotificationSettings(),
-                  routeName: NamedRoutes.notificationSettings,
-                );
-              },
-            ),
-            SizedBox(height: 16.h),
-            SettingsItem(
-              imageAsset: AppAsset.settingsAccount,
-              label: "Account Security",
-              subInfo: "Secure your account wth ease. ",
-              onPressed: () {
-                pushNavigation(
-                  context: context,
-                  widget: AccountSecurity(),
-                  routeName: NamedRoutes.settings,
-                );
-              },
-            ),
-            SizedBox(height: 16.h),
-            SettingsItem(
-              imageAsset: AppAsset.logout,
-              label: "Log Out",
-              subInfo: "Log out of your account. ",
-              onPressed: () async{
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginVm = ref.watch(loginViewModel);
+    return BusyOverlay(
+      show: loginVm.secondState == ViewState.busy,
+      child: Scaffold(
+        appBar: customAppBar(context: context, title: 'Settings'),
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppDimension.paddingLeft,
+            vertical: AppDimension.paddingTop,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ScreenTitle(
+                title: "Settings ",
+                subTitle: "Manage your account settings all in one place.   ",
+                subTitleSize: 12.sp,
+              ),
+              SizedBox(height: 32.h),
+              SettingsItem(
+                imageAsset: AppAsset.settingsNotification,
+                label: "Notification Setting",
+                subInfo: "Edit your Personal Information like name etc.",
+                onPressed: () {
+                  pushNavigation(
+                    context: context,
+                    widget: NotificationSettings(),
+                    routeName: NamedRoutes.notificationSettings,
+                  );
+                },
+              ),
+              SizedBox(height: 16.h),
+              SettingsItem(
+                imageAsset: AppAsset.settingsAccount,
+                label: "Account Security",
+                subInfo: "Secure your account wth ease. ",
+                onPressed: () {
+                  pushNavigation(
+                    context: context,
+                    widget: AccountSecurity(),
+                    routeName: NamedRoutes.settings,
+                  );
+                },
+              ),
+              SizedBox(height: 16.h),
+              SettingsItem(
+                imageAsset: AppAsset.logout,
+                label: "Log Out",
+                subInfo: "Log out of your account. ",
+                onPressed: () async {
 
-                //clear token
-                await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
-
-                //todo: hit backend endpoint if provided by backend first before clearing user
-                final container =
-                ProviderScope.containerOf(context);
-
-                final loginVm =
-                container.read(loginViewModel);
-                //delete user
-                loginVm.clearUser();
-
-                pushAndClearNavigation(
-                  context: context,
-                  widget: Login(),
-                  routeName: NamedRoutes.login,
-                  clearRoute: NamedRoutes.onboarding
-                );
-
-                //show message
-                showFlushBar(
-                  context: context,
-                  success: true,
-                  message: 'Logout Successful',
-                );
-              },
-            ),
-            SizedBox(height: 16.h),
-          ],
+                  final container = ProviderScope.containerOf(context);
+                  final loginVm = container.read(loginViewModel);
+                  await loginVm.logOut();
+                  if (loginVm.secondState == ViewState.retrieved) {
+                    pushAndClearAllNavigation(
+                      context: context,
+                      widget: const Login(),
+                      routeName: NamedRoutes.login,
+                    );
+                  }
+                  //show message
+                  showFlushBar(
+                    context: context,
+                    success: loginVm.secondState == ViewState.retrieved,
+                    message: loginVm.message,
+                  );
+                },
+              ),
+              SizedBox(height: 16.h),
+            ],
+          ),
         ),
       ),
     );

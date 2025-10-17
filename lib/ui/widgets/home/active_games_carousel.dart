@@ -21,6 +21,7 @@ class ActiveGamesCarousel extends ConsumerWidget {
         highlightColor: ColorPath.athensGrey2,
         child: Container(
           height: 32.h,
+          margin: EdgeInsets.only(),
           width: double.infinity,
           color: ColorPath.grayGrey,
         ),

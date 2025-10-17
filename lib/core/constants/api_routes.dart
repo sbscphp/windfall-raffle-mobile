@@ -29,6 +29,8 @@ class ApiRoutes {
       "${dotenv.env['AUTH']}/forgot-password/create-password/$userId";
   static var login =
       "${dotenv.env['AUTH']}/login";
+  static var logout =
+      "${dotenv.env['AUTH']}/logout";
 
   //profile/settings
   static var fetchProfile =

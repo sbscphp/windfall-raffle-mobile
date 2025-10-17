@@ -29,7 +29,9 @@ import '../../widgets/show_flush_bar.dart';
 
 class Login extends ConsumerStatefulWidget {
   final bool sessionExpired;
-  const Login({super.key, this.sessionExpired = false});
+  final String? visitingRoute;
+  final String? destinationRoute;
+  const Login({super.key, this.sessionExpired = false, this.visitingRoute, this.destinationRoute});
 
   @override
   ConsumerState<Login> createState() => _LoginState();
