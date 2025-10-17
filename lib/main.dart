@@ -109,10 +109,11 @@ class _MyAppState extends ConsumerState<MyApp> {
                   navigatorKey: locator<NavigationService>().navigationKey,
                   onGenerateRoute: router.generateRoute,
                   //home: const Landing(),
-                  home: const BottomNav(),
-                  routes: {
-                    NamedRoutes.bottomNav: (context) => const BottomNav(),
-                  },
+                  //home: const BottomNav(),
+                  initialRoute: NamedRoutes.bottomNav,
+                  // routes: {
+                  //   NamedRoutes.bottomNav: (context) => const BottomNav(),
+                  // },
                   builder: (context, child) {
                     final mq = MediaQuery.of(context);
                     return MediaQuery(

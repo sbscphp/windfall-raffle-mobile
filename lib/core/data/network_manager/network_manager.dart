@@ -42,11 +42,19 @@ class NetworkManager {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           bool useAuth = options.extra["useAuth"] ?? true;
+          bool useGuestToken = options.extra["useGuestToken"] ?? false;
           if (useAuth) {
             String? token = await SecureStorageUtils.retrieveToken();
             print('token:::$token>>>');
             if (token != null && token.isNotEmpty) {
               options.headers["Authorization"] = "Bearer $token";
+            }
+          }
+          if (useGuestToken) {
+            String? guestToken = await SecureStorageUtils.retrieveGuestToken();
+            print('guest token:::$guestToken>>>');
+            if (guestToken != null && guestToken.isNotEmpty) {
+              options.headers["X-Guest-Cart-ID"] = guestToken;
             }
           }
           return handler.next(options);
@@ -91,6 +99,7 @@ class NetworkManager {
         dynamic body,
         queryParameters,
         bool useAuth = true,
+        bool useGuestToken = false,
         File? backFile,
         bool retrieveResponse = false,
         bool retrieveUnauthorizedResponse = false,
@@ -103,7 +112,7 @@ class NetworkManager {
 
     try {
       Response response;
-      final options = Options(extra: {"useAuth": useAuth});
+      final options = Options(extra: {"useAuth": useAuth, "useGuestToken": useGuestToken});
 
       switch (requestType) {
         case RequestType.get:

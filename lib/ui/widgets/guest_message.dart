@@ -22,31 +22,32 @@ class GuestMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.only(top: 56.h, left: AppDimension.paddingLeft, right: AppDimension.paddingRight),
+        padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomAssetViewer(asset: AppAsset.avatar, height: 100.h, width: 100.w,),
-            SizedBox(height: 32.h,),
+            CustomAssetViewer(asset: AppAsset.emptyNotification, height: 64.h, width: 64.w,),
+            SizedBox(height: 8.h,),
             Text(
               title ?? 'Join The Fun',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.textPrimary.withCustomOpacity(0.85),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.textPrimary,
               ),
             ),
             SizedBox(height: 8.h,),
             Text(
-              subtitle ?? 'Sign up or log in to unlock exclusive deals, personalised recommendations and enjoy seamless shopping experience.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              subtitle ?? 'Looks like you’re browsing as a guest. Log in to unlock access to all active draw and instant games. Join the fun — your next big win could be waiting.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w400,
                 color: Theme.of(context).colorScheme.textPrimary.withCustomOpacity(0.45),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 32.h,),
+            SizedBox(height: 16.h,),
             CustomButton(
-                buttonText: 'Login',
-                useDottedBorder: true,
+              buttonWidth: null,
+                buttonText: 'Login to play',
                 onPressed: (){
                   pushNavigation(context: context, widget: Login(
                       visitingRoute: visitingRoute,

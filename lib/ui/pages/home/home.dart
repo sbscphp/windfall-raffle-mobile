@@ -99,7 +99,7 @@ class _HomeState extends ConsumerState<Home> {
                 child: Column(
                   children: [
                     AllGamesSection(),
-                    if(loginVm.isLoggedIn)MyGamesSection(),
+                    MyGamesSection(),
                     if(loginVm.isLoggedIn)GameResultsSection(),
                   ],
                 ),

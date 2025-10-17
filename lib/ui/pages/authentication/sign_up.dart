@@ -40,7 +40,9 @@ import '../../widgets/error_state.dart';
 import '../../widgets/show_flush_bar.dart';
 
 class SignUp extends ConsumerStatefulWidget {
-  const SignUp({super.key});
+  final String? visitingRoute;
+  final String? destinationRoute;
+  const SignUp({super.key, this.visitingRoute, this.destinationRoute});
 
   @override
   ConsumerState<SignUp> createState() => _SignUpState();
@@ -70,6 +72,8 @@ class _SignUpState extends ConsumerState<SignUp> {
     final pwdVm = ref.read(passwordViewModel);
     final vm = ref.watch(registrationViewModel);
     final otpVm = ref.watch(otpViewModel);
+    final hasVisitingRoute = widget.visitingRoute != null;
+    final hasDestinationRoute = widget.destinationRoute != null;
 
     return BusyOverlay(
       show: otpVm.state == ViewState.busy || vm.state == ViewState.busy,
@@ -494,7 +498,10 @@ class _SignUpState extends ConsumerState<SignUp> {
 
                                 if (vm.state == ViewState.retrieved) {
                                   replaceNavigation(context: context,
-                                      widget: const Login(),
+                                      widget: Login(
+                                        visitingRoute: widget.visitingRoute,
+                                        destinationRoute: widget.destinationRoute,
+                                      ),
                                       routeName: NamedRoutes.login);
                                 }
 

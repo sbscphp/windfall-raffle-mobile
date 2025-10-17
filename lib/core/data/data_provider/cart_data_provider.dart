@@ -15,7 +15,8 @@ class CartDataProvider{
     try {
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.get, ApiRoutes.fetchCart,
-          useAuth: true
+          useAuth: true,
+          useGuestToken: true
       );
       var result = ApiResponse<CartData>.fromJson(
         response,
@@ -34,7 +35,8 @@ class CartDataProvider{
     try {
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.delete, ApiRoutes.deleteItem(gameId: gameId),
-          useAuth: true
+          useAuth: true,
+        useGuestToken: true
       );
       var result = ApiResponse<CartData>.fromJson(
         response,
@@ -54,7 +56,28 @@ class CartDataProvider{
       Map<String, dynamic> response = await NetworkManager()
           .networkRequestManager(RequestType.post, ApiRoutes.addToCart(gameId: gameId),
           useAuth: true,
+        useGuestToken: true,
         body: jsonEncode(details)
+      );
+      var result = ApiResponse<CartData>.fromJson(
+        response,
+            (data) => CartData.fromJson(data as Map<String, dynamic>),
+      );
+      completer.complete(result);
+    } catch (e) {
+      completer.completeError(e);
+    }
+    return completer.future;
+  }
+
+  //transfer cart
+  Future<ApiResponse<CartData>> transferCart() async {
+    var completer = Completer<ApiResponse<CartData>>();
+    try {
+      Map<String, dynamic> response = await NetworkManager()
+          .networkRequestManager(RequestType.post, ApiRoutes.transferCart,
+          useAuth: true,
+          useGuestToken: true
       );
       var result = ApiResponse<CartData>.fromJson(
         response,

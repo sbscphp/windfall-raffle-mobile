@@ -4,12 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/color_path.dart';
+import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/enum/checkout_type.dart';
+import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
 import 'package:windfall/core/data/view_models/cart_vm.dart';
 import 'package:windfall/core/data/view_models/checkout_vm.dart';
 import 'package:windfall/core/data/view_models/payment_vms/payment_vm.dart';
 import 'package:windfall/core/data/view_models/referral_vm.dart';
 import 'package:windfall/core/data/view_models/utility_view_models/config_view_model.dart';
+import 'package:windfall/core/utilities/navigator.dart';
 import 'package:windfall/core/utilities/utilities.dart';
 import 'package:windfall/ui/widgets/body_header.dart';
 import 'package:windfall/ui/widgets/bottom_sheets/base_bottom_sheet.dart';
@@ -32,6 +35,7 @@ import '../../../core/data/view_models/game_vms/single_game_vm.dart';
 import '../../../core/utilities/input_formatters/money_input_formatter.dart';
 import '../../../core/utilities/validator.dart';
 import '../../widgets/empty_state.dart';
+import '../authentication/login.dart';
 
 class Checkout extends ConsumerStatefulWidget {
   const Checkout({super.key});
@@ -76,6 +80,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
     final cartVm = ref.watch(cartViewModel);
     final paymentVm = ref.watch(paymentViewModel);
     final configVm = ref.watch(configViewModel);
+    final loginVm = ref.watch(loginViewModel);
     return BusyOverlay(
       show: cartVm.secondState == ViewState.busy || paymentVm.state == ViewState.busy,
       child: Scaffold(
@@ -98,7 +103,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       subTitleSize: 14,
                       titleFontWeight: FontWeight.w600,
                       titleColor: Theme.of(context).colorScheme.textPrimary,
-                      subTitle: 'Buy now and stand a chance to win big!!!',
+                      subTitle: loginVm.isLoggedIn ? 'Buy now and stand a chance to win big!!!':'Login to complete your checkout process',
                     ),
                   ),
                 ],
@@ -188,7 +193,9 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       ),
                     ),
                   ),
-                  if((showPromoCodeField && configVm.usePromoCode) || (showReferralBalField && configVm.useReferralBonus))Padding(
+
+                  if(((showPromoCodeField && configVm.usePromoCode) || (showReferralBalField && configVm.useReferralBonus)) && loginVm.isLoggedIn)
+                    Padding(
                     padding: EdgeInsets.all(16.w),
                     child: WindfallContainer(
                       padding: EdgeInsets.all(16.w),
@@ -297,25 +304,42 @@ class _CheckoutState extends ConsumerState<Checkout> {
                       horizontal: AppDimension.paddingLeft,
                     ),
                     child: CustomButton(
+                      buttonText: loginVm.isLoggedIn ? 'Continue':'Login to continue',
                       onPressed: () async{
-                        await paymentVm.fetchPaymentBreakdown(
-                            checkoutType: vm.checkoutType,
-                          checkoutItems: vm.checkoutItems,
-                          promoCode: _promoCode.text,
-                          refBonus: Utilities.formatToDouble(value: _referralAmount.text)
-                        );
-                        if(paymentVm.state == ViewState.retrieved){
-                          baseBottomSheet(
-                              context: context,
-                              content: CheckoutSummaryBottomSheet()
+
+                        if(loginVm.isLoggedIn){
+
+                          await paymentVm.fetchPaymentBreakdown(
+                              checkoutType: vm.checkoutType,
+                              checkoutItems: vm.checkoutItems,
+                              promoCode: _promoCode.text,
+                              refBonus: Utilities.formatToDouble(value: _referralAmount.text)
                           );
+                          if(paymentVm.state == ViewState.retrieved){
+                            baseBottomSheet(
+                                context: context,
+                                content: CheckoutSummaryBottomSheet()
+                            );
+                          }
+                          else{
+                            showFlushBar(
+                                context: context,
+                                message: paymentVm.message,
+                                success: false
+                            );
+                          }
+
                         }else{
-                          showFlushBar(
+
+                          pushNavigation(
                               context: context,
-                              message: paymentVm.message,
-                            success: false
+                              widget:  Login(
+                                visitingRoute: NamedRoutes.checkout,
+                              ),
+                            routeName: NamedRoutes.login
                           );
                         }
+
 
                       },
                       useDottedBorder: true,

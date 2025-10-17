@@ -117,6 +117,8 @@ class ApiRoutes {
       "${dotenv.env['GUEST']}/cart/remove/$gameId";
   static addToCart({required String? gameId}) =>
       "${dotenv.env['GUEST']}/cart/add/$gameId";
+  static var transferCart =
+      "${dotenv.env['CUSTOMER']}/cart/transfer";
 
   //order history
   static fetchOrderHistory({required int? pageNumber, String? filterParams}) =>

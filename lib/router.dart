@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:windfall/ui/pages/authentication/login.dart';
+import 'package:windfall/ui/pages/bottom_nav.dart';
 
 import 'core/constants/named_routes.dart';
 
@@ -11,6 +12,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const Login(),
+      );
+    case NamedRoutes.bottomNav:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const BottomNav(),
       );
     //todo::add more routes
     default:

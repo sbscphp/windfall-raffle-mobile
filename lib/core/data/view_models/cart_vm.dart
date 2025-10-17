@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
+import 'package:windfall/core/constants/secure_storage_constants.dart';
 import 'package:windfall/core/data/models/cart_product.dart';
 import 'package:windfall/core/data/models/cart_summary.dart';
+import 'package:windfall/core/utilities/secure_storage/secure_storage_utils.dart';
 import '../../../../locator.dart';
 import '../../constants/app_constants.dart';
 import '../../utilities/utilities.dart';
@@ -49,6 +52,7 @@ class CartVm extends BaseState{
     });
   }
 
+  //delete item from cart
   deleteItem({required String? gameId}) async {
     setSecondState(ViewState.busy);
     await _cartDp
@@ -64,6 +68,7 @@ class CartVm extends BaseState{
     });
   }
 
+  //add/update cart
   addToCart({required String? gameId, required int? quantity}) async {
     setSecondState(ViewState.busy);
     final details = {
@@ -81,6 +86,63 @@ class CartVm extends BaseState{
       setSecondState(ViewState.error);
     });
   }
+
+  //transfer cart
+  transferCart() async {
+    //check if user has a guest token
+    final hasGuestToken = await _hasGuestToken();
+    if(!hasGuestToken){
+      fetchCart();
+      return;
+    }
+
+    setThirdState(ViewState.busy);
+    await _cartDp
+        .transferCart()
+        .then((response) async{
+      _message = response.message ?? defaultSuccessMessage;
+      _cartItems = response.data?.cart?.items ?? [];
+      _cartSummary = response.data?.cart?.summary;
+      await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.guestToken);
+      print('cart transfereed and guest token deleted successfully>>>>');
+      setThirdState(ViewState.retrieved);
+    }, onError: (e) {
+      _message = Utilities.formatMessage(e.toString(), isSuccess: false);
+      setThirdState(ViewState.error);
+    });
+  }
+
+
+  generateGuestToken()async{
+
+    final hasGuestToken = await _hasGuestToken();
+
+    if(hasGuestToken){
+      fetchCart();
+      return; //user already has a guest token... don't generate
+    }
+
+
+    try{
+      final id = Uuid().v4();
+      print('guest token generated>>>>>>$id');
+      //save guest token to secure storage
+      await SecureStorageUtils.saveGuestToken(value: id);
+      //fetch cart
+      fetchCart();
+    }catch(e){
+      print('error occurred while generating guest id:::$e>>>');
+    }
+
+  }
+
+  Future<bool> _hasGuestToken()async{
+    final guestToken = await SecureStorageUtils.retrieveGuestToken();
+    if(guestToken == null)return false;
+    return true;
+  }
+
+
 
 
 }

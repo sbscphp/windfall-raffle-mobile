@@ -8,12 +8,14 @@ import 'package:windfall/core/constants/named_routes.dart';
 import 'package:windfall/core/data/view_models/authentication_vms/login_vm.dart';
 import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/utilities/navigator.dart';
+import 'package:windfall/ui/pages/authentication/login.dart';
 import 'package:windfall/ui/pages/profile/game_results.dart';
 import 'package:windfall/ui/pages/profile/notifications.dart';
 import 'package:windfall/ui/pages/profile/order/order_history.dart';
 import 'package:windfall/ui/pages/profile/personal_information.dart';
 import 'package:windfall/ui/pages/profile/rewards.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
+import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
 import 'package:windfall/ui/widgets/guest_message.dart';
 import 'package:windfall/ui/widgets/profile/profile_action.dart';
@@ -37,6 +39,7 @@ class _ProfileState extends ConsumerState<Profile> {
   Widget build(BuildContext context) {
     final bottomNavVm = ref.watch(bottomNavViewModel);
     final loginVm = ref.watch(loginViewModel);
+    final profileVm = ref.watch(profileViewModel);
     return Scaffold(
       appBar: customAppBar(
         context: context,
@@ -51,168 +54,228 @@ class _ProfileState extends ConsumerState<Profile> {
         ),
         child: Builder(
           builder: (context) {
-            if(loginVm.isLoggedIn){
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Consumer(
-                    builder: (context, ref, child){
-                      final profileVm = ref.watch(profileViewModel);
-                      if(profileVm.hasImage){
-                        final imageProvider = CachedNetworkImageProvider(profileVm.image);
-                        precacheImage(imageProvider, context);
-                      }
-                      return Row(
-                        children: [
-                          CustomPaint(
-                            painter: DottedBorder(
-                                color: ColorPath.redOrange,
-                                isCircle: true
-                            ),
-                            child: DisplayImage(
-                              size: 54,
-                              borderWidth: 0,
-                              image: profileVm.image,
-                              useGradient:  false,
-                              borderColor: Theme.of(context).colorScheme.whiteText,
-                              firstName: profileVm.firstname,
-                              lastName: profileVm.lastname,
-                              fontSize: 24.sp,
-                            ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if(loginVm.isLoggedIn)Consumer(
+                  builder: (context, ref, child){
+                    if(profileVm.hasImage){
+                      final imageProvider = CachedNetworkImageProvider(profileVm.image);
+                      precacheImage(imageProvider, context);
+                    }
+                    return Row(
+                      children: [
+                        CustomPaint(
+                          painter: DottedBorder(
+                              color: ColorPath.redOrange,
+                              isCircle: true
                           ),
-                          SizedBox(width: 19.w,),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${profileVm.firstname} ${profileVm.lastname} 🌹',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: Theme.of(context).colorScheme.brandColor
-                                  ),
+                          child: DisplayImage(
+                            size: 54,
+                            borderWidth: 0,
+                            image: profileVm.image,
+                            useGradient:  false,
+                            borderColor: Theme.of(context).colorScheme.whiteText,
+                            firstName: profileVm.firstname,
+                            lastName: profileVm.lastname,
+                            fontSize: 24.sp,
+                          ),
+                        ),
+                        SizedBox(width: 19.w,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${profileVm.firstname} ${profileVm.lastname} 🌹',
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).colorScheme.brandColor
                                 ),
-                                SizedBox(height: 5.h,),
-                                Text(
-                                  'ID: ${profileVm.uniqueId}🚀',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      color: Theme.of(context).colorScheme.textTertiary
-                                  ),
+                              ),
+                              SizedBox(height: 5.h,),
+                              Text(
+                                'ID: ${profileVm.uniqueId}🚀',
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: Theme.of(context).colorScheme.textTertiary
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                )
+                else Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                    horizontal: 16.w
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorPath.pippinPink,
+                    border: Border.all(color: ColorPath.redOrange, width: 0.5.w),
+                    borderRadius: BorderRadius.all(Radius.circular(8.r))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome, Guest',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorPath.redOrange
+                              ),
                             ),
-                          )
-                        ],
-                      );
-                    },
+                            SizedBox(height: 4.h,),
+                            FittedBox(
+                              child: Text(
+                                'Log in to unlock your profile, play, and get instant win alerts.',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: ColorPath.scorpionGrey
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 30.w,),
+                      Clickable(
+                        onPressed: (){
+                          pushNavigation(
+                              context: context,
+                              widget: Login(
+                                visitingRoute: NamedRoutes.bottomNav,
+                              ),
+                            routeName: NamedRoutes.login
+                          );
+                        },
+                        child: Text(
+                          'Login',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: ColorPath.redOrange,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ColorPath.redOrange
+                          ),
+                        ),
+                      ),
+
+                    ],
                   ),
-                  SizedBox(height: 32.h,),
-                  Text(
-                    'My Profile',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: Theme.of(context).colorScheme.textPrimary
-                    ),
+                ),
+                SizedBox(height: 32.h,),
+                Text(
+                  'My Profile',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).colorScheme.textPrimary
                   ),
-                  SizedBox(height: 24.h,),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          WindfallContainer(
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ProfileAction(
-                                      imageAsset: AppAsset.personalInformation,
-                                      label: "Personal Information",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: PersonalInformation(),routeName: NamedRoutes.personalInfo);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.ticketsLeft,
-                                      label: "My Games",
-                                      onPressed: (){
-                                        bottomNavVm.setCurrentIndex(2);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.results,
-                                      label: "Result",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: const GameResults(), routeName: NamedRoutes.gameResults);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.rewards,
-                                      label: "Rewards",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: const Rewards(), routeName: NamedRoutes.rewards);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.transactions,
-                                      label: "Order History",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: const OrderHistory(), routeName: NamedRoutes.orderHistory);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.notifications,
-                                      label: "Notifications",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: Notifications(),routeName: NamedRoutes.notifications);
-                                      }
-                                  ),
-                                  CustomDivider(
-                                    verticalSpace: 16.h,
-                                  ),
-                                  ProfileAction(
-                                      imageAsset: AppAsset.settings,
-                                      label: "Settings",
-                                      onPressed: (){
-                                        pushNavigation(context: context, widget: Settings(),routeName: NamedRoutes.settings);
+                ),
+                SizedBox(height: 24.h,),
+                Expanded(
+                  child: IgnorePointer(
+                    ignoring: !loginVm.isLoggedIn,
+                    child: Opacity(
+                      opacity: loginVm.isLoggedIn ? 1 : 0.4,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            WindfallContainer(
+                                padding: EdgeInsets.symmetric(vertical: 16.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ProfileAction(
+                                        imageAsset: AppAsset.personalInformation,
+                                        label: "Personal Information",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: PersonalInformation(),routeName: NamedRoutes.personalInfo);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.ticketsLeft,
+                                        label: "My Games",
+                                        onPressed: (){
+                                          bottomNavVm.setCurrentIndex(2);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.results,
+                                        label: "Result",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: const GameResults(), routeName: NamedRoutes.gameResults);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.rewards,
+                                        label: "Rewards",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: const Rewards(), routeName: NamedRoutes.rewards);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.transactions,
+                                        label: "Order History",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: const OrderHistory(), routeName: NamedRoutes.orderHistory);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.notifications,
+                                        label: "Notifications",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: Notifications(),routeName: NamedRoutes.notifications);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.settings,
+                                        label: "Settings",
+                                        onPressed: (){
+                                          pushNavigation(context: context, widget: Settings(),routeName: NamedRoutes.settings);
 
-                                      }
-                                  ),
+                                        }
+                                    ),
 
-                                ],
-                              )
-                          )
+                                  ],
+                                )
+                            )
 
 
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  )
+                  ),
+                )
 
-                ],
-              );
-            }
-
-            return Center(
-              child: GuestMessage(
-                visitingRoute: NamedRoutes.bottomNav,
-              ),
+              ],
             );
           }
         ),

@@ -45,7 +45,7 @@ class Settings extends ConsumerWidget {
               SizedBox(height: 32.h),
               SettingsItem(
                 imageAsset: AppAsset.settingsNotification,
-                label: "Notification Setting",
+                label: "Notification Settings",
                 subInfo: "Edit your Personal Information like name etc.",
                 onPressed: () {
                   pushNavigation(

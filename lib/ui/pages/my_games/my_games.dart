@@ -151,211 +151,209 @@ class _MyGamesState extends ConsumerState<MyGames> {
             ),
           ),
           SizedBox(height: 16.h,),
-          Builder(
+          if(loginVm.isLoggedIn)Builder(
             builder: (context) {
+              if(myGamesFilterVm.showFilteredList){
 
-              if(loginVm.isLoggedIn){
+                if(myGamesFilterVm.state == ViewState.busy){
+                  return Center(
+                    child: AppLoader(),
+                  );
+                }
 
-                if(myGamesFilterVm.showFilteredList){
+                if(myGamesFilterVm.state == ViewState.retrieved){
 
-                  if(myGamesFilterVm.state == ViewState.busy){
-                    return Center(
-                      child: AppLoader(),
-                    );
-                  }
-
-                  if(myGamesFilterVm.state == ViewState.retrieved){
-
-                    if(myGamesFilterVm.filteredResults.isEmpty){
-
-                      return Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
-                              child: EmptyState(
-                                asset: AppAsset.gamesEmptyState,
-                                title: 'No Results',
-                                subtitle: "no results found",
-                                showCtaButton: false,
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-
-                    }
+                  if(myGamesFilterVm.filteredResults.isEmpty){
 
                     return Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: RefreshIndicator.adaptive(
-                              onRefresh: () => _refresh(myGamesFilterVm),
-                              backgroundColor: Theme.of(context).colorScheme.whiteText,
-                              color: ColorPath.redOrange,
-                              child: GridView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  controller: _filterScrollController,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: myGamesFilterVm.filteredResults.length,
-                                  padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-                                  gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 16.h,
-                                    crossAxisSpacing: 16.w,
-                                    mainAxisExtent: 212.h,
-                                  ),
-                                  itemBuilder: (BuildContext context, int index) {
-                                    final myGame = myGamesFilterVm.filteredResults[index];
-                                    return MyGameItem(myGame: myGame,);
-                                  }),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
+                            child: EmptyState(
+                              asset: AppAsset.gamesEmptyState,
+                              title: 'No Results',
+                              subtitle: "no results found",
+                              showCtaButton: false,
                             ),
-                          ),
-                          if(myGamesFilterVm.paginatedState == ViewState.busy)
-                            Padding(
-                              padding: EdgeInsets.only(top: 5.h),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: AppLoader(
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          if(myGamesFilterVm.paginatedState == ViewState.error)
-                            ErrorState(
-                                message: myGamesFilterVm.message,
-                                isPaginationType: true,
-                                onPressed: ()=>myGamesFilterVm.fetchFilteredResults(firstCall: false))
+                          )
                         ],
                       ),
                     );
+
                   }
 
-                  if(vm.state == ViewState.error){
-                    return  Center(
-                      child: ErrorState(
-                          message: myGamesFilterVm.message,
-                          onPressed: ()=>myGamesFilterVm.fetchFilteredResults()
-                      ),
-                    );
-                  }
-
-                  return const SizedBox();
-
-                }
-                else{
-
-                  if(vm.state == ViewState.busy){
-                    return Center(
-                      child: AppLoader(),
-                    );
-                  }
-
-                  if(vm.state == ViewState.retrieved){
-
-                    if(vm.myGames.isEmpty){
-
-                      return Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
-                              child: EmptyState(
-                                asset: AppAsset.gamesEmptyState,
-                                title: 'No Games',
-                                subtitle: "You are yet to Play any Games",
-                                ctaText: 'View Games',
-                                onPressed: (){
-                                  final container =
-                                  ProviderScope.containerOf(context);
-
-                                  final bottomNavVm =
-                                  container.read(bottomNavViewModel);
-
-                                  bottomNavVm.updateIndex(1);
-                                },
-                              ),
-                            )
-                          ],
+                  return Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(myGamesFilterVm),
+                            backgroundColor: Theme.of(context).colorScheme.whiteText,
+                            color: ColorPath.redOrange,
+                            child: GridView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _filterScrollController,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: myGamesFilterVm.filteredResults.length,
+                                padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                  mainAxisExtent: 212.h,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final myGame = myGamesFilterVm.filteredResults[index];
+                                  return MyGameItem(myGame: myGame,);
+                                }),
+                          ),
                         ),
-                      );
-
-                    }
-
-                    return Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: RefreshIndicator.adaptive(
-                              onRefresh: () => _refresh(myGamesFilterVm),
-                              backgroundColor: Theme.of(context).colorScheme.whiteText,
-                              color: ColorPath.redOrange,
-                              child: GridView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  controller: _scrollController,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: vm.myGames.length,
-                                  padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
-                                  gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 16.h,
-                                    crossAxisSpacing: 16.w,
-                                    mainAxisExtent: 212.h,
-                                  ),
-                                  itemBuilder: (BuildContext context, int index) {
-                                    final myGame = vm.myGames[index];
-                                    return MyGameItem(myGame: myGame,);
-                                  }),
-                            ),
-                          ),
-                          if(vm.paginatedState == ViewState.busy)
-                            Padding(
-                              padding: EdgeInsets.only(top: 5.h),
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: AppLoader(
-                                  size: 16,
-                                ),
+                        if(myGamesFilterVm.paginatedState == ViewState.busy)
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.h),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: AppLoader(
+                                size: 16,
                               ),
                             ),
-                          if(vm.paginatedState == ViewState.error)
-                            ErrorState(
-                                message: vm.message,
-                                isPaginationType: true,
-                                onPressed: ()=>vm.fetchMyGames(firstCall: false))
-                        ],
-                      ),
-                    );
-                  }
-
-                  if(vm.state == ViewState.error){
-                    return  Center(
-                      child: ErrorState(
-                          message: vm.message,
-                          onPressed: ()=>vm.fetchMyGames()
-                      ),
-                    );
-                  }
-
-                  return const SizedBox();
-
+                          ),
+                        if(myGamesFilterVm.paginatedState == ViewState.error)
+                          ErrorState(
+                              message: myGamesFilterVm.message,
+                              isPaginationType: true,
+                              onPressed: ()=>myGamesFilterVm.fetchFilteredResults(firstCall: false))
+                      ],
+                    ),
+                  );
                 }
+
+                if(vm.state == ViewState.error){
+                  return  Center(
+                    child: ErrorState(
+                        message: myGamesFilterVm.message,
+                        onPressed: ()=>myGamesFilterVm.fetchFilteredResults()
+                    ),
+                  );
+                }
+
+                return const SizedBox();
 
               }
-              return GuestMessage(
-                visitingRoute: NamedRoutes.bottomNav,
-              );
+              else{
 
+                if(vm.state == ViewState.busy){
+                  return Center(
+                    child: AppLoader(),
+                  );
+                }
+
+                if(vm.state == ViewState.retrieved){
+
+                  if(vm.myGames.isEmpty){
+
+                    return Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingRight),
+                            child: EmptyState(
+                              asset: AppAsset.gamesEmptyState,
+                              title: 'No Games',
+                              subtitle: "You are yet to Play any Games",
+                              ctaText: 'View Games',
+                              onPressed: (){
+                                final container =
+                                ProviderScope.containerOf(context);
+
+                                final bottomNavVm =
+                                container.read(bottomNavViewModel);
+
+                                bottomNavVm.updateIndex(1);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+
+                  }
+
+                  return Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator.adaptive(
+                            onRefresh: () => _refresh(myGamesFilterVm),
+                            backgroundColor: Theme.of(context).colorScheme.whiteText,
+                            color: ColorPath.redOrange,
+                            child: GridView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: vm.myGames.length,
+                                padding: EdgeInsets.symmetric(horizontal: AppDimension.paddingLeft),
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                  mainAxisExtent: 212.h,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final myGame = vm.myGames[index];
+                                  return MyGameItem(myGame: myGame,);
+                                }),
+                          ),
+                        ),
+                        if(vm.paginatedState == ViewState.busy)
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.h),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: AppLoader(
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        if(vm.paginatedState == ViewState.error)
+                          ErrorState(
+                              message: vm.message,
+                              isPaginationType: true,
+                              onPressed: ()=>vm.fetchMyGames(firstCall: false))
+                      ],
+                    ),
+                  );
+                }
+
+                if(vm.state == ViewState.error){
+                  return  Center(
+                    child: ErrorState(
+                        message: vm.message,
+                        onPressed: ()=>vm.fetchMyGames()
+                    ),
+                  );
+                }
+
+                return const SizedBox();
+
+              }
             }
+          )
+          else Expanded(
+            child: Center(
+              child: GuestMessage(
+                visitingRoute: NamedRoutes.bottomNav,
+              ),
+            ),
           ),
         ],
       ),

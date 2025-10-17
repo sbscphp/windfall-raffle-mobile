@@ -3,7 +3,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
+import 'package:windfall/core/data/view_models/bottom_nav_view_model.dart';
 import 'package:windfall/core/data/view_models/game_vms/my_games_vm.dart';
+import 'package:windfall/core/data/view_models/profile_vms/notification_vms/notification_vm.dart';
 import 'package:windfall/ui/pages/receipt/payment_receipt.dart';
 
 import '../../core/constants/app_dimension.dart';
@@ -53,7 +55,7 @@ class _OrderConfirmationState extends ConsumerState<OrderConfirmation> {
 
 
         //fetch notifications
-        //todo:fetch notifications
+        ref.read(notificationViewModel).fetchNotifications(refreshUi: false);
       });
     }
 
@@ -138,6 +140,7 @@ class _OrderConfirmationState extends ConsumerState<OrderConfirmation> {
                       borderColor: ColorPath.athensGrey2,
                       buttonTextColor: Theme.of(context).colorScheme.textPrimary,
                       onPressed: (){
+                        ref.read(bottomNavViewModel).updateIndex(0);
                         popUntilNavigation(context: context, route: NamedRoutes.bottomNav);
                       }
                   ),

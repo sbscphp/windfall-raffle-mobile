@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:windfall/core/constants/app_asset.dart';
@@ -17,9 +18,17 @@ import 'package:windfall/ui/widgets/custom_svg.dart';
 import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/models/user.dart';
+import '../../../core/data/services/navigation_service.dart';
+import '../../../core/data/view_models/cart_vm.dart';
+import '../../../core/data/view_models/game_vms/my_game_results_vm.dart';
+import '../../../core/data/view_models/game_vms/my_games_vm.dart';
+import '../../../core/data/view_models/profile_vms/notification_vms/notification_settings_vm.dart';
+import '../../../core/data/view_models/profile_vms/profile_vm.dart';
+import '../../../core/data/view_models/referral_vm.dart';
 import '../../../core/utilities/biometric_utils.dart';
 import '../../../core/utilities/secure_storage/secure_storage_utils.dart';
 import '../../../core/utilities/validator.dart';
+import '../../../locator.dart';
 import '../../widgets/clickable.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_painter/dotted_border.dart';
@@ -67,6 +76,8 @@ class _LoginState extends ConsumerState<Login> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(loginViewModel);
+    final hasVisitingRoute = widget.visitingRoute != null;
+    final hasDestinationRoute = widget.destinationRoute != null;
     return BusyOverlay(
       show: vm.state == ViewState.busy,
       child: Scaffold(
@@ -266,6 +277,43 @@ class _LoginState extends ConsumerState<Login> {
 
                                   if(vm.state == ViewState.retrieved){
 
+                                    if(hasVisitingRoute && !hasDestinationRoute){
+
+                                      //fetch user details
+                                      fetchUserDetails();
+
+
+                                      locator<NavigationService>().popUntil(
+                                        routeName: widget.visitingRoute!,
+                                      );
+
+                                      //show success message
+                                      showFlushBar(
+                                        context: context,
+                                        message: vm.message,
+                                      );
+                                      return;
+                                    }
+
+                                    if(hasVisitingRoute && hasDestinationRoute){
+
+                                      //fetch user details
+                                      fetchUserDetails();
+
+
+                                      locator<NavigationService>().pushAndClearRoutes(
+                                          routeName: widget.destinationRoute!,
+                                          clearRoute: widget.visitingRoute!
+                                      );
+
+                                      //show success message
+                                      showFlushBar(
+                                        context: context,
+                                        message: vm.message,
+                                      );
+                                      return;
+                                    }
+
                                     //nav user into the app
                                     pushNavigation(context: context, widget: const BottomNav(), routeName: NamedRoutes.bottomNav);
 
@@ -295,7 +343,10 @@ class _LoginState extends ConsumerState<Login> {
                               ),
                               Clickable(
                                 onPressed: (){
-                                  pushNavigation(context: context, widget: const SignUp(), routeName: NamedRoutes.signUp);
+                                  pushNavigation(context: context, widget: SignUp(
+                                    visitingRoute: widget.visitingRoute,
+                                    destinationRoute: widget.destinationRoute,
+                                  ), routeName: NamedRoutes.signUp);
                                 },
                                 child: Text(
                                   "Sign Up",
@@ -396,5 +447,26 @@ class _LoginState extends ConsumerState<Login> {
     _biometricsEnabled = await SecureStorageUtils.retrieveBiometricPref();
     _savedPassword = await SecureStorageUtils.retrievePassword();
     setState(() {});
+  }
+
+  fetchUserDetails(){
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      final loginVm = ref.read(loginViewModel);
+      final myGamesVm = ref.read(myGamesViewModel);
+      final myGameResultsVm = ref.read(myGameResultsViewModel);
+      final vm = ref.read(referralViewModel);
+      ref.read(profileViewModel).user = loginVm.user;
+      //fetch cart
+      ref.read(cartViewModel).transferCart();
+      //fetch my games
+      myGamesVm.fetchMyGames();
+      //fetch my game results
+      myGameResultsVm.fetchMyGameResults();
+      ref.read(notificationSettingsViewModel).settings = loginVm.user?.notificationSetting;
+      ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
+      vm.fetchEarnedHistory();
+      vm.fetchUsedHistory();
+
+    });
   }
 }

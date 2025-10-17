@@ -10,10 +10,14 @@ import 'package:windfall/core/utilities/extensions/color_extensions.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/empty_state.dart';
+import 'package:windfall/ui/widgets/guest_message.dart';
 import 'package:windfall/ui/widgets/listview_items/my_game_item.dart';
+import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
+import '../../../core/constants/named_routes.dart';
 import '../../../core/data/enum/view_state.dart';
+import '../../../core/data/view_models/authentication_vms/login_vm.dart';
 import '../../../core/data/view_models/bottom_nav_view_model.dart';
 import '../error_state.dart';
 import '../screen_title.dart';
@@ -23,6 +27,7 @@ class MyGamesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginVm = ref.watch(loginViewModel);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,7 +46,7 @@ class MyGamesSection extends ConsumerWidget {
                     subTitle: 'Track and Manage games Played'
                 ),
               ),
-              Clickable(
+              if(loginVm.isLoggedIn)Clickable(
                 onPressed: (){
                   final container =
                   ProviderScope.containerOf(context);
@@ -72,7 +77,7 @@ class MyGamesSection extends ConsumerWidget {
           ),
         ),
         SizedBox(height: 24.h,),
-          Builder(
+          if(loginVm.isLoggedIn)Builder(
             builder: (context) {
 
               final vm = ref.watch(myGamesViewModel);
@@ -161,6 +166,18 @@ class MyGamesSection extends ConsumerWidget {
 
 
             }
+          )
+        else WindfallContainer(
+            margin: EdgeInsets.symmetric(
+              horizontal: AppDimension.paddingLeft
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 24.h,
+              horizontal: 24.w
+            ),
+              child: GuestMessage(
+                visitingRoute: NamedRoutes.bottomNav,
+              )
           )
 
       ],

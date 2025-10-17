@@ -59,9 +59,10 @@ class _BottomNavState extends ConsumerState<BottomNav> {
           ref.read(referralViewModel).referralCode = loginVm.user?.referralCode ?? '';
           vm.fetchEarnedHistory();
           vm.fetchUsedHistory();
-          //cartVm.fetchCart(); //delete guest token
+          cartVm.transferCart();
         }else{
-          cartVm.fetchCart();
+          //generate guest token
+          cartVm.generateGuestToken();
         }
 
       });
@@ -72,6 +73,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
 
     super.initState();
   }
+
 
 
 

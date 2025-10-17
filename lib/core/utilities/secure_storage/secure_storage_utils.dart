@@ -16,6 +16,17 @@ class SecureStorageUtils{
     return SecureStorageInit.storage.read(key: SecuredStorageConstants.token);
   }
 
+  ///save guest token
+  static saveGuestToken({required String? value}) async{
+    SecureStorageInit.storage.write(key: SecuredStorageConstants.guestToken, value: value);
+  }
+
+  ///retrieve guest token
+  static Future<String?> retrieveGuestToken() async{
+    final pref = await SecureStorageInit.storage.read(key: SecuredStorageConstants.guestToken);
+    return pref;
+  }
+
   ///save passcode
   static saveToken({required String token}) async{
     await SecureStorageInit.storage.write(key: SecuredStorageConstants.token, value: token);
