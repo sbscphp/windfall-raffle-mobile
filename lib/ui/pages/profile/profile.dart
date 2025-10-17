@@ -17,7 +17,6 @@ import 'package:windfall/ui/pages/profile/rewards.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
-import 'package:windfall/ui/widgets/guest_message.dart';
 import 'package:windfall/ui/widgets/profile/profile_action.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
