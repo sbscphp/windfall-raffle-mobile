@@ -166,10 +166,13 @@ class RegistrationVm extends BaseState {
       "optIn_exclusive_offer": _receiveEmailNotification,
       "date_of_birth": DateUtilities.reverseDate(dob),
       //"heard_from": hearAboutUs,
-      "referral_code": referral,
       "fcm_token": token,
       "platform":"mobile"
     };
+
+    if(referral.isNotEmpty){
+      details['referral_code'] = referral;
+    }
 
 
     await _authDp.register(details: details).then((response) async{

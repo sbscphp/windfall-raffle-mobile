@@ -69,7 +69,7 @@ class CartVm extends BaseState{
   }
 
   //add/update cart
-  addToCart({required String? gameId, required int? quantity}) async {
+  addToCart({required String? gameId, required int? quantity, bool isUpdatingCart = false}) async {
     setSecondState(ViewState.busy);
     final details = {
       "quantity": quantity
@@ -77,7 +77,7 @@ class CartVm extends BaseState{
     await _cartDp
         .addToCart(gameId: gameId, details: details)
         .then((response) {
-      _message = response.message ?? defaultSuccessMessage;
+      _message = isUpdatingCart ? 'Cart updated successfully':response.message ?? defaultSuccessMessage;
       _cartItems = response.data?.cart?.items ?? [];
       _cartSummary = response.data?.cart?.summary;
       setSecondState(ViewState.retrieved);

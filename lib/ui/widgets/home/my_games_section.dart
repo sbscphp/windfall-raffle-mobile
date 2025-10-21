@@ -176,6 +176,7 @@ class MyGamesSection extends ConsumerWidget {
               horizontal: 24.w
             ),
               child: GuestMessage(
+                title: 'No Games Available',
                 visitingRoute: NamedRoutes.bottomNav,
               )
           )

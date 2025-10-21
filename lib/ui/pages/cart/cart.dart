@@ -80,7 +80,7 @@ class _CartState extends ConsumerState<Cart> {
                             titleFontWeight: FontWeight.w600,
                             titleColor: Theme.of(context).colorScheme.textPrimary,
                             subTitle:
-                            'See the list of Raffle Ticket you want buy. Checkout now before draw.',
+                            'See the list of raffle tickets you want to buy. Checkout now before the draw.',
                           ),
                         ),
                       ],

@@ -15,6 +15,7 @@ class CartProduct {
   final dynamic totalPrice;
   final Discount? discount;
   final int? maximumTicketNumberPurchase;
+  final int? minimumTicketNumberPurchase;
 
   CartProduct({
     this.uuid,
@@ -30,7 +31,8 @@ class CartProduct {
     this.discountAmount,
     this.totalPrice,
     this.discount,
-    this.maximumTicketNumberPurchase
+    this.maximumTicketNumberPurchase,
+    this.minimumTicketNumberPurchase
   });
 
   factory CartProduct.fromJson(Map<String, dynamic> json) => CartProduct(
@@ -48,6 +50,7 @@ class CartProduct {
     totalPrice: json["total_price"],
     discount: json["discount"] == null ? null : Discount.fromJson(json["discount"]),
     maximumTicketNumberPurchase: json["maximum_ticket_number_purchase"],
+    minimumTicketNumberPurchase: json["minimum_ticket_number_purchase"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +68,6 @@ class CartProduct {
     "total_price": totalPrice,
     "discount": discount?.toJson(),
     "maximum_ticket_number_purchase": maximumTicketNumberPurchase,
+    "minimum_ticket_number_purchase": minimumTicketNumberPurchase,
   };
 }

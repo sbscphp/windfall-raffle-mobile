@@ -242,9 +242,13 @@ class _CheckoutState extends ConsumerState<Checkout> {
                               ),
                             ],
                           ),
-                          if(showReferralBalField && configVm.useReferralBonus) Consumer(
+                          if(showReferralBalField && configVm.useReferralBonus ) Consumer(
                             builder: (context, ref, child){
                               final referralVm = ref.watch(referralViewModel);
+                              if(referralVm.referralBalance == 0){
+                                return SizedBox.shrink();
+                              }
+
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,

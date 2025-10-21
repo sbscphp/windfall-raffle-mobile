@@ -64,6 +64,7 @@ class _CartItemState extends State<CartItem> {
     final discountedUnitPrice = double.tryParse(widget.item.discountedUnitPrice?.toString() ?? '0') ?? 0;
     final subtotal = double.tryParse(widget.item.totalPrice?.toString() ?? '0') ?? 0;
     final maxQuantity = widget.item.maximumTicketNumberPurchase ?? 1;
+    final minQuantity = widget.item.minimumTicketNumberPurchase ?? 1;
     final quantity = widget.item.quantity ?? 1;
     return WindfallContainer(
       padding: EdgeInsets.all(16.w),
@@ -220,10 +221,12 @@ class _CartItemState extends State<CartItem> {
                                   swapButtons: true,
                                   showBottomBorder: true,
                                   upperLimit: maxQuantity,
+                                  lowerLimit: minQuantity,
                                   onChanged: (value) async{
                                     await vm.addToCart(
                                         gameId: id,
-                                        quantity: value.toInt()
+                                        quantity: value.toInt(),
+                                      isUpdatingCart: true
                                     );
                                     showFlushBar(
                                         context: context,

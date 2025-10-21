@@ -458,7 +458,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                             SizedBox(width: 10.w,),
                             Expanded(
                               child: Text(
-                                'By creating your account, you acknowledge and confirm that you are at least 18 years old and have read and accept Windfall’s policies relating to age verification.',
+                                'By creating your account, you acknowledge and confirm that you are at least 18 years old and have read and accepted Windfall’s policies relating to age verification.',
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(context).colorScheme.textSecondary

@@ -610,6 +610,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                 QuantityCounter(
                   value: vm.quantity.toInt(),
                   upperLimit: vm.availableTickets,
+                  lowerLimit: vm.minQuantity,
                   onChanged: (value) {
                     // setState(() {
                     //   vm.quantity = value.toDouble() ?? 1;
@@ -730,7 +731,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                     padding: EdgeInsets.only(top: 5.h),
                     child: FlutterSlider(
                       values: [vm.quantity.toDouble()],
-                      min: 1,
+                      min: vm.minQuantity.toDouble(),
                       max: vm.availableTickets.toDouble(),
                       handler: FlutterSliderHandler(
                         decoration: BoxDecoration(), // removes default glow

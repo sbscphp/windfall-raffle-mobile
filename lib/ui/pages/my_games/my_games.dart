@@ -174,7 +174,7 @@ class _MyGamesState extends ConsumerState<MyGames> {
                             child: EmptyState(
                               asset: AppAsset.gamesEmptyState,
                               title: 'No Results',
-                              subtitle: "no results found",
+                              subtitle: "No results found",
                               showCtaButton: false,
                             ),
                           )
