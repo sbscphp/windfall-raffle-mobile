@@ -119,7 +119,7 @@ class SecureStorageUtils{
     await SecureStorageUtils.saveToken(token: response?.accessToken ?? '');
 
     //save password
-    //await SecureStorageUtils.savePassword(value: password);
+    await SecureStorageUtils.savePassword(value: password);
 
     //retrieve saved user
     final savedUser = await SecureStorageUtils.retrieveUser();

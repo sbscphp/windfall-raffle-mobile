@@ -15,6 +15,7 @@ class User {
   final String? referralCode;
   final String? referralLink;
   final String? referralBalance;
+  final String? biometrics;
   final dynamic exclusionType;
   final dynamic excludeTill;
   final NotificationSetting? notificationSetting;
@@ -36,6 +37,7 @@ class User {
     this.referralBalance,
     this.exclusionType,
     this.excludeTill,
+    this.biometrics,
     this.notificationSetting,
   });
 
@@ -53,6 +55,7 @@ class User {
     spendLimitStatus: json["spend_limit_status"],
     referralCode: json["referral_code"],
     referralLink: json["referral_link"],
+    biometrics: json["biometrics"],
     referralBalance: json["referral_balance"],
     exclusionType: json["exclusion_type"],
     excludeTill: json["exclude_till"],
@@ -70,6 +73,7 @@ class User {
     "date_of_birth": "${dateOfBirth!.year.toString().padLeft(4, '0')}-${dateOfBirth!.month.toString().padLeft(2, '0')}-${dateOfBirth!.day.toString().padLeft(2, '0')}",
     "lga": lga,
     "area": area,
+    "biometrics": biometrics,
     "spend_limit_status": spendLimitStatus,
     "referral_code": referralCode,
     "referral_link": referralLink,

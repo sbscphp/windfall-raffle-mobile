@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,11 +22,30 @@ import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/data/enum/view_state.dart';
 
-class AccountSecurity extends ConsumerWidget {
+class AccountSecurity extends ConsumerStatefulWidget {
   const AccountSecurity({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AccountSecurity> createState() => _AccountSecurityState();
+
+}
+
+class _AccountSecurityState extends ConsumerState<AccountSecurity> {
+
+  late bool _biometricsPref;
+
+
+
+  @override
+  void initState() {
+    _biometricsPref = ref.read(profileViewModel).biometricsEnabled;
+    super.initState();
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
     final otpVm = ref.watch(otpViewModel);
     return BusyOverlay(
       show: otpVm.state == ViewState.busy,
@@ -44,6 +64,53 @@ class AccountSecurity extends ConsumerWidget {
                 title: "Account Security",
                 subTitle: "Manage your account security with ease.",
                 subTitleSize: 12.sp,
+              ),
+              SizedBox(height: 24.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Enable Biometric Authentication',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.textPrimary,
+                        fontWeight: FontWeight.w600
+                    ),
+                  ),
+                  Transform.scale(
+                    scale: .75,
+                    child: CupertinoSwitch(
+                      value: _biometricsPref,
+                      activeTrackColor: ColorPath.redOrange,
+                      onChanged: (value) async{
+                        setState(() {
+                          _biometricsPref = !_biometricsPref;
+
+                        });
+
+                        final profileVm = ref.read(profileViewModel);
+                        await profileVm.updateProfile(
+                          isUpdatingBiometricsPref: true,
+                            details: {
+                          'biometrics': _biometricsPref ? 'true': 'false'
+                        });
+                        if(profileVm.state == ViewState.error){
+                          setState(() {
+                            //revert value
+                            _biometricsPref = !_biometricsPref;
+                          });
+                          //display error message
+                          showFlushBar(
+                              context: context,
+                              message: profileVm.message,
+                            success: false
+                          );
+                        }
+
+
+                      },
+                    ),
+                  )
+                ],
               ),
               SizedBox(height: 24.h),
               WindfallContainer(
@@ -72,11 +139,11 @@ class AccountSecurity extends ConsumerWidget {
                                 "Keep your account safe by regularly updating your password. Choose a strong, unique password to protect your personal information and raffle activity",
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      height: 1.25,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.textTertiary,
-                                    ),
+                                  height: 1.25,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.textTertiary,
+                                ),
                               ),
                             ],
                           ),
@@ -100,13 +167,13 @@ class AccountSecurity extends ConsumerWidget {
                           pushNavigation(
                               context: context,
                               widget: Otp(otpType: OtpType.resetPassword, identifier: email),
-                            routeName: NamedRoutes.otp
+                              routeName: NamedRoutes.otp
                           );
                         }else{
                           showFlushBar(
                               context: context,
                               message: otpVm.message,
-                            success: false
+                              success: false
                           );
                         }
 
@@ -128,9 +195,9 @@ class AccountSecurity extends ConsumerWidget {
                             "Change Password",
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
-                                  color: Theme.of(context).colorScheme.whiteText,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              color: Theme.of(context).colorScheme.whiteText,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           SizedBox(width: 6.w),
                           CustomSvg(

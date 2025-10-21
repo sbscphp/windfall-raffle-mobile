@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windfall/core/utilities/secure_storage/secure_storage_utils.dart';
 
 import '../../../../locator.dart';
 import '../../../constants/app_constants.dart';
@@ -42,6 +43,7 @@ class ProfileVm extends BaseState{
   bool get hasImage => image.isNotEmpty;
   String get referralCode => _user?.referralCode ?? '';
   String get referralLink => _user?.referralLink ?? '';
+  bool get biometricsEnabled => _user?.biometrics?.toLowerCase() == 'true';
 
 
 
@@ -62,13 +64,17 @@ class ProfileVm extends BaseState{
 
   //update profile
   updateProfile(
-      {required Map<String, dynamic> details}) async {
+      {required Map<String, dynamic> details, bool isUpdatingBiometricsPref = false}) async {
 
     setState(ViewState.busy);
 
     await _profileDp.updateProfile(details: details).then((response) async{
       _message = response.message ?? defaultSuccessMessage;
       _user = response.data;
+      if(isUpdatingBiometricsPref){
+        final _pref = details['biometrics'].toString().toLowerCase() == 'true';
+        await SecureStorageUtils.saveBiometricsPref(value: _pref);
+      }
       setState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
