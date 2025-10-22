@@ -26,6 +26,8 @@
 	<true/>
 	 <key>NSCameraUsageDescription</key>
      <string>Windfall requires access to the camera to take a picture to be used as your profile photo.</string>
+     <key>NSFaceIDUsageDescription</key>
+     <string>Windfall uses biometrics to authenticate users</string>
      <key>NSMicrophoneUsageDescription</key>
      <string>Windfall needs access to your microphone for voice</string>
      <key>NSPhotoLibraryUsageDescription</key>

@@ -15,7 +15,7 @@ class User {
   final String? referralCode;
   final String? referralLink;
   final String? referralBalance;
-  final String? biometrics;
+  String? biometrics;
   final dynamic exclusionType;
   final dynamic excludeTill;
   final NotificationSetting? notificationSetting;

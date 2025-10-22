@@ -75,6 +75,6 @@ class MyGameResultsVm extends BaseState{
 
 }
 
-final myGameResultsViewModel = ChangeNotifierProvider.autoDispose<MyGameResultsVm>((ref){
+final myGameResultsViewModel = ChangeNotifierProvider<MyGameResultsVm>((ref){
   return MyGameResultsVm();
 });

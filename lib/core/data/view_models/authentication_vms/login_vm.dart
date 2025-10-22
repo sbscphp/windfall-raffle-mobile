@@ -61,6 +61,8 @@ class LoginVm extends BaseState {
 
   initUserFromStorage({bool refreshUi = true})async{
     user = await SecureStorageUtils.retrieveUser();
+    final biometricPref = await SecureStorageUtils.retrieveBiometricPref();
+    user?.biometrics = biometricPref ? 'true':'false';
     if(refreshUi)notifyListeners();
   }
 
