@@ -23,9 +23,9 @@ const String phoneNumberRegex = r'0[789][01]\d{8}';
 const String phoneNumberLengthError = 'Phone number must be 11 digits';
 const String invalidPhoneNumberField =
     "Invalid Phone Number";
-const String terms = "https://winit-app.netlify.app/policy";
-const String faq = "https://winit-app.netlify.app/faq";
-const String claimPrize = "https://winit-app.netlify.app/prize-claim";
+const String terms = "";
+const String faq = "https://windfall-fe-main-app.vercel.app/faq";
+const String claimPrize = "";
 ///design height, draft(responsiveness)
 const double draftHeight = 812;
 

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:windfall/core/constants/app_constants.dart';
 import 'package:windfall/core/constants/app_dimension.dart';
 import 'package:windfall/core/constants/app_theme/custom_color_scheme.dart';
 import 'package:windfall/core/constants/named_routes.dart';
@@ -17,6 +18,7 @@ import 'package:windfall/ui/pages/profile/rewards.dart';
 import 'package:windfall/ui/pages/profile/settings.dart';
 import 'package:windfall/ui/widgets/clickable.dart';
 import 'package:windfall/ui/widgets/custom_divider.dart';
+import 'package:windfall/ui/widgets/in_app_web_view.dart';
 import 'package:windfall/ui/widgets/profile/profile_action.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/constants/app_asset.dart';
@@ -208,6 +210,23 @@ class _ProfileState extends ConsumerState<Profile> {
                                         label: "My Games",
                                         onPressed: (){
                                           bottomNavVm.setCurrentIndex(2);
+                                        }
+                                    ),
+                                    CustomDivider(
+                                      verticalSpace: 16.h,
+                                    ),
+                                    ProfileAction(
+                                        imageAsset: AppAsset.faq,
+                                        label: "FAQs",
+                                        onPressed: (){
+                                          pushNavigation(
+                                              context: context,
+                                              widget: const InAppWebView(
+                                                  url: faq,
+                                                  title: 'FAQs'
+                                              ),
+                                            routeName: NamedRoutes.inAppWebView
+                                          );
                                         }
                                     ),
                                     CustomDivider(

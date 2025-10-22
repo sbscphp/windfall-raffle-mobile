@@ -58,6 +58,9 @@ class NamedRoutes {
   static const checkout = '/checkout';
   static const paymentReceipt = '/paymentReceipt';
 
+  //webview
+  static const inAppWebView = '/inAppWebView';
+
 
 
 
