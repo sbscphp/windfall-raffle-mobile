@@ -116,6 +116,7 @@ class _NotificationsState extends ConsumerState<Notifications> {
                             backgroundColor: Colors.white,
                             color: ColorPath.redOrange,
                             child: ListView.separated(
+                              controller: _scrollController,
                               physics: AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
@@ -219,8 +220,9 @@ class NotificationItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
+                      Flexible(
                         child: Text(
                           title,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
