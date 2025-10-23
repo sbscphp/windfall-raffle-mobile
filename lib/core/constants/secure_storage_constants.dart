@@ -7,4 +7,5 @@ class SecuredStorageConstants {
   static const String biometricStatus = 'biometricStatus';
   static const String biometricPref = 'biometricPref';
   static const String guestToken = 'guestToken';
+  static const String authStatus = 'authStatus';
 }

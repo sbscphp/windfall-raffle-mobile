@@ -226,7 +226,7 @@ class _RewardsState extends ConsumerState<Rewards> with SingleTickerProviderStat
             assetHeight: 128.h,
             assetWidth: 128.w,
             showCtaButton: false,
-            title: "You haven't used any referral bonus yet",
+            title: "You haven't earned any referral bonus yet",
             //ctaText: "Explore All Games",
             subtitle:
             "",

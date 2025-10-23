@@ -107,6 +107,18 @@ class SecureStorageUtils{
   }
 
   ///saves biometrics pref
+  static saveAuthStatus({required bool value}) async{
+    SecureStorageInit.storage.write(key: SecuredStorageConstants.authStatus, value: value == true ? 'true':'false');
+  }
+
+  ///retrieves 'auth status'
+  static Future<bool> retrieveAuthStatus() async{
+    final pref = await SecureStorageInit.storage.read(key: SecuredStorageConstants.authStatus);
+    if(pref == null)return false;
+    return pref == 'true' ?  true : false;
+  }
+
+  ///saves biometrics pref
   static saveBiometricsPref({required bool? value}) async{
     print('pref to save::::::$value>>>>');
     SecureStorageInit.storage.write(key: SecuredStorageConstants.biometricPref, value: value == true ? 'true':'false');
@@ -120,6 +132,9 @@ class SecureStorageUtils{
 
     //save password
     await SecureStorageUtils.savePassword(value: password);
+
+    //save auth status
+    await SecureStorageUtils.saveAuthStatus(value: true);
 
     //retrieve saved user
     final savedUser = await SecureStorageUtils.retrieveUser();

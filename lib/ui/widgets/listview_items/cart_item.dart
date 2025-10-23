@@ -136,10 +136,10 @@ class _CartItemState extends State<CartItem> {
                             baseBottomSheet(
                               context: context,
                               content: CustomBottomSheet(
-                                title: "Delete Ticket ? ",
+                                title: "Delete Ticket?",
                                 subTitle:
                                 "Are you sure you want to delete this ticket? Kindly note that this action cannot be reversed",
-                                firstbuttonText: "Save Changes",
+                                firstbuttonText: "Yes, Delete",
                                 secondButtonText: "No, Close",
                                 firstButtonOnPressed: ()async{
 

@@ -44,6 +44,7 @@ class EmptyState extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     color:
                     Theme.of(context).colorScheme.textPrimary),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 4.h,),
               Text(
@@ -106,6 +107,7 @@ class EmptyState extends StatelessWidget {
               fontWeight: FontWeight.w800,
               color:
               Theme.of(context).colorScheme.textPrimary),
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 8.h,),
         Padding(

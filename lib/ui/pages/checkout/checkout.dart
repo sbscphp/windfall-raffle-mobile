@@ -313,6 +313,18 @@ class _CheckoutState extends ConsumerState<Checkout> {
 
                         if(loginVm.isLoggedIn){
 
+                          if(_referralAmount.text.isNotEmpty){
+                            final referralVm = ref.read(referralViewModel);
+                            if(Utilities.formatToDouble(value: _referralAmount.text) > referralVm.referralBalance){
+                              showFlushBar(
+                                  context: context,
+                                  message:  "Amount can't exceed ₦${Utilities.formatAmount(amount: referralVm.referralBalance)}",
+                                success: false
+                              );
+                              return;
+                            }
+                          }
+
                           await paymentVm.fetchPaymentBreakdown(
                               checkoutType: vm.checkoutType,
                               checkoutItems: vm.checkoutItems,

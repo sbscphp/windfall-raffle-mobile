@@ -17,6 +17,7 @@ import 'core/data/view_models/utility_view_models/config_view_model.dart';
 import 'core/data/view_models/utility_view_models/lga_details_view_model.dart';
 import 'core/utilities/firebase_messaging_utils.dart';
 import 'core/utilities/secure_storage/secure_storage_init.dart';
+import 'core/utilities/secure_storage/secure_storage_utils.dart';
 import 'locator.dart';
 
 
@@ -30,7 +31,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
- await Firebase.initializeApp();
+  await Firebase.initializeApp();
   await dotenv.load(fileName: ".env");
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // if(Platform.isAndroid){
@@ -49,11 +50,14 @@ void main() async{
   AppConfig.setEnvironment(Environment.staging);
   SecureStorageInit.initSecureStorage();
   setupLocator();
-  runApp(const ProviderScope(child: MyApp()));
+  // Load login status before launching the app
+  final isLoggedIn = await SecureStorageUtils.retrieveAuthStatus();
+  runApp(ProviderScope(child: MyApp(isLoggedIn: isLoggedIn,)));
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();
@@ -84,6 +88,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -109,7 +115,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   onGenerateRoute: router.generateRoute,
                   //home: const Landing(),
                   //home: const BottomNav(),
-                  initialRoute: NamedRoutes.bottomNav,
+                  initialRoute: widget.isLoggedIn ? NamedRoutes.bottomNav : NamedRoutes.login,
                   // routes: {
                   //   NamedRoutes.bottomNav: (context) => const BottomNav(),
                   // },

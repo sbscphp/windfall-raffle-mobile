@@ -145,11 +145,13 @@ class _LoginState extends ConsumerState<Login> {
                                       ),
                                     ),
                                     SizedBox(height: 5.h,),
-                                    Text(
-                                      'Welcome to WindFall. Play to win today 🚀 ',
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.w400,
-                                          color: Theme.of(context).colorScheme.textSecondary
+                                    FittedBox(
+                                      child: Text(
+                                        'Welcome to WindFall. Play to win today 🚀 ',
+                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color: Theme.of(context).colorScheme.textSecondary
+                                        ),
                                       ),
                                     ),
                                   ],

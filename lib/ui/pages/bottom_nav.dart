@@ -69,7 +69,7 @@ class _BottomNavState extends ConsumerState<BottomNav> {
     });
 
     //init push notification listeners
-    FirebaseMessagingUtils.pushNotificationListenerInit(context: context, ref: ref);
+    FirebaseMessagingUtils.pushNotificationListenerInit(context: context);
 
     super.initState();
   }
