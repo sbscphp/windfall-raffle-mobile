@@ -68,6 +68,7 @@ class AppAsset {
   static const String subTotal = 'assets/icons/subtotal.svg';
   static const String appIcon = 'assets/icons/app_icon.svg';
   static const String faq = 'assets/icons/faq.svg';
+  static const String alert = 'assets/icons/alert.svg';
 
 
 

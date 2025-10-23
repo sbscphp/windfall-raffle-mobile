@@ -27,10 +27,10 @@ const String terms = "";
 const String faq = "https://windfall-fe-main-app.vercel.app/faq";
 const String claimPrize = "";
 ///design height, draft(responsiveness)
-const double draftHeight = 812;
+const double draftHeight = 932;
 
 ///design width, draft(responsiveness)
-const double draftWidth = 375;
+const double draftWidth = 430;
 ///pagination limit
 const int paginationLimit = 20;
 

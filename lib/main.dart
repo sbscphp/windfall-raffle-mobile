@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:windfall/core/constants/app_constants.dart';
 import 'package:windfall/router.dart' as router;
 import 'core/constants/app_config.dart';
 import 'core/constants/app_theme/app_theme.dart';
@@ -99,7 +100,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           return ScreenUtilInit(
             splitScreenMode: false,
             minTextAdapt: true,
-            designSize: Size(width, height),
+            designSize: Size(draftWidth, draftHeight),
             //designSize: designSize,
             builder: (context, child) => Consumer(
               builder: (context, ref, child) {

@@ -21,6 +21,7 @@ import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 
 import '../../../core/data/enum/view_state.dart';
+import '../../../core/utilities/biometric_utils.dart';
 
 class AccountSecurity extends ConsumerStatefulWidget {
   const AccountSecurity({super.key});
@@ -33,13 +34,21 @@ class AccountSecurity extends ConsumerStatefulWidget {
 class _AccountSecurityState extends ConsumerState<AccountSecurity> {
 
   late bool _biometricsPref;
+  bool _canUseBiometrics = false;
 
 
 
   @override
   void initState() {
+    _checkBiometricsAvailability();
     _biometricsPref = ref.read(profileViewModel).biometricsEnabled;
     super.initState();
+  }
+
+  _checkBiometricsAvailability()async{
+    _canUseBiometrics = await BiometricUtils.canAuthenticate();
+    setState(() {});
+
   }
 
 
@@ -65,52 +74,54 @@ class _AccountSecurityState extends ConsumerState<AccountSecurity> {
                 subTitle: "Manage your account security with ease.",
                 subTitleSize: 12.sp,
               ),
-              SizedBox(height: 24.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Enable Biometric Authentication',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.textPrimary,
-                        fontWeight: FontWeight.w600
+              if(_canUseBiometrics)Padding(
+                padding: EdgeInsets.only(top: 24.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Enable Biometric Authentication',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.textPrimary,
+                          fontWeight: FontWeight.w600
+                      ),
                     ),
-                  ),
-                  Transform.scale(
-                    scale: .75,
-                    child: CupertinoSwitch(
-                      value: _biometricsPref,
-                      activeTrackColor: ColorPath.redOrange,
-                      onChanged: (value) async{
-                        setState(() {
-                          _biometricsPref = !_biometricsPref;
-
-                        });
-
-                        final profileVm = ref.read(profileViewModel);
-                        await profileVm.updateProfile(
-                          isUpdatingBiometricsPref: true,
-                            details: {
-                          'biometrics': _biometricsPref ? 'true': 'false'
-                        });
-                        if(profileVm.state == ViewState.error){
+                    Transform.scale(
+                      scale: .75,
+                      child: CupertinoSwitch(
+                        value: _biometricsPref,
+                        activeTrackColor: ColorPath.redOrange,
+                        onChanged: (value) async{
                           setState(() {
-                            //revert value
                             _biometricsPref = !_biometricsPref;
+
                           });
-                          //display error message
-                          showFlushBar(
-                              context: context,
-                              message: profileVm.message,
-                            success: false
-                          );
-                        }
+
+                          final profileVm = ref.read(profileViewModel);
+                          await profileVm.updateProfile(
+                            isUpdatingBiometricsPref: true,
+                              details: {
+                            'biometrics': _biometricsPref ? 'true': 'false'
+                          });
+                          if(profileVm.state == ViewState.error){
+                            setState(() {
+                              //revert value
+                              _biometricsPref = !_biometricsPref;
+                            });
+                            //display error message
+                            showFlushBar(
+                                context: context,
+                                message: profileVm.message,
+                              success: false
+                            );
+                          }
 
 
-                      },
-                    ),
-                  )
-                ],
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
               SizedBox(height: 24.h),
               WindfallContainer(

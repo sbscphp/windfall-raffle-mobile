@@ -17,6 +17,8 @@ import 'package:windfall/ui/widgets/custom_svg.dart';
 import 'package:windfall/ui/widgets/screen_title.dart';
 import 'package:windfall/ui/widgets/windfall_container.dart';
 import '../../../core/data/enum/view_state.dart';
+import '../../widgets/bottom_sheets/action_confirmation.dart';
+import '../../widgets/bottom_sheets/base_bottom_sheet.dart';
 import '../../widgets/show_flush_bar.dart';
 
 class Settings extends ConsumerWidget {
@@ -75,21 +77,30 @@ class Settings extends ConsumerWidget {
                 subInfo: "Log out of your account. ",
                 onPressed: () async {
 
-                  final container = ProviderScope.containerOf(context);
-                  final loginVm = container.read(loginViewModel);
-                  await loginVm.logOut();
-                  if (loginVm.secondState == ViewState.retrieved) {
-                    pushAndClearAllNavigation(
-                      context: context,
-                      widget: const Login(),
-                      routeName: NamedRoutes.login,
-                    );
-                  }
-                  //show message
-                  showFlushBar(
+                  baseBottomSheet(
                     context: context,
-                    success: loginVm.secondState == ViewState.retrieved,
-                    message: loginVm.message,
+                    content: ActionConfirmation(
+                      title: 'Are you sure you want to log out ?',
+                      proceedBtnText: 'Yes, log out',
+                      onPressed: ()async{
+                        final container = ProviderScope.containerOf(context);
+                        final loginVm = container.read(loginViewModel);
+                        await loginVm.logOut();
+                        if (loginVm.secondState == ViewState.retrieved) {
+                          pushAndClearAllNavigation(
+                            context: context,
+                            widget: const Login(),
+                            routeName: NamedRoutes.login,
+                          );
+                        }
+                        //show message
+                        showFlushBar(
+                          context: context,
+                          success: loginVm.secondState == ViewState.retrieved,
+                          message: loginVm.message,
+                        );
+                      },
+                    ),
                   );
                 },
               ),
