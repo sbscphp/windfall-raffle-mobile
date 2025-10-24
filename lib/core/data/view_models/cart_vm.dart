@@ -69,7 +69,13 @@ class CartVm extends BaseState{
   }
 
   //add/update cart
-  addToCart({required String? gameId, required int? quantity, bool isUpdatingCart = false}) async {
+  addToCart({required String? gameId, required int? quantity, int? index, bool isUpdatingCart = false}) async {
+    int? currentValue = 0;
+    if(index != null && isUpdatingCart){
+      currentValue = _cartItems[index].quantity;
+      _cartItems[index].quantity = quantity;
+    }
+
     setSecondState(ViewState.busy);
     final details = {
       "quantity": quantity
@@ -81,7 +87,10 @@ class CartVm extends BaseState{
       _cartItems = response.data?.cart?.items ?? [];
       _cartSummary = response.data?.cart?.summary;
       setSecondState(ViewState.retrieved);
-    }, onError: (e) {
+    }).catchError((e) {
+          if(index != null && isUpdatingCart){
+            _cartItems[index].quantity = currentValue;
+          }
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
       setSecondState(ViewState.error);
     });

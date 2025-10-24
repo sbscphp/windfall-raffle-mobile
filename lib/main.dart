@@ -95,13 +95,19 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (context, constraints) {
-          final height = constraints.maxHeight - 32;
-          final width = constraints.maxWidth - 16;
+          final maxWidth = constraints.maxWidth;
+          final maxHeight = constraints.maxHeight;
+
+          const figmaDesignSize = Size(draftWidth, draftHeight);
+          final isFoldOrTablet = maxWidth > phoneWidth;
+          final designSize = isFoldOrTablet
+              ? Size(maxWidth - 16, maxHeight - 32)
+              : figmaDesignSize; // standard phone design
           return ScreenUtilInit(
             splitScreenMode: false,
             minTextAdapt: true,
-            designSize: Size(draftWidth, draftHeight),
-            //designSize: designSize,
+            //designSize: Size(maxWidth - 16,  maxHeight - 32),
+            designSize: designSize,
             builder: (context, child) => Consumer(
               builder: (context, ref, child) {
                 final themeVm = ref.watch(themeSelectionViewModel);

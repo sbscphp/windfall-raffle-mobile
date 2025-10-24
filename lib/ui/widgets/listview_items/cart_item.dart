@@ -21,6 +21,7 @@ import 'package:windfall/ui/widgets/windfall_tag.dart';
 import '../../../core/data/enum/tag_type.dart';
 import '../../../core/data/enum/view_state.dart';
 import '../../../core/data/models/cart_product.dart';
+import '../../../core/utilities/debouncer.dart';
 import '../../../core/utilities/navigator.dart';
 import '../../../core/utilities/utilities.dart';
 import '../bottom_sheets/base_bottom_sheet.dart';
@@ -44,8 +45,11 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
 
+  late Debouncer debouncer;
+
   @override
   void initState() {
+    debouncer = Debouncer(milliseconds: 800);
     super.initState();
   }
 
@@ -63,8 +67,10 @@ class _CartItemState extends State<CartItem> {
     final desc = widget.item.description ?? 'N/A';
     final discountedUnitPrice = double.tryParse(widget.item.discountedUnitPrice?.toString() ?? '0') ?? 0;
     final subtotal = double.tryParse(widget.item.totalPrice?.toString() ?? '0') ?? 0;
-    final maxQuantity = widget.item.maximumTicketNumberPurchase ?? 1;
     final minQuantity = widget.item.minimumTicketNumberPurchase ?? 1;
+    final maxAvailable = widget.item.maximumTicketNumberPurchase ?? 1;
+    final ticketsLeft = widget.item.ticketsLeft ?? 1;
+    final maxQuantity = ticketsLeft < maxAvailable ? ticketsLeft : maxAvailable;
     final quantity = widget.item.quantity ?? 1;
     return WindfallContainer(
       padding: EdgeInsets.all(16.w),
@@ -223,16 +229,20 @@ class _CartItemState extends State<CartItem> {
                                   upperLimit: maxQuantity,
                                   lowerLimit: minQuantity,
                                   onChanged: (value) async{
-                                    await vm.addToCart(
-                                        gameId: id,
-                                        quantity: value.toInt(),
-                                      isUpdatingCart: true
-                                    );
-                                    showFlushBar(
-                                        context: context,
-                                        message: vm.message,
-                                      success: vm.secondState == ViewState.retrieved
-                                    );
+                                    debouncer.performAction(action: () async {
+                                      await vm.addToCart(
+                                          index: widget.index,
+                                          gameId: id,
+                                          quantity: value.toInt(),
+                                          isUpdatingCart: true
+                                      );
+                                      showFlushBar(
+                                          context: context,
+                                          message: vm.message,
+                                          success: vm.secondState == ViewState.retrieved
+                                      );
+                                    });
+
                                   },
                                 )
                               : Text(

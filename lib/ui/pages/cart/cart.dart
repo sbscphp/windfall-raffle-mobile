@@ -98,6 +98,7 @@ class _CartState extends ConsumerState<Cart> {
                         final cartItem = vm.cartItems[index];
                         return CartItem(
                           item: cartItem,
+                          index: index,
                         );
                       },
                       separatorBuilder: (context, index) {

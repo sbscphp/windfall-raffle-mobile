@@ -51,7 +51,7 @@ class SingleGameVm extends BaseState{
   String get ctaText => game?.ctaText ?? 'Play Now';
   List<TicketTier> get tickets => game?.ticketTiers ?? [];
   String get discountType => game?.discount?.type ?? '';
-  double get maxPurchaseAmount => double.tryParse(game?.maximumTicketAmountPurchase?.toString() ?? '0') ?? 0;
+  //double get axPurchaseAmount => double.tryParse(game?.maximumTicketAmountPurchase?.toString() ?? '0') ?? 0;
   bool get usePromoCode => game?.allowPromoCodeUsage?.toLowerCase() == 'true';
   bool get useReferralBonus => game?.allowReferralBalanceUsage?.toLowerCase() == 'true';
   List<DiscountTier> get discountTiers => game?.discount?.tiers ?? [];
@@ -66,10 +66,12 @@ class SingleGameVm extends BaseState{
   bool get isEnded => status.toLowerCase() == 'ended';
   DateTime get drawDate => game?.drawDate ?? DateTime.now();
   bool get hasDiscount => _discountUnitPrice != _unitPrice;
-  int get availableTickets => game?.maximumTicketNumberPurchase ?? 1;
   int get minQuantity => game?.minimumTicketNumberPurchase ?? 1;
+  int get ticketsLeft => game?.ticketsLeft ?? maxAvailable;
+  int get maxAvailable => game?.maximumTicketNumberPurchase ?? 1;
+  int get availableTickets => ticketsLeft < maxAvailable ? ticketsLeft : maxAvailable;
   double get minEntryPrice => double.tryParse(game?.ticketPrice?.toString() ?? '0') ?? 0;
-  double get maxPerson => double.tryParse(game?.maximumTicketNumberPurchase?.toString() ?? '0') ?? 0;
+  double get maxPerson => maxAvailable.toDouble();
   List<Prize> get instantPrizes => game?.prizes ?? [];
 
 
@@ -152,10 +154,10 @@ class SingleGameVm extends BaseState{
     return amount;
   }
 
-  //checks when a user crosses the purchase amount threshold for a game
-  bool purchaseAmountLimitExceed({required double amount}){
-    return amount > maxPurchaseAmount;
-  }
+  // //checks when a user crosses the purchase amount threshold for a game
+  // bool urchaseAmountLimitExceed({required double amount}){
+  //   return amount > maxPurchaseAmount;
+  // }
 
 
   //returns an instance of a cart item for checkout

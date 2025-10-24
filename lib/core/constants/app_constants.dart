@@ -26,6 +26,7 @@ const String invalidPhoneNumberField =
 const String terms = "";
 const String faq = "https://windfall-fe-main-app.vercel.app/faq";
 const String claimPrize = "";
+const double phoneWidth = 500;
 ///design height, draft(responsiveness)
 const double draftHeight = 932;
 

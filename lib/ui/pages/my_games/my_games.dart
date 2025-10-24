@@ -248,8 +248,10 @@ class _MyGamesState extends ConsumerState<MyGames> {
               else{
 
                 if(vm.state == ViewState.busy){
-                  return Center(
-                    child: AppLoader(),
+                  return Expanded(
+                    child: Center(
+                      child: AppLoader(),
+                    ),
                   );
                 }
 
@@ -335,10 +337,12 @@ class _MyGamesState extends ConsumerState<MyGames> {
                 }
 
                 if(vm.state == ViewState.error){
-                  return  Center(
-                    child: ErrorState(
-                        message: vm.message,
-                        onPressed: ()=>vm.fetchMyGames()
+                  return Expanded(
+                    child: Center(
+                      child: ErrorState(
+                          message: vm.message,
+                          onPressed: ()=>vm.fetchMyGames()
+                      ),
                     ),
                   );
                 }
