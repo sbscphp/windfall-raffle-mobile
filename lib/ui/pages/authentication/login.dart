@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -450,7 +452,7 @@ class _LoginState extends ConsumerState<Login> {
                             }
                           }
                         },
-                          child: CustomSvg(asset: AppAsset.biometrics, height: 40.h, width: 40.w,)))
+                          child: CustomSvg(asset: Platform.isAndroid ? AppAsset.biometrics:AppAsset.faceId, height: 40.h, width: 40.w,)))
                 ],
               ),
             ),

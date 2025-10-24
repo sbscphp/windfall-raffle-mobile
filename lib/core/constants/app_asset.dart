@@ -69,6 +69,7 @@ class AppAsset {
   static const String appIcon = 'assets/icons/app_icon.svg';
   static const String faq = 'assets/icons/faq.svg';
   static const String alert = 'assets/icons/alert.svg';
+  static const String faceId = 'assets/icons/face_id.svg';
 
 
 
