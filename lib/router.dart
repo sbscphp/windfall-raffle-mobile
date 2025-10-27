@@ -11,7 +11,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case NamedRoutes.login:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: const Login(),
+        viewToShow: const Login(sessionExpired: true,),
       );
     case NamedRoutes.bottomNav:
       return _getPageRoute(

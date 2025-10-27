@@ -52,8 +52,8 @@ void main() async{
   SecureStorageInit.initSecureStorage();
   setupLocator();
   // Load login status before launching the app
-  final isLoggedIn = await SecureStorageUtils.retrieveAuthStatus();
-  runApp(ProviderScope(child: MyApp(isLoggedIn: isLoggedIn,)));
+  //final isLoggedIn = await SecureStorageUtils.retrieveAuthStatus();
+  runApp(ProviderScope(child: MyApp(isLoggedIn: true,)));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -122,7 +122,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   onGenerateRoute: router.generateRoute,
                   //home: const Landing(),
                   //home: const BottomNav(),
-                  initialRoute: widget.isLoggedIn ? NamedRoutes.bottomNav : NamedRoutes.login,
+                  initialRoute: NamedRoutes.bottomNav,
                   // routes: {
                   //   NamedRoutes.bottomNav: (context) => const BottomNav(),
                   // },

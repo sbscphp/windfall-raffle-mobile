@@ -648,6 +648,11 @@ ${DateFormat.yMMMd().format(date)} ${DateFormat.jms().format(date)}''';
     final now = DateTime.now();
     final difference = dateTime.difference(now);
 
+    //If the time is in the past, return formatted date
+    if (difference.isNegative) {
+      return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}';
+    }
+
     if (difference.inMinutes < 60) {
       return '${difference.inMinutes} min${difference.inMinutes > 1 ? 's' : ''}';
     } else if (difference.inHours < 24) {

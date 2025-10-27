@@ -373,7 +373,7 @@ class _LoginState extends ConsumerState<Login> {
                       ),
                     ),
                   ),
-                  if(_canUseBiometrics && _biometricsEnabled)Align(
+                  if(_canUseBiometrics && _biometricsEnabled && _userExist)Align(
                     alignment: Alignment.center,
                       child: Clickable(
                         onPressed: ()async{
@@ -494,7 +494,8 @@ class _LoginState extends ConsumerState<Login> {
   }
 
   fetchUserDetails(){
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async{
+
       final loginVm = ref.read(loginViewModel);
       final myGamesVm = ref.read(myGamesViewModel);
       final myGameResultsVm = ref.read(myGameResultsViewModel);

@@ -158,6 +158,8 @@ class SecureStorageUtils{
 
       //save password
       await SecureStorageUtils.savePassword(value: password);
+
+      await Future.delayed(const Duration(seconds: 2));
     }
   }
 
