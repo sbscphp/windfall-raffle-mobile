@@ -181,7 +181,7 @@ class _CheckoutState extends ConsumerState<Checkout> {
                           // ),
                           SizedBox(height: 16.h),
                           RowDescriptionItem(
-                            description: "Total Prices of Ticket:",
+                            description: "Total price of tickets:",
                             item: NairaDisplay(
                               amount: vm.totalPrice,
                               fontSize: 18.sp,

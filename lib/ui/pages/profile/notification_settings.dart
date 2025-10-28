@@ -119,7 +119,7 @@ class _NotificationSettingsState extends ConsumerState<NotificationSettings> {
             NotificationSettingsItem(
               title: "Account & Security Alerts",
               subTitle:
-                  "Get exclusive offers, limited-time discounts, and raffle promotions.",
+                  "Stay informed about password changes, new logins, or suspicious activity.",
               onchanged: (value) => _accountSecurity = value,
               initialValue: _accountSecurity,
             ),

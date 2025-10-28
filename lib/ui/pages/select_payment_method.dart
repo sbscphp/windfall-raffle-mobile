@@ -19,6 +19,7 @@ import 'package:windfall/ui/widgets/show_flush_bar.dart';
 import '../../core/constants/named_routes.dart';
 import '../../core/data/view_models/payment_vms/payment_vm.dart';
 import '../../core/utilities/navigator.dart';
+import '../../core/utilities/utilities.dart';
 import '../widgets/app_loader.dart';
 import '../widgets/custom_radio_button.dart';
 import '../widgets/error_state.dart';
@@ -289,7 +290,7 @@ class _SelectPaymentMethodState extends ConsumerState<SelectPaymentMethod> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  paymentType.replaceAll('_', ' '),
+                                  Utilities.capitalizeWord(paymentType).replaceAll('_', ' '),
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                       fontWeight: FontWeight.w500,
                                       color: Theme.of(context).colorScheme.textPrimary
