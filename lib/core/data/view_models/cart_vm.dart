@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:windfall/core/constants/secure_storage_constants.dart';
@@ -113,7 +114,6 @@ class CartVm extends BaseState{
       _cartItems = response.data?.cart?.items ?? [];
       _cartSummary = response.data?.cart?.summary;
       await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.guestToken);
-      print('cart transfereed and guest token deleted successfully>>>>');
       setThirdState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
@@ -134,13 +134,13 @@ class CartVm extends BaseState{
 
     try{
       final id = Uuid().v4();
-      print('guest token generated>>>>>>$id');
       //save guest token to secure storage
       await SecureStorageUtils.saveGuestToken(value: id);
+      await Future.delayed(const Duration(seconds: 1));
       //fetch cart
       fetchCart();
     }catch(e){
-      print('error occurred while generating guest id:::$e>>>');
+      debugPrint('error occurred while generating guest id:::$e>>>');
     }
 
   }
@@ -149,6 +149,14 @@ class CartVm extends BaseState{
     final guestToken = await SecureStorageUtils.retrieveGuestToken();
     if(guestToken == null)return false;
     return true;
+  }
+
+  resetCart(){
+    _cartItems.clear();
+    _cartSummary = null;
+    //generate guest token
+    generateGuestToken();
+
   }
 
 
