@@ -25,6 +25,7 @@ class NetworkManager {
     headers: {
       HttpHeaders.acceptHeader: 'application/json',
       HttpHeaders.contentTypeHeader: 'application/json',
+      'Platform': 'mobile'
     },
   );
 
