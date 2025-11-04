@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:windfall/core/utilities/extensions/num_extension.dart';
 
 import '../../../locator.dart';
@@ -12,9 +13,6 @@ import '../../utilities/secure_storage/secure_storage_utils.dart';
 import '../../utilities/utilities.dart';
 import '../enum/request_type.dart';
 import '../services/navigation_service.dart';
-
-
-/////A WORK IN PROGRESS //////////
 
 class NetworkManager {
   static final NetworkManager _instance = NetworkManager._internal();
@@ -30,6 +28,10 @@ class NetworkManager {
   );
 
   late final Dio client;
+  
+  // Token refresh management
+  bool _isRefreshing = false;
+  final List<Completer<void>> _pendingRequests = [];
 
   factory NetworkManager() {
     return _instance;
@@ -65,33 +67,133 @@ class NetworkManager {
           final requestOptions = error.requestOptions;
           final useAuth = requestOptions.extra["useAuth"] ?? true;
 
+          // Handle 401 Unauthorized errors
           if (useAuth && response?.statusCode == 401) {
-            if (!requestOptions.path.contains('/auth/refresh')) { //todo: update route
+            // Don't try to refresh if this its the refresh request
+            if (requestOptions.path.contains('/auth/token/refresh')) {
+              log("Refresh token request failed");
+              await _handleSessionExpired();
+              return handler.reject(error);
+            }
+            // If already refreshing, queue this request
+            if (_isRefreshing) {
+              log("Token refresh in progress, queuing request...");
+              final completer = Completer<void>();
+              _pendingRequests.add(completer);
+              
               try {
-                final refreshToken = await SecureStorageUtils.retrieveRefreshToken();
-                final refreshResponse = await client.post(
-                  '${AppConfig.baseUrl}/auth/refresh',
-                  data: {"refresh_token": refreshToken},
-                );
-
-                final newAccessToken = refreshResponse.data['access_token'];
-                await SecureStorageUtils.saveToken(token: newAccessToken);
-
-                final newRequestOptions = requestOptions..headers["Authorization"] = "Bearer $newAccessToken";
-                final clonedResponse = await client.fetch(newRequestOptions);
-                return handler.resolve(clonedResponse);
-              } catch (_) {
-                if (Utilities.unauthorizedFlag == false) {
-                  sessionExpired();
+                await completer.future;
+                // Retry the request with new token
+                final newToken = await SecureStorageUtils.retrieveToken();
+                if (newToken != null && newToken.isNotEmpty) {
+                  requestOptions.headers["Authorization"] = "Bearer $newToken";
+                  final retryResponse = await client.fetch(requestOptions);
+                  return handler.resolve(retryResponse);
                 }
+              } catch (e) {
                 return handler.reject(error);
               }
             }
+
+            // Start token refresh
+            _isRefreshing = true;
+            
+            try {
+              final refreshToken = await SecureStorageUtils.retrieveRefreshToken();
+              log("REFRESH TOKEN::: $refreshToken");
+
+              if (refreshToken == null || refreshToken.isEmpty) {
+                throw Exception('No refresh token available');
+              }
+
+              final refreshResponse = await client.get(
+                '${AppConfig.baseUrl}${dotenv.env['CUSTOMER']}/auth/token/refresh',
+                queryParameters: {"refresh_token": refreshToken},
+                options: Options(
+                  // Use current token to authorize new token
+                  sendTimeout: const Duration(seconds: 30),
+                  receiveTimeout: const Duration(seconds: 30),
+                ),
+              );
+
+              log("REFRESH RESPONSE::: ${refreshResponse.data}");
+
+              if (refreshResponse.statusCode != 200) {
+                log('Token refresh failed with status: ${refreshResponse.statusCode}');
+                throw Exception('Token refresh failed with status: ${refreshResponse.statusCode}');
+              }
+
+              final newAccessToken = refreshResponse.data['data']['access_token'];
+              final newRefreshToken = refreshResponse.data['data']['refresh_token'];
+
+              
+              if (newAccessToken == null || newAccessToken.isEmpty) {
+                throw Exception('Invalid access token received');
+              }
+
+              // Save new tokens
+              await SecureStorageUtils.saveToken(token: newAccessToken);
+              await SecureStorageUtils.saveRefreshToken(refreshToken: newRefreshToken);
+              log("New access token saved successfully");
+
+              // Retry original request with new token
+              requestOptions.headers["Authorization"] = "Bearer $newAccessToken";
+              final clonedResponse = await client.fetch(requestOptions);
+
+              // Resolve all pending requests
+              for (var completer in _pendingRequests) {
+                if (!completer.isCompleted) {
+                  completer.complete();
+                }
+              }
+              _pendingRequests.clear();
+              _isRefreshing = false;
+
+              return handler.resolve(clonedResponse);
+              
+            } catch (e) {
+              log("Token refresh error: $e");
+              
+              // Reject all pending requests
+              for (var completer in _pendingRequests) {
+                if (!completer.isCompleted) {
+                  completer.completeError(e);
+                }
+              }
+              _pendingRequests.clear();
+              _isRefreshing = false;
+
+              // Handle session expired
+              await _handleSessionExpired();
+              
+              return handler.reject(error);
+            }
           }
+          
           return handler.next(error);
         },
       ),
     );
+  }
+
+  Future<void> _handleSessionExpired() async {
+    if (Utilities.unauthorizedFlag == false) {
+      Utilities.unauthorizedFlag = true;
+      
+      // // Clear all tokens
+      // await SecureStorageUtils.deleteAll();
+      
+      // Navigate to login
+      try {
+        NavigationService navigationService = locator<NavigationService>();
+        navigationService.pushAndClearRoutes(
+          routeName: NamedRoutes.login,
+          clearRoute: NamedRoutes.onboarding,
+        );
+      } catch (e) {
+        log("Navigation error in session expired: $e");
+      }
+    }
   }
 
   Future<Map<String, dynamic>> networkRequestManager(
@@ -160,11 +262,11 @@ class NetworkManager {
 
         if (statusCode == 400) {
           if (retrieveResponse) return responseData;
-          throw (responseData['message']);
+          throw (responseData['message'] ?? 'Bad request');
         } else if (statusCode == 401) {
-          if (Utilities.unauthorizedFlag == false) sessionExpired();
+          // 401 is now handled by the interceptor
           if (retrieveUnauthorizedResponse) return responseData;
-          throw (responseData['message']);
+          throw (responseData['message'] ?? 'Unauthorized');
         } else if (statusCode == 403 || statusCode == 404) {
           throw (responseData['message'] ?? "Resource not available");
         } else if (statusCode.isBetween(402, 422)) {
@@ -181,16 +283,10 @@ class NetworkManager {
         throw ("An unexpected error occurred");
       }
     } catch (e) {
-      throw ("An error occurred while processing this request");
+      log("Network request error: $e");
+      rethrow;
     }
   }
 }
 
-sessionExpired() {
-  Utilities.unauthorizedFlag = true;
-  NavigationService navigationService = locator<NavigationService>();
-  navigationService.pushAndClearRoutes(
-   routeName: NamedRoutes.login,
-   clearRoute: NamedRoutes.onboarding
-  );
-}
+// Removed sessionExpired() global function - now handled internally
