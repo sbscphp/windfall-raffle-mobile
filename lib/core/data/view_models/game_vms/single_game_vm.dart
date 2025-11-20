@@ -69,7 +69,7 @@ class SingleGameVm extends BaseState{
   int get minQuantity => game?.minimumTicketNumberPurchase ?? 1;
   int get ticketsLeft => game?.ticketsLeft ?? maxAvailable;
   int get maxAvailable => game?.maximumTicketNumberPurchase ?? 1;
-  int get availableTickets => ticketsLeft < maxAvailable ? ticketsLeft : maxAvailable;
+  int get availableTickets => ticketsLeft < maxAvailable ? (minQuantity >= ticketsLeft ? (minQuantity + 1):ticketsLeft) : maxAvailable;
   double get minEntryPrice => double.tryParse(game?.ticketPrice?.toString() ?? '0') ?? 0;
   double get maxPerson => maxAvailable.toDouble();
   List<Prize> get instantPrizes => game?.prizes ?? [];
@@ -89,7 +89,6 @@ class SingleGameVm extends BaseState{
       _unitPrice = double.tryParse(game?.ticketPrice?.toString() ?? '0') ?? 0;
       _quantity = minQuantity.toDouble();
       calculatePrice(isUnitPriceCalculation: true);
-      print('price:::$_unitPrice .... discount:$_discountUnitPrice>>>>');
       setState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);
