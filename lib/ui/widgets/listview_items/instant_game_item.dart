@@ -190,6 +190,7 @@ class _InstantGameItemState extends State<InstantGameItem> {
                 final ticket = _filteredList[index];
                 final ticketNumber = ticket.ticketNumber ?? 'N/A';
                 final yetToWin = ticket.flag?.toLowerCase() == 'yet to be won';
+                //todo: specifically cater for won status
                 return DottedContainer(
                     borderColor: ColorPath.mistGrey,
                     borderRadius: 8,
