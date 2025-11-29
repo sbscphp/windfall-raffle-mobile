@@ -12,6 +12,7 @@ import '../../core/constants/app_dimension.dart';
 import '../../core/constants/color_path.dart';
 import '../../core/constants/named_routes.dart';
 import '../../core/data/enum/view_state.dart';
+import '../../core/data/view_models/game_vms/my_game_results_vm.dart';
 import '../../core/data/view_models/profile_vms/profile_vm.dart';
 import '../../core/data/view_models/referral_vm.dart';
 import '../../core/utilities/navigator.dart';
@@ -49,6 +50,10 @@ class _OrderConfirmationState extends ConsumerState<OrderConfirmation> {
             referralVm.fetchUsedHistory();
           }
         });
+
+        //fetch my results
+        final myGameResultsVm = ref.read(myGameResultsViewModel);
+        myGameResultsVm.fetchMyGameResults(refreshUi: false);
 
         //fetch my games
         ref.read(myGamesViewModel).fetchMyGames();

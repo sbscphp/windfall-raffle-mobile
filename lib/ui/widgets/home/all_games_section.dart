@@ -15,6 +15,7 @@ import 'package:windfall/ui/widgets/listview_items/game_item.dart';
 import '../../../core/constants/app_asset.dart';
 import '../../../core/constants/color_path.dart';
 import '../../../core/data/enum/view_state.dart';
+import '../empty_state.dart';
 import '../screen_title.dart';
 
 class AllGamesSection extends ConsumerWidget {
@@ -52,6 +53,21 @@ class AllGamesSection extends ConsumerWidget {
     }
 
     if(vm.state == ViewState.retrieved){
+
+
+      if(vm.allGames.isEmpty){
+        return Padding(
+          padding: EdgeInsets.only(left: AppDimension.paddingLeft, right: AppDimension.paddingRight, top: 32.h),
+          child: EmptyState(
+            asset: AppAsset.gamesEmptyState,
+            title: 'No Games',
+            subtitle: "No Games Available at the moment",
+            ctaText: 'View Games',
+            showCtaButton: false,
+          ),
+        );
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

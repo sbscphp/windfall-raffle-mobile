@@ -55,6 +55,7 @@ class ProfileVm extends BaseState{
     await _profileDp.fetchProfile().then((response) async{
       _message = response.message ?? defaultSuccessMessage;
       _user = response.data;
+      await SecureStorageUtils.saveBiometricsPref(value: biometricsEnabled);
       setThirdState(ViewState.retrieved);
     }, onError: (e) {
       _message = Utilities.formatMessage(e.toString(), isSuccess: false);

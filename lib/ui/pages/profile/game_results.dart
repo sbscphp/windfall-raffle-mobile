@@ -188,7 +188,11 @@ class _GameResultsState extends ConsumerState<GameResults> {
                                 final result = vm.myGameResults[index];
                                 final name = result.game?.name ?? 'N/A';
                                 final description = result.game?.description ?? 'N/A';
-                                final drawDate = DateUtilities.monthDayYear(date: result.game?.endDate ?? DateTime.now());
+                                final isInstantGame = result.game?.instantGame?.toLowerCase() == 'true';
+                                final drawDate = isInstantGame
+                                    ? DateUtilities.monthDayYear(date: result.game?.createdAt ?? DateTime.now())
+                                    :DateUtilities.monthDayYear(date: result.game?.endDate ?? DateTime.now());
+
                                 return Clickable(
                                   onPressed: (){
                                     pushNavigation(context: context, widget: GameTickets(id: result.uuid,), routeName: NamedRoutes.gameTickets);

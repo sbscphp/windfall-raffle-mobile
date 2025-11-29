@@ -79,7 +79,7 @@ class LoginVm extends BaseState {
       _message = response.message ?? defaultSuccessMessage;
       await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.token);
       await SecureStorageUtils.saveAuthStatus(value: false);
-      await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.user);
+      // await SecureStorageUtils.deleteKey(key: SecuredStorageConstants.user);
       clearUser(refreshUi: false);
       setSecondState(ViewState.retrieved);
     }, onError: (e) {

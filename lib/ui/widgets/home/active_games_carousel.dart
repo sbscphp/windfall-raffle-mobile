@@ -29,6 +29,10 @@ class ActiveGamesCarousel extends ConsumerWidget {
     }
 
     if(vm.secondState == ViewState.retrieved){
+
+      if(vm.liveGames.isEmpty){
+        return const SizedBox.shrink();
+      }
       return Row(
         children: [
           Container(
