@@ -721,7 +721,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
               ),
             ),
           ),
-          if(!vm.isUpComing) Padding(
+          if(!vm.isUpComing && (vm.minQuantity.toDouble() != vm.availableTickets.toDouble())) Padding(
             padding: EdgeInsets.only(top: 20.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -734,7 +734,7 @@ class _GameDetailsState extends ConsumerState<GameDetails> {
                       min: vm.minQuantity.toDouble(),
                       max: vm.availableTickets.toDouble(),
                       handler: FlutterSliderHandler(
-                        decoration: BoxDecoration(), // removes default glow
+                        decoration: BoxDecoration(),
                         child: Container(
                           width: 24,
                           height: 24,

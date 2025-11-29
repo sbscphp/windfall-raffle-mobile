@@ -390,7 +390,7 @@ class _LoginState extends ConsumerState<Login> {
                           }
 
                           //authenticate with biometrics
-                          final authenticate = await BiometricUtils.authenticate();
+                          final authenticate = await BiometricUtils.authenticate(context);
                           if(authenticate != null && authenticate){
                             //login
                             Utilities.hideKeyboard(context);

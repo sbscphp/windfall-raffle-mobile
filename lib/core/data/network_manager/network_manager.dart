@@ -20,8 +20,8 @@ class NetworkManager {
   static final NetworkManager _instance = NetworkManager._internal();
 
   static BaseOptions options = BaseOptions(
-    connectTimeout: const Duration(minutes: 5),
-    receiveTimeout: const Duration(minutes: 5),
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
     headers: {
       HttpHeaders.acceptHeader: 'application/json',
       HttpHeaders.contentTypeHeader: 'application/json',
